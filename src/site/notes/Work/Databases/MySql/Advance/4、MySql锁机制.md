@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/work/databases/my-sql/advance/4-my-sql/","title":"MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-03-03T11:07:48.000+08:00","updated":"2026-03-10T11:12:11.000+08:00"}
+{"dg-publish":true,"permalink":"/work/databases/my-sql/advance/4-my-sql/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-03-03T11:07:48.000+08:00","updated":"2026-03-10T16:26:36.342+08:00"}
 ---
 
 # 定义

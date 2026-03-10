@@ -1,9 +1,9 @@
 ---
-{"dg-publish":true,"permalink":"/learn/cpu/","title":"重新认识CPU","pinned":true,"noteIcon":"","created":"2026-03-09T23:00:20.000+08:00","updated":"2026-03-09T23:03:35.000+08:00"}
+{"dg-publish":true,"permalink":"/learn/cpu/","title":"重新认识CPU","pinned":true,"noteIcon":"","created":"2026-03-09T23:00:20.000+08:00","updated":"2026-03-10T14:48:53.543+08:00"}
 ---
 
 # MOSFET的**负电压**
-![Pasted image 20251005114337](http://wcj.x3322.net:88/i/2025/10/05/68e1e9c517ef8.png)
+![Pasted image 20251005114337](https://weichengjun2.dpdns.org/i/2025/10/05/68e1e9c517ef8.png)
 ### 一、MOSFET 的类型与阈值电压
 首先，需要知道MOSFET有两种主要类型：
 1.  **N沟道MOSFET**：当 $V_{GS}$**大于**一个正的门槛值（**阈值电压 $V_{th}$**，如+2V）时，管子**开启**。
@@ -48,16 +48,16 @@
 *   **正电压**可以用于它的**增强型关断**。
 ### 电路图标识
 #### NMOS 源极出，PMOS源极进
-![Pasted image 20251005114434](http://wcj.x3322.net:88/i/2025/10/05/68e1e9c334dc1.png)
+![Pasted image 20251005114434](https://weichengjun2.dpdns.org/i/2025/10/05/68e1e9c334dc1.png)
 #### NMOS/PMOS实现非门
 **负压为1，正压为0**
-![Pasted image 20251005114457](http://wcj.x3322.net:88/i/2025/10/05/68e1e9c232ef7.png)
+![Pasted image 20251005114457](https://weichengjun2.dpdns.org/i/2025/10/05/68e1e9c232ef7.png)
 
-![Pasted image 20251005114412](http://wcj.x3322.net:88/i/2025/10/05/68e1e9c42d37e.png)
+![Pasted image 20251005114412](https://weichengjun2.dpdns.org/i/2025/10/05/68e1e9c42d37e.png)
 
-![Pasted image 20251005114239](http://wcj.x3322.net:88/i/2025/10/05/68e1e9c6dcdb3.png)
+![Pasted image 20251005114239](https://weichengjun2.dpdns.org/i/2025/10/05/68e1e9c6dcdb3.png)
 ### 逻辑门
-![Pasted image 20251005114157](http://wcj.x3322.net:88/i/2025/10/05/68e1e9c7cb8b5.png)
+![Pasted image 20251005114157](https://weichengjun2.dpdns.org/i/2025/10/05/68e1e9c7cb8b5.png)
 
 
-![Pasted image 20251005114124](http://wcj.x3322.net:88/i/2025/10/05/68e1e8e5c64fc.png)
+![Pasted image 20251005114124](https://weichengjun2.dpdns.org/i/2025/10/05/68e1e8e5c64fc.png)

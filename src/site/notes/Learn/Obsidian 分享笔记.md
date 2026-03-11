@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Learn/Obsidian 分享笔记/","title":"Obsidian 分享笔记","tags":["flashcards","gardenEntry"],"noteIcon":"","created":"2026-03-10T22:26:15.000+08:00","updated":"2026-03-11T15:19:40.822+08:00"}
+{"dg-publish":true,"permalink":"/Learn/Obsidian 分享笔记/","title":"Obsidian 分享笔记","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:26:15.000+08:00","updated":"2026-03-11T17:43:11.140+08:00"}
 ---
 
 ## 简介

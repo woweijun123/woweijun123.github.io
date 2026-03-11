@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/learn/cpu/","title":"重新认识CPU","tags":["flashcards"],"noteIcon":"","created":"2026-03-09T23:00:20.000+08:00","updated":"2026-03-11T15:23:52.601+08:00"}
+{"dg-publish":true,"permalink":"/Learn/重新认识CPU/","title":"重新认识CPU","tags":["flashcards"],"noteIcon":"","created":"2026-03-09T23:00:20.000+08:00","updated":"2026-03-11T15:23:52.601+08:00"}
 ---
 
 # MOSFET的**负电压**

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/learn/hash/","title":"Hash算法与数据库实现","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:34:02.000+08:00","updated":"2026-03-11T15:18:15.843+08:00"}
+{"dg-publish":true,"permalink":"/Learn/Hash算法与数据库实现/","title":"Hash算法与数据库实现","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:34:02.000+08:00","updated":"2026-03-11T15:18:15.843+08:00"}
 ---
 
 # Hash函数

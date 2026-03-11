@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/learn/obsidian/","title":"Obsidian 分享笔记","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:26:15.000+08:00","updated":"2026-03-11T14:59:34.696+08:00"}
+{"dg-publish":true,"permalink":"/learn/obsidian/","title":"Obsidian 分享笔记","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:26:15.000+08:00","updated":"2026-03-11T15:01:48.880+08:00"}
 ---
 
 ## 简介
@@ -103,4 +103,4 @@ dg-home: false
 1. 创建新笔记并填入上述模板。
 2. 将 `dg-publish` 设为 `true`。
 3. 按下 `Cmd/Ctrl + P` 打开命令面板，选择 **"Digital Garden: Publish Single Note"**。
-4. 稍等片刻（可以在 GitHub 的 Actions 选项卡查看进度），你的笔记就会出现在 `username.github.io` 上。
+4. 稍等片刻（可以在 GitHub 的 Actions 选项卡查看进度），你的笔记就会出现在 `username.github.io` 上

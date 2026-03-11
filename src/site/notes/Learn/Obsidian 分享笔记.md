@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/learn/obsidian/","title":"Obsidian 分享笔记","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:26:15.000+08:00","updated":"2026-03-11T14:52:03.935+08:00"}
+{"dg-publish":true,"permalink":"/learn/obsidian/","title":"Obsidian 分享笔记","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:26:15.000+08:00","updated":"2026-03-11T14:59:34.696+08:00"}
 ---
 
 ## 简介
@@ -90,7 +90,7 @@ Digital Garden 通过 Frontmatter 控制发布逻辑。建议创建一个包含�
 ---
 title: 文章标题
 tags: 标签
-dg-permalink: 自定义链接(可选)
+ 自定义链接(可选)
 dg-publish: false
 dg-pinned: false
 dg-home: false

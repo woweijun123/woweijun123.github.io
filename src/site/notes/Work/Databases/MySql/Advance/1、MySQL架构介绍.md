@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/work/databases/my-sql/advance/1-my-sql/","title":"1、MySQL架构介绍","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-10T22:34:01.000+08:00"}
+{"dg-publish":true,"permalink":"/work/databases/my-sql/advance/1-my-sql/","title":"1、MySQL架构介绍","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-11T14:59:34.743+08:00"}
 ---
 
 # 官网

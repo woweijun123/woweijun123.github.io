@@ -1,6 +1,7 @@
 ---
-{"dg-publish":true,"permalink":"/work/script/php/basics/php/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-11T14:59:34.740+08:00"}
+{"dg-publish":true,"permalink":"/work/script/php/basics/php/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-11T15:07:20.520+08:00"}
 ---
+
 
 # 基本语法 [¶](https://www.php.net/manual/zh/language.basic-syntax.php#language.basic-syntax)
 ## 命名规范

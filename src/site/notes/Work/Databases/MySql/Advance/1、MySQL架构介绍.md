@@ -1,10 +1,10 @@
 ---
-{"dg-publish":true,"permalink":"/work/databases/my-sql/advance/1-my-sql/","title":"1、MySQL架构介绍","tags":["flashcards"],"noteIcon":"","created":"2025-01-06T16:13:54.000+08:00","updated":"2026-03-10T15:14:32.000+08:00"}
+{"dg-publish":true,"permalink":"/work/databases/my-sql/advance/1-my-sql/","title":"1、MySQL架构介绍","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-10T22:34:01.000+08:00"}
 ---
 
 # 官网
 https://dev.mysql.com/downloads/mysql/5.5.html#downloads
-[MySQL-client-5.5.48-1.linux2.6.i386.rpm](http://wcj.x3322.net:88:5/sharing/FJzJL7EJU)
+[MySQL-client-5.5.48-1.linux2.6.i386.rpm](https://weichengjun2.dpdns.org:5/sharing/FJzJL7EJU)
 # 查询
 ```shell
 rpm -qa | grep -i mysql # 查询是否安装过
@@ -148,7 +148,7 @@ linux /etc/my.cnf文件
 和其它数据库相比, MySQL有点与众不同,它的架构可以在多种不同场景中应用并发挥良好作用。
 主要体现在存储引擎的架构上,**插件式的存储引擎架构将查询处理和其它的系统任务以及数据的存储提取相分离**。这种架构可以根据业务的需求和实际需要选择合适的存储引擎。
 
-![|673](http://wcj.x3322.net:88/i/2023/09/20/650ab44115258.png)
+![|673](https://weichengjun2.dpdns.org/i/2023/09/20/650ab44115258.png)
 
 ## 1. 连接层
 最上层是一些客户端和连接服务,包含本地sock通信和大多数基于客户端/服务端工具实现的类似于tcp/ip的通信。

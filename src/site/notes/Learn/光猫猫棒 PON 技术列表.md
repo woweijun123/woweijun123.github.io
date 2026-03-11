@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/learn/pon/","noteIcon":"","created":"2026-03-09T23:05:37.000+08:00","updated":"2026-03-09T23:08:35.000+08:00"}
+{"dg-publish":true,"permalink":"/learn/pon/","title":"光猫猫棒 PON 技术列表","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:18:51.000+08:00","updated":"2026-03-10T22:19:01.000+08:00"}
 ---
 
 - **GPON：**

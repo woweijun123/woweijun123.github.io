@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/work/databases/my-sql/advance/4-my-sql/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-03-03T11:07:48.000+08:00","updated":"2026-03-10T16:26:36.342+08:00"}
+{"dg-publish":true,"permalink":"/work/databases/my-sql/advance/4-my-sql/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-10T22:34:01.000+08:00"}
 ---
 
 # 定义
@@ -146,12 +146,12 @@ SELECT * FROM mylock;
 lock table (表名1) read(write), (表名2) read(write);
 ```
 ### 加读锁(共享锁)
-![|915](http://wcj.x3322.net:88/i/2023/09/20/650ab5858e3f6.jpg)
+![|915](https://weichengjun2.dpdns.org/i/2023/09/20/650ab5858e3f6.jpg)
 ### 加写锁(排他锁)
 1. 加表锁写锁时不能查询其他表信息，会报错
-![](http://wcj.x3322.net:88/i/2023/09/20/650ab5f469253.png)
+![](https://weichengjun2.dpdns.org/i/2023/09/20/650ab5f469253.png)
 
-![](http://wcj.x3322.net:88/i/2023/09/20/650ab589abf9f.jpg)
+![](https://weichengjun2.dpdns.org/i/2023/09/20/650ab589abf9f.jpg)
 <?e?>
 ## 表锁结论
 <?l?>
@@ -183,7 +183,7 @@ show open tables
 ```mysql
 unlock tables;
 ```
-![](http://wcj.x3322.net:88/i/2023/09/20/650ab5f1aebef.png)
+![](https://weichengjun2.dpdns.org/i/2023/09/20/650ab5f1aebef.png)
 ### 分析表锁定
 可以通过检查`table_locks_waited`和`table_locks_immediate`状态变量来分析系统上的表锁定:
 ```mysql

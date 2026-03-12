@@ -1,12 +1,12 @@
 ---
-{"dg-publish":true,"permalink":"/Learn/Welcome/","title":"Welcome","tags":["flashcards","gardenEntry"],"noteIcon":"","created":"2026-03-11T17:42:58.882+08:00","updated":"2026-03-11T18:17:08.900+08:00"}
+{"dg-publish":true,"permalink":"/Learn/Welcome/","title":"Welcome","tags":["flashcards","gardenEntry"],"noteIcon":"","created":"2026-03-11T17:42:58.882+08:00","updated":"2026-03-12T16:53:27.462+08:00"}
 ---
 
 # 🚀 欢迎来到我的数字花园
-### 缘起：从 Nas 服务器开始的自托管实验
+### 🌱缘起：从 Nas 服务器开始的自托管实验
 你是否曾开启过一项爱好，并瞬间意识到自己将为此深深着迷？对我而言，**自托管 (Self-hosting)** 就是这样的存在。
 我的探索之旅始于几年前。那时，我亲手搭建了人生中第一台服务器 —— Nas。虽然目前仍处于起步阶段，但我已准备好在这条“兔子洞”里越钻越深。
-### 核心理念：在阳光下进化 (Learn in Public)
+### ☀️核心理念：在阳光下进化 (Learn in Public)
 建立这个站点的初衷，是为了记录我在技术探索中的点滴。我推崇的理念：将思考的过程透明化，不仅能复盘自己的成长，或许也能为同行者提供一份参考。
 ### 📖 站点导航
 我将这里划分为两个主要板块，分别承载不同维度的记录：

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-11T17:22:14.832+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-12T13:57:25.082+08:00"}
 ---
 
 # Hello World

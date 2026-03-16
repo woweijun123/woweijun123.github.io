@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Learn/QPS、TPS、RT、吞吐量/","title":"QPS、TPS、RT、吞吐量","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-11T15:17:50.348+08:00"}
+{"dg-publish":true,"permalink":"/Learn/QPS、TPS、RT、吞吐量/","title":"QPS、TPS、RT、吞吐量","tags":["flashcards"],"noteIcon":"","created":"2026-03-11T15:17:50.000+08:00","updated":"2026-03-11T15:17:50.000+08:00"}
 ---
 
 ## 一、QPS「每秒查询」

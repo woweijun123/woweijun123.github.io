@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-11T15:18:26.955+08:00"}
+{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T11:48:20.000+08:00","updated":"2026-03-16T11:48:20.000+08:00"}
 ---
 
 # 定义
@@ -218,7 +218,7 @@ MyISAM 的调度机制默认认为**写操作比读操作更重要**：
 * **调节优先级**：若业务必须以读为主，可设置 `low_priority_updates = 1`，将写操作的优先级降到读操作之后。
 * **单条控制**：在特定的 `INSERT/UPDATE` 后添加 `LOW_PRIORITY` 关键字。
 * **强制整理**：定期使用 `OPTIMIZE TABLE` 整理碎片，提高锁的释放效率。
-<!--SR:!2026-03-14,18,250-->
+<!--SR:!2026-04-29,46,250-->
 <?e?>
 # 行锁(偏写)
 ## 特点：InnoDB 引擎特有
@@ -425,12 +425,10 @@ SHOW VARIABLES LIKE 'innodb_deadlock_detect';
 死锁保留机制就是 **“定向清除最弱竞争者，腾出通道给幸存者”** 。
 <!--SR:!2026-03-25,29,270-->
 <?e?>
-<?e?>
 ### 死锁监控
-<?l?>
 #### 默认状态：内存瞬时记录
 * **行为**：当发生死锁时，MySQL 会自动回滚成本最低的事务，并向客户端返回错误码 `1213`。
-* **存储**：死锁信息仅存储在内存中，且**只保留最近一次**记录。
+* **存储**：死锁信息仅存储在内存中，且只保留==1;;最近一次==记录。
 * **查看命令**：
 ```mysql
 # 查询锁信息
@@ -470,7 +468,7 @@ tail -f /var/log/mysql/error.log
 	* **`HOLDS THE LOCK(S)`**：当前事务已占有的锁。
 	* **`WAITING FOR THIS LOCK TO BE GRANTED`**：正在申请并导致阻塞的锁。
 	* **`WE ROLL BACK TRANSACTION`**：最终被系统判定牺牲（回滚）的事务。
-<!--SR:!2026-03-16,13,251-->
+<!--SR:!2026-03-19,3,250-->
 <?e?>
 ### 死锁案例
 #### 案例1：间隙锁 (Gap Lock) 导致的插入意向锁冲突「IODKU」
@@ -988,9 +986,8 @@ InnoDB 的行锁（Row Lock）本质上是**索引记录锁**。
     * 只有使用 `FOR SHARE`（S 锁）或 `FOR UPDATE`（X 锁）时，才会请求并施加行锁（**当前读**）。
 <!--SR:!2026-03-28,32,270-->
 <?e?>
-<?e?>
 ## 行锁分析
-通过检查`innodb_row_lock`状态变量来分析系统上的行锁的争夺情况
+通过命令`show status like 'innodb_row_lock%';`检查状态变量来分析系统上的行锁的争夺情况
 <?l?>
 ```mysql
 show status like 'innodb_row_lock%';
@@ -1008,20 +1005,12 @@ show status like 'innodb_row_lock%';
 对各个状态量的说明如下:
 ```mysql
 Innodb_row_lock_current_waits # 当前正在等待锁定的数量;
-Innodb_row_lock_time # 从系统启动到现在锁定总时间长度;
-Innodb_row_lock_time_avg # 每次等待所花平均时间;
+Innodb_row_lock_time # 💡从系统启动到现在锁定总时间长度;
+Innodb_row_lock_time_avg # 💡每次等待所花平均时间;
 Innodb_row_lock_time_max # 系统启动到现在最长等待时间;
-Innodb_row_lock_waits # 系统启动后到现在总共等待的次数;
+Innodb_row_lock_waits # 💡系统启动后到现在总共等待的次数;
 ```
-对于这5个状态变量,比较重要的主要是这三项:
-```mysql
-Innodb_row_locktime_avg # 等待平均时长 
-Innodb_row_lock_waits # 等待总次数
-Innodb_row_lock time # 等待总时长
-```
-尤其是当等待次数很高,而且每次等待时长也不小的时候,我们就需要分析系统中为什么会有如此多的等待,然后根据分析结果着手指定优化计划。
-<!--SR:!2026-03-15,12,250-->
-<?e?>
+<!--SR:!2026-03-19,3,250-->
 <?e?>
 # 锁的实时分布
 <?l?>

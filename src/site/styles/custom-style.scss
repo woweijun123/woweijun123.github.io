@@ -1,86 +1,86 @@
-body {
-    /* 1. 核心参数微调 */
-    --dg-content-max-width: 850px; /* 略微调大正文，保持阅读舒适 */
-    --dg-sidebar-max-width: 300px; /* 侧边栏宽度 */
-    --dg-filetree-width: 280px;    /* 左侧树宽度 */
-    --dg-sidebar-gap: 30px;        /* 侧边栏与正文的视觉间距 */
+// body {
+//     /* 1. 核心参数微调 */
+//     --dg-content-max-width: 850px; /* 略微调大正文，保持阅读舒适 */
+//     --dg-sidebar-max-width: 300px; /* 侧边栏宽度 */
+//     --dg-filetree-width: 280px;    /* 左侧树宽度 */
+//     --dg-sidebar-gap: 30px;        /* 侧边栏与正文的视觉间距 */
 
-    /* 2. 左侧文件树靠左 */
-    .filetree-wrapper {
-        position: fixed !important;
-        left: 0 !important;
-        width: var(--dg-filetree-width);
-        height: 100vh;
-        border-right: 1px solid var(--background-modifier-border); /* 可选：增加分割线 */
-    }
+//     /* 2. 左侧文件树靠左 */
+//     .filetree-wrapper {
+//         position: fixed !important;
+//         left: 0 !important;
+//         width: var(--dg-filetree-width);
+//         height: 100vh;
+//         border-right: 1px solid var(--background-modifier-border); /* 可选：增加分割线 */
+//     }
 
-    /* 3. 右侧大纲靠右且撑满高度 */
-    .sidebar {
-        position: fixed !important;
-        top: 10px !important;      /* 距离顶部 10px */
-        right: 10px !important;    /* 距离右侧 10px */
-        left: auto !important;
+//     /* 3. 右侧大纲靠右且撑满高度 */
+//     .sidebar {
+//         position: fixed !important;
+//         top: 10px !important;      /* 距离顶部 10px */
+//         right: 10px !important;    /* 距离右侧 10px */
+//         left: auto !important;
         
-        /* 关键：高度设为屏幕高度减去上下边距 */
-        height: calc(100vh - 20px) !important; 
-        width: var(--dg-sidebar-max-width) !important;
-        max-width: var(--dg-sidebar-max-width); /* 移除之前的动态计算，强制宽度 */
+//         /* 关键：高度设为屏幕高度减去上下边距 */
+//         height: calc(100vh - 20px) !important; 
+//         width: var(--dg-sidebar-max-width) !important;
+//         max-width: var(--dg-sidebar-max-width); /* 移除之前的动态计算，强制宽度 */
         
-        display: flex;
-        flex-direction: column;
-        z-index: 3;
-        background: transparent; /* 保持背景透明感 */
+//         display: flex;
+//         flex-direction: column;
+//         z-index: 3;
+//         background: transparent; /* 保持背景透明感 */
         
-        /* 内部滚动优化 */
-        overflow-y: auto;
-        padding-bottom: 20px;
+//         /* 内部滚动优化 */
+//         overflow-y: auto;
+//         padding-bottom: 20px;
 
-        .graph {
-            width: 100%;
-            height: var(--dg-graph-height, 250px);
-            flex-shrink: 0; /* 防止关系图被压缩 */
+//         .graph {
+//             width: 100%;
+//             height: var(--dg-graph-height, 250px);
+//             flex-shrink: 0; /* 防止关系图被压缩 */
             
-            #link-graph {
-                width: 100% !important;
-                height: 100% !important;
-            }
-        }
+//             #link-graph {
+//                 width: 100% !important;
+//                 height: 100% !important;
+//             }
+//         }
 
-        /* 目录（TOC）部分撑开 */
-        .toc-container {
-            flex-grow: 1; 
-            max-height: none !important; /* 解除高度限制，让它自由延伸 */
-        }
-    }
+//         /* 目录（TOC）部分撑开 */
+//         .toc-container {
+//             flex-grow: 1; 
+//             max-height: none !important; /* 解除高度限制，让它自由延伸 */
+//         }
+//     }
 
-    /* 4. 响应式处理：屏幕太窄时自动切换模式，防止重叠 */
-    @media screen and (max-width: 1500px) {
-        /* 如果屏幕不够宽，优先保证正文，可以适当缩小两侧 */
-        --dg-sidebar-max-width: 250px;
-        --dg-filetree-width: 240px;
-    }
+//     /* 4. 响应式处理：屏幕太窄时自动切换模式，防止重叠 */
+//     @media screen and (max-width: 1500px) {
+//         /* 如果屏幕不够宽，优先保证正文，可以适当缩小两侧 */
+//         --dg-sidebar-max-width: 250px;
+//         --dg-filetree-width: 240px;
+//     }
 
-    @media screen and (max-width: 1300px) {
-        /* 屏幕进一步缩小时，侧边栏转为非固定模式，避免遮挡 */
-        .sidebar {
-            position: relative !important;
-            right: auto !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            height: auto !important;
-            margin-top: 40px;
-        }
-    }
+//     @media screen and (max-width: 1300px) {
+//         /* 屏幕进一步缩小时，侧边栏转为非固定模式，避免遮挡 */
+//         .sidebar {
+//             position: relative !important;
+//             right: auto !important;
+//             width: 100% !important;
+//             max-width: 100% !important;
+//             height: auto !important;
+//             margin-top: 40px;
+//         }
+//     }
 
-    /* 5. 内部容器优化：去除 overflow 让其自然伸展 */
-    .sidebar-container {
-        padding: 20px var(--dg-sidebar-container-padding) 20px 15px;
-        width: 100%;
-        /* 去掉 overflow-y: auto; 让内部元素根据内容高度自然排列 */
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        /* 如果内容超过 100vh，建议在外层 .sidebar 开启滚动而非此处 */
-        height: auto; 
-    }
-}
+//     /* 5. 内部容器优化：去除 overflow 让其自然伸展 */
+//     .sidebar-container {
+//         padding: 20px var(--dg-sidebar-container-padding) 20px 15px;
+//         width: 100%;
+//         /* 去掉 overflow-y: auto; 让内部元素根据内容高度自然排列 */
+//         display: flex;
+//         flex-direction: column;
+//         justify-content: flex-start;
+//         /* 如果内容超过 100vh，建议在外层 .sidebar 开启滚动而非此处 */
+//         height: auto; 
+//     }
+// }

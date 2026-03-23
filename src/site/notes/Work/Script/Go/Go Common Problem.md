@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T11:44:22.000+08:00","updated":"2026-03-16T11:44:22.000+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-03-14T19:37:26.000+08:00","updated":"2026-03-23T10:21:03.330+08:00"}
 ---
 
 # 为什么 Go 语言要求 Map 键必须可比较？
@@ -132,7 +132,7 @@ if len(b) == cap(b) {
 ### 关键结论
 * **修改 Len 的开销极小**：仅仅是 CPU 寄存器级别的整数赋值，不涉及数组拷贝。
 * **零拷贝思想**：预留 `Cap`  底层填充  更新 `Len`。这是 Go 处理高性能 I/O 的核心套路。
-<!--SR:!2026-03-21,5,232-->
+<!--SR:!2026-04-02,12,232-->
 <?e?>
 ## Append 扩容机制
 ### 扩容公式 (Go 1.18+)
@@ -216,7 +216,7 @@ if cap > doublecap {
 - **预分配 (Pre-allocation)**：如果你预知数据量（比如文件大小），直接 `make([]byte, 0, fileSize)`。这能让你的代码从 $O(N)$ 的多次拷贝优化到 ==1;;零==拷贝。
 - **大内存常驻**：由于切片引用==1;;底层==数组，如果一个==1;;小==切片引用了一个==1;;巨大==的数组，整个数组都不会被 ==1;;GC 回收==。在处理大数据后，建议将有用部分 `copy` 到新切片。
 - **复用切片**：在循环中通过 `s = s[:0]` 重置切片，可以复用已有的底层数组，避免重新触发扩容逻辑。
-<!--SR:!2026-03-23,7,252-->
+<!--SR:!2026-04-10,18,252-->
 <?e?>
 ## 切片视图与 io.Reader 的读取契约
 ```go

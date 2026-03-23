@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/PHP principle/OPcache/","title":"OPcache","tags":["flashcards"],"noteIcon":"","created":"2025-10-18T11:11:04.000+08:00","updated":"2026-03-16T22:18:39.661+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/PHP principle/OPcache/","title":"OPcache","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T22:18:39.000+08:00","updated":"2026-03-16T22:18:39.000+08:00"}
 ---
 
 # 一、引言：重要概念

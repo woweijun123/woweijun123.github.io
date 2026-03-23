@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Golang开发新手常犯的50个错误/","title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T11:23:13.000+08:00","updated":"2026-03-16T11:23:13.000+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Golang开发新手常犯的50个错误/","title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-16T11:23:13.058+08:00"}
 ---
 
 本文总结了Go语言初学者常遇到的陷阱与误区，包括变量声明、类型断言、并发编程等多个方面，帮助开发者规避错误，提升编程效率。

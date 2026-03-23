@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Docker k8s/K8S basic/","title":"K8S basic","tags":["flashcards"],"noteIcon":"","created":"2026-02-04T09:48:16.000+08:00","updated":"2026-03-16T22:50:33.167+08:00"}
+{"dg-publish":true,"permalink":"/Work/Tools/Docker k8s/K8S basic/","title":"K8S basic","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T22:50:33.000+08:00","updated":"2026-03-16T22:50:33.000+08:00"}
 ---
 
  https://pan.baidu.com/s/15MCgIFW9vrOdNycBReEpig?pwd=3dnm 提取码: 3dnm

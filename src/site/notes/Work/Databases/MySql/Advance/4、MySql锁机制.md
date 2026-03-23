@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T11:48:20.000+08:00","updated":"2026-03-16T11:48:20.000+08:00"}
+{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-03-14T19:35:53.000+08:00","updated":"2026-03-23T10:44:14.561+08:00"}
 ---
 
 # 定义
@@ -113,7 +113,7 @@
 | **插入意向锁 (I-I)**        | **冲突**    | 兼容           | **冲突**        | 兼容          |
 ## 补充说明：隐式锁 (Implicit Lock)
 InnoDB 在 `INSERT` 时，通常不显式加锁，而是通过一种“延迟加锁”机制。如果一个事务插入记录后，另一个事务尝试读取或修改该记录，隐式锁会转换成显示锁。
-<!--SR:!2026-03-23,27,271-->
+<!--SR:!2026-06-05,74,271-->
 <?e?>
 # 全局锁 (Global Lock)
 - **FTWRL (`Flush tables with read lock`)**：锁定整个数据库实例，使整个库处于只读状态。
@@ -386,7 +386,7 @@ COMMIT; -- 立即提交
 3. **调整数据库配置**
 	- **降低锁超时时间**：适当调小 `SET innodb_lock_wait_timeout = 10; -- 10秒`（默认 50 秒），减少长时间等待导致的超时错误。
 	- **启用死锁检测**：MySQL 默认会自动检测死锁并回滚最小事务，无需手动干预。
-<!--SR:!2026-03-22,26,270-->
+<!--SR:!2026-05-31,69,270-->
 <?e?>
 <?e?>
 ### 死锁保留机制
@@ -468,7 +468,7 @@ tail -f /var/log/mysql/error.log
 	* **`HOLDS THE LOCK(S)`**：当前事务已占有的锁。
 	* **`WAITING FOR THIS LOCK TO BE GRANTED`**：正在申请并导致阻塞的锁。
 	* **`WE ROLL BACK TRANSACTION`**：最终被系统判定牺牲（回滚）的事务。
-<!--SR:!2026-03-19,3,250-->
+<!--SR:!2026-03-28,9,250-->
 <?e?>
 ### 死锁案例
 #### 案例1：间隙锁 (Gap Lock) 导致的插入意向锁冲突「IODKU」
@@ -961,7 +961,7 @@ InnoDB 的行锁（Row Lock）本质上是**索引记录锁**。
 | **诊断** | `SHOW ENGINE INNODB STATUS;`                        | 搜 `TRANSACTIONS` 栏的 `row lock(s)` 数量  |
 | **监控** | `SELECT * FROM performance_schema.data_lock_waits;` | 查找 `blocking_pid` 定位阻塞源头 (MySQL 8.0+) |
 | **运行** | `SELECT * FROM information_schema.INNODB_TRX;`      | 检查是否有长时间未提交的“僵尸事务”                    |
-<!--SR:!2026-03-19,32,270-->
+<!--SR:!2026-06-12,85,270-->
 <?e?>
 <?e?>
 ## 行锁结论
@@ -987,7 +987,7 @@ InnoDB 的行锁（Row Lock）本质上是**索引记录锁**。
 <!--SR:!2026-03-28,32,270-->
 <?e?>
 ## 行锁分析
-通过命令`show status like 'innodb_row_lock%';`检查状态变量来分析系统上的行锁的争夺情况
+通过什么命令检查状态变量来分析系统上的行锁的争夺情况？
 <?l?>
 ```mysql
 show status like 'innodb_row_lock%';
@@ -1010,7 +1010,7 @@ Innodb_row_lock_time_avg # 💡每次等待所花平均时间;
 Innodb_row_lock_time_max # 系统启动到现在最长等待时间;
 Innodb_row_lock_waits # 💡系统启动后到现在总共等待的次数;
 ```
-<!--SR:!2026-03-19,3,250-->
+<!--SR:!2026-03-24,1,210-->
 <?e?>
 # 锁的实时分布
 <?l?>

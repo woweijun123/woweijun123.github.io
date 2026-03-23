@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Docker k8s/K8S Commands/","title":"K8S Commands","tags":["flashcards"],"noteIcon":"","created":"2025-03-12T16:23:57.000+08:00","updated":"2026-03-16T22:46:31.068+08:00"}
+{"dg-publish":true,"permalink":"/Work/Tools/Docker k8s/K8S Commands/","title":"K8S Commands","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T22:46:31.000+08:00","updated":"2026-03-16T22:46:31.000+08:00"}
 ---
 
 # 常用命令

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-23T18:39:25.819+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-23T18:51:01.272+08:00"}
 ---
 
 # 基本语法 [¶](https://www.php.net/manual/zh/language.basic-syntax.php#language.basic-syntax)
@@ -4361,34 +4361,38 @@ use(选择包) as(别名)
 ### 原生枚举（PHP 8.1+）
 ```php
 // 1. 基础字符串枚举
-enum Status: string {
+enum Status: string
+{
     case DRAFT = 'draft';
     case PUBLISHED = 'published';
     case ARCHIVED = 'archived';
 
     // 获取中文标签
-    public function label(): string {
-        return match($this) {
-            self::DRAFT => '草稿',
+    public function label(): string
+    {
+        return match ($this) {
+            self::DRAFT     => '草稿',
             self::PUBLISHED => '已发布',
-            self::ARCHIVED => '已归档',
+            self::ARCHIVED  => '已归档',
         };
     }
 }
 
 // 使用示例
 $status = Status::PUBLISHED;
-echo $status->value; // 输出 'published'
+echo $status->value;   // 输出 'published'
 echo $status->label(); // 输出 '已发布'
 
 // 2. 整数枚举（权限标志）
-enum Permission: int {
+enum Permission: int
+{
     case READ = 1;
     case WRITE = 2;
     case DELETE = 4;
 
     // 组合权限
-    public static function combine(array $permissions): int {
+    public static function combine(array $permissions): int
+    {
         return array_reduce($permissions, fn(int $carry, self $p) => $carry | $p->value, 0);
     }
 }
@@ -4406,12 +4410,14 @@ use OpenApi\Attributes as OA;
     type: 'string',
     enum: ['admin', 'user', 'guest']
 )]
-enum Role: string {
+enum Role: string
+{
     case Admin = 'admin';
     case User = 'user';
     case Guest = 'guest';
 
-    public static function fromString(string $value): ?self {
+    public static function fromString(string $value): ?self
+    {
         return self::tryFrom($value);
     }
 }

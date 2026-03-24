@@ -1,10 +1,9 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/1、MySQL架构介绍/","title":"1、MySQL架构介绍","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-11T15:18:20.462+08:00"}
+{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/1、MySQL架构介绍/","title":"1、MySQL架构介绍","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T11:08:48.288+08:00"}
 ---
 
 # 官网
 https://dev.mysql.com/downloads/mysql/5.5.html#downloads
-[MySQL-client-5.5.48-1.linux2.6.i386.rpm](https://weichengjun2.dpdns.org:5/sharing/FJzJL7EJU)
 # 查询
 ```shell
 rpm -qa | grep -i mysql # 查询是否安装过

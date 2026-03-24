@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Learn/Hash算法与数据库实现/","title":"Hash算法与数据库实现","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T23:28:31.000+08:00","updated":"2026-03-23T10:59:40.045+08:00"}
+{"dg-publish":true,"permalink":"/Learn/Hash算法与数据库实现/","title":"Hash算法与数据库实现","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T23:28:31.000+08:00","updated":"2026-03-24T17:18:17.372+08:00"}
 ---
 
 # Hash函数
@@ -786,7 +786,7 @@ array(5) {
 }
 */
 ```
-<!--SR:!2026-03-24,8,250-->
+<!--SR:!2026-04-13,20,250-->
 <?e?>
 # Hash方案对比(PHP/Java/Go)
 | **特性**       | **PHP 8.5.3 (Zend HashTable)**                                                    | **Java (HashMap)**                                                  | **Go (map)**                                                           |

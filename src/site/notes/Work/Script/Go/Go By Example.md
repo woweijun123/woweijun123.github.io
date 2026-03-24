@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-03-20T23:49:04.000+08:00","updated":"2026-03-23T11:57:36.028+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-03-20T23:49:04.000+08:00","updated":"2026-03-24T17:12:52.854+08:00"}
 ---
 
 # Hello World
@@ -6995,7 +6995,7 @@ ok      benchmark       3.289s
     1. 拿字符串 "Name" 去结构体的元数据表里对比。
     2. 逐个==1;;遍历==字段：是 "Age" 吗？不是。是 "Name" 吗？匹配成功。
     3. 这种遍历和字符串比较无法被 CPU 完全并行化，因此耗时陡增。
-<!--SR:!2026-03-24,8,275-->
+<!--SR:!2026-04-16,23,275-->
 <?e?>
 # 中间件
 <?l?>

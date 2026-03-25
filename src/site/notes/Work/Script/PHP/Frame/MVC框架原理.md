@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/MVC框架原理/","title":"MVC框架原理","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T17:34:42.848+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/MVC框架原理/","title":"MVC框架原理","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-25T17:33:58.045+08:00"}
 ---
 
 # 1.什么是MVC
@@ -96,7 +96,7 @@ location / {
 这样在PHP中用`$_SERVER['REQUEST_URI']就能拿到/item/detail/1`；
 
 （3）可以用来生成美化的URL，利于SEO。
-## 4 PHP MVC核心文件
+# 4 PHP MVC核心文件
 ### 4.1 入口文件
 接下来，在 project 目录下新建 index.php 入口文件，文件内容为：
 ```php
@@ -658,7 +658,7 @@ class View
 ```
 这样，核心的PHP MVC框架核心就完成了。
 下面我们编写应用来测试框架功能。
-## 5 应用
+# 5 应用
 ### 5.1 数据库部署
 在 SQL 中新建一个 project 数据库，增加一个item 表、并插入两条记录，命令如下：
 ```mysql
@@ -904,7 +904,7 @@ delete.php，删除记录后的提示，内容：
 ```php
 <a href="/item/index">成功删除<?php echo $count ?>项，点击返回</a>
 ```
-## 6 应用测试
+# 6 应用测试
 这样，在浏览器中访问 project程序：http://localhost/item/index/，就可以看到效果了。
 ![](https://weichengjun2.dpdns.org/i/2023/09/21/650be5d53bbe8.jpeg)
 

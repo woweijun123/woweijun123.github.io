@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-03-14T19:35:53.000+08:00","updated":"2026-03-23T10:44:14.561+08:00"}
+{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-03-14T19:35:53.000+08:00","updated":"2026-03-25T10:38:56.470+08:00"}
 ---
 
 # 定义
@@ -423,7 +423,7 @@ SHOW VARIABLES LIKE 'innodb_deadlock_detect';
 | **5** | `ROLLBACK;`                              |                                          |                                          | **死锁预警**：B 和 C 同时获得 S 锁，又同时想升级为 X 锁去执行插入。<br>**结果：** 触发死锁检测，回滚**权重更低**的 Session 2 |
 #### 总结
 死锁保留机制就是 **“定向清除最弱竞争者，腾出通道给幸存者”** 。
-<!--SR:!2026-03-25,29,270-->
+<!--SR:!2026-06-11,78,270-->
 <?e?>
 ### 死锁监控
 #### 默认状态：内存瞬时记录
@@ -1010,7 +1010,7 @@ Innodb_row_lock_time_avg # 💡每次等待所花平均时间;
 Innodb_row_lock_time_max # 系统启动到现在最长等待时间;
 Innodb_row_lock_waits # 💡系统启动后到现在总共等待的次数;
 ```
-<!--SR:!2026-03-24,1,210-->
+<!--SR:!2026-03-27,2,210-->
 <?e?>
 # 锁的实时分布
 <?l?>

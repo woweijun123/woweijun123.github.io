@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-03-20T23:49:04.000+08:00","updated":"2026-03-24T17:12:52.854+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-03-20T23:49:04.000+08:00","updated":"2026-03-25T12:08:57.521+08:00"}
 ---
 
 # Hello World
@@ -1571,8 +1571,7 @@ func main() {
 <!--SR:!2026-04-14,49,269-->
 <?e?>
 # 接口
-如何定义实现了接口?<?:?>实现了接口的全部方法，就自动实现了 geometry 接口
-<!--SR:!2026-03-25,44,309-->
+实现了接口的全部方法，就**自动实现**了 geometry 接口
 <?e?>
 1. 多态应用
 2. 空接口
@@ -2161,8 +2160,7 @@ go2:  pong
 # 通道缓冲
 无缓冲通道的发送操作是 (?)  必须等到 (?) 才能完成发送? <?:?> 同步的; 有接收者准备好接收时
 <!--SR:!2026-03-26,45,290-->
-无缓冲通道什么情况下会触发死锁? <?:?> 在**主协程**使用无缓冲通道并且**没有接收者**准备好接收时(在**子协程**中使用无缓冲通道不会触发死锁)
-<!--SR:!2026-03-25,44,290-->
+在**主协程**使用无缓冲通道并且**没有接收者**准备好接收时(在**子协程**中使用无缓冲通道不会触发死锁)
 ```go
 package main
 
@@ -2741,8 +2739,10 @@ worker 2 finished job 4
 # WaitGroup
 方法传参 WaitGroup 必须是(?)类型 <?:?> 指针 (`*sync.WaitGroup`)，以确保操作的是同一个计数器
 <!--SR:!2026-07-20,119,291-->
-go 1.22前的问题 <?:?> `i := i` 避免在每个协程闭包中重复利用相同的 i 值 更多细节可以参考 the FAQ(https://go.dev/doc/faq#closures_and_goroutines)
-<!--SR:!2026-03-24,43,291-->
+<?e?>
+go 1.22前的问题
+<?l?>
+ `i := i` 避免在每个协程闭包中重复利用相同的 i 值 更多细节可以参考 the FAQ(https://go.dev/doc/faq#closures_and_goroutines)
 ```go
 package main
 
@@ -2870,6 +2870,7 @@ request 4 2026-01-22 11:48:26.20147 +0800 CST m=+1.201640668
 request 5 2026-01-22 11:48:26.401497 +0800 CST m=+1.401665960
 ```
 # 原子计数器
+<!--SR:!2026-03-28,3,271-->
 <?e?>
 原子计数器关键代码
 <?l?>
@@ -4032,7 +4033,7 @@ func main() {
    </parent>
  </nesting> 
 ```
-<!--SR:!2026-03-24,13,232-->
+<!--SR:!2026-04-23,29,232-->
 <?e?>
 # 时间
 <?e?>
@@ -4176,54 +4177,48 @@ func main() {
 3. 自定义格式化：只输出 12 小时制的时间
 4. 自定义格式化：全日期时间（含星期、月份、日、时、分、秒、年）
 5. 自定义格式化：精确到微秒及偏移量
-6. 使用自定义布局解析字符串
-7. 使用 Printf 进行传统的手动格式化拼接
-8. 错误处理演示：解析格式不匹配时会返回错误
-9. 获取时间对象的各个字段
+6. 错误处理演示：解析格式不匹配时会返回错误
+7. 获取时间对象的各个字段
 <?l?>
 ```go
-package main
+t := time.Now()
+// 1. 使用预定义的 RFC3339 标准格式输出
+fmt.Println("1.RFC3339:", t.Format(time.RFC3339))
 
-import (
-	"fmt"
-	"time"
+// 2. 解析字符串为时间对象
+t1, _ := time.Parse(time.RFC3339, "2012-11-01T22:08:41+00:00")
+fmt.Println("2.Parse:", t1)
+
+// 3. 自定义格式化：只输出 12 小时制的时间
+fmt.Println("3.Format-Time:", t.Format(time.Kitchen))
+
+// 4. 自定义格式化：全日期时间（含星期、月份、日、时、分、秒、年）
+fmt.Println("4.Format-Full:", t.Format(time.ANSIC))
+
+// 5. 自定义格式化：精确到微秒及偏移量
+fmt.Println("5.Format-Micro:", t.Format(time.RFC3339Nano))
+
+// 6. 使用自定义布局解析字符串
+t2, _ := time.Parse("3 04 PM", "8 41 PM")
+fmt.Println("6.CustomParse:", t2)
+
+// 7. 使用 Printf 进行传统的手动格式化拼接
+fmt.Printf(
+	"7.Printf: %d-%02d-%02dT%02d:%02d:%02d-00:00\n",
+	t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(),
 )
 
-func main() {
-	t := time.Now()
-	// 1. 使用预定义的 RFC3339 标准格式输出
-	fmt.Println("1.RFC3339:", t.Format(time.RFC3339))
+// 8. 错误处理演示：解析格式不匹配时会返回错误
+_, e := time.Parse(time.ANSIC, "8:41PM")
+fmt.Println("8.ParseError:", e) // 格式不匹配，输出错误信息
 
-	// 2. 解析字符串为时间对象
-	t1, _ := time.Parse(time.RFC3339, "2012-11-01T22:08:41+00:00")
-	fmt.Println("2.Parse:", t1)
-
-	// 3. 自定义格式化：只输出 12 小时制的时间
-	fmt.Println("3.Format-Time:", t.Format(time.Kitchen))
-
-	// 4. 自定义格式化：全日期时间（含星期、月份、日、时、分、秒、年）
-	fmt.Println("4.Format-Full:", t.Format(time.ANSIC))
-
-	// 5. 自定义格式化：精确到微秒及偏移量
-	fmt.Println("5.Format-Micro:", t.Format(time.RFC3339Nano))
-
-	// 6. 使用自定义布局解析字符串
-	form := "3 04 PM"
-	t2, _ := time.Parse(form, "8 41 PM")
-	fmt.Println("6.CustomParse:", t2)
-
-	// 7. 使用 Printf 进行传统的手动格式化拼接
-	fmt.Printf("7.Printf: %d-%02d-%02dT%02d:%02d:%02d-00:00\n", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
-
-	// 8. 错误处理演示：解析格式不匹配时会返回错误
-	_, e := time.Parse(time.ANSIC, "8:41PM")
-	fmt.Println("8.ParseError:", e) // 格式不匹配，输出错误信息
-
-	// 9. 获取时间对象的各个字段
-	timeStr := "2025-12-10 13:09:24"
-	parse, _ := time.Parse(time.DateTime, timeStr)
-	fmt.Printf("9.Custome %d-%02d-%02d %02d:%02d:%02d", parse.Year(), parse.Month(), parse.Day(), parse.Hour(), parse.Minute(), parse.Second())
-}
+// 9. 获取时间对象的各个字段
+timeStr := "2025-12-10 13:09:24"
+t3, _ := time.Parse(time.DateTime, timeStr)
+fmt.Printf(
+	"9.Custome %d-%02d-%02d %02d:%02d:%02d",
+	t3.Year(), t3.Month(), t3.Day(), t3.Hour(), t3.Minute(), t3.Second(),
+)
 ```
 输出
 ```
@@ -4237,7 +4232,7 @@ func main() {
 8.ParseError: parsing time "8:41PM" as "Mon Jan _2 15:04:05 2006": cannot parse "8:41PM" as "Mon"
 9.Custome 2025-12-10 13:09:24
 ```
-<!--SR:!2026-03-24,16,252-->
+<!--SR:!2026-05-04,40,252-->
 <?e?>
 # 随机数
 <?e?>
@@ -4419,7 +4414,7 @@ func main() {
 6.2QueryMap: map[k:[v]]
 6.3QueryValue: v
 ```
-<!--SR:!2026-03-24,7,232-->
+<!--SR:!2026-04-10,16,232-->
 <?e?>
 # SHA256 散列
 <?e?>
@@ -6266,12 +6261,15 @@ if vPtr.CanSet() {
 ### 方法动态调用
 💡重点：Call 接收并返回 `[]reflect.Value` 切片
 <?l?>
+#### 基本用法
 ```go
 fmt.Println("\n3. [动态调用]")
 uv := reflect.ValueOf(u)
+
 // A. 无参调用 (按索引)
 res1 := uv.Method(0).Call(nil)
 fmt.Printf("无参调用 (Method 0): %v\n", res1[0].Interface())
+
 // B. 带参调用 (按名称)
 method := uv.MethodByName("SayHello")
 args := []reflect.Value{
@@ -6281,11 +6279,71 @@ args := []reflect.Value{
 res2 := method.Call(args)
 fmt.Printf("带参调用 (SayHello): %v\n", res2[0].String())
 /*
-   1. [动态调用]
+   3. [动态调用]
    无参调用 (Method 0): 我的名字叫 Gemini
    带参调用 (SayHello): 你好 Gopher，我是 Gemini，说了 3 遍
 */
 ```
+#### 方法调用 Method vs. Func
+##### 1. 核心对比：绑定逻辑与调用差异
+调用结构体方法存在**两种**本质不同的路径：**绑定态 (Method Value)** 与 **非绑定态 (Function Value)**。
+###### 方式 A：`reflect.Value.Method()` (绑定态)
+获取的是已绑定具体实例的“方法值”。调用时**无需**传入接收者（Receiver）。
+```go
+// 语义：instance.MethodName
+v := reflect.ValueOf(instance)
+mValue := v.MethodByName("Store") // 此时 mValue 已“锁死”在 instance 上
+
+// 调用：直接传参
+mValue.Call([]reflect.Value{arg1, arg2}) 
+```
+###### 方式 B：`reflect.Type.Method().Func` (非绑定态)
+获取的是未绑定的底层函数。调用时**必须**将实例作为**第一个参数**传入。
+```go
+// 语义：Type.MethodName(instance, ...)
+t := reflect.TypeOf(instance)
+mFunc := t.Method(0).Func // 此时 mFunc 只是一个通用函数指针
+
+// 调用：首个参数必须是接收者实例
+mFunc.Call([]reflect.Value{reflect.ValueOf(instance), arg1, arg2})
+```
+##### 2. 技术参数对照表
+| 维度       | `Value.Method(i)` | `Type.Method(i).Func` |
+| :------- | :---------------- | :-------------------- |
+| **底层类型** | Method Value      | Function Value        |
+| **参数数量** | $N$ (仅业务参数)       | $N + 1$ (接收者 + 业务参数)  |
+| **绑定时机** | 获取时立即绑定           | 调用时动态传入               |
+| **内存开销** | 每次获取都会闭包捕获（较多）    | 共享底层函数定义（较少）          |
+| **执行速度** | **快** (直接寻址)      | **慢** (多一层转换)         |
+##### 3. 代码实战示例
+```go
+type Calc struct{ ID int }
+
+func (c *Calc) Add(a, b int) int { return a + b }
+func main() {
+	c := &Calc{ID: 1}
+
+	// --- 方式 A: 适合固定实例的缓存 ---
+	// 逻辑：将方法与 c 永久绑定，存入 Map 后随时取用
+	vMethod := reflect.ValueOf(c).MethodByName("Add")
+	res1 := vMethod.Call([]reflect.Value{reflect.ValueOf(10), reflect.ValueOf(20)})
+	fmt.Println(res1[0].Interface()) // 30
+
+	// --- 方式 B: 适合泛型框架/DI 容器 ---
+	// 逻辑：缓存函数定义，调用时再决定作用于哪个 Calc 实例
+	tMethod := reflect.TypeOf(c).Method(0).Func
+	res2 := tMethod.Call([]reflect.Value{
+		reflect.ValueOf(c), // 显式注入实例
+		reflect.ValueOf(10),
+		reflect.ValueOf(20),
+	})
+	fmt.Println(res2[0].Interface()) // 30
+}
+```
+##### 4. 架构级记忆要点 💡
+* **90% 场景选方式 A**：处理一个具体的对象（如 Gin 的 Controller 注入），用 `Value.Method()`。更符合直觉，且参数列表与原生函数签名对齐。
+* **10% 场景选方式 B**：写 ORM 或性能要求极高的底层库，且需要**同一个方法定义**作用于**成千上万**个**不同**的实例，此时缓存 `Type.Method().Func` 更有利于内存复用。
+* **Panic 预警**：使用方式 B 时，如果第一个参数的类型与方法接收者不匹配（例如期望 `*Calc` 却传了 `Calc`），程序会直接崩溃。
 <!--SR:!2026-03-29,9,273-->
 <?e?>
 ### 运行时动态构造
@@ -6886,7 +6944,7 @@ Reflect: 0.082978010177612s
 | **反射赋值 (Reflect)** | ~==1;;1.58== ns | ~==1;;82.98== ns | 约 ==1;;52== 倍    |
 **核心发现：**
 Go 的**反射调用**（==1;;~1.58== ns）比 PHP 的**直接赋值**（==1;;~17.93== ns）还要快 ==1;;11== 倍。这意味着在 Go 中即便是被认为“慢”的反射，其执行效率也远超 PHP 的常规代码。
-<!--SR:!2026-03-25,8,255-->
+<!--SR:!2026-04-15,21,255-->
 <?e?>
 #### 2. 损耗比分析 (Performance Penalty)
 反射比原生慢了多少倍：

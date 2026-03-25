@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-03-14T19:37:26.000+08:00","updated":"2026-03-23T10:21:03.330+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-03-14T19:37:26.000+08:00","updated":"2026-03-25T09:34:37.424+08:00"}
 ---
 
 # 为什么 Go 语言要求 Map 键必须可比较？
@@ -54,7 +54,7 @@ func main() {
 ### 解决方式
 1. 确保有发送者（在其他 goroutine 里发送）
 2. 用带缓冲的通道、select+default 等避免长期阻塞。
-<!--SR:!2026-03-25,11,272-->
+<!--SR:!2026-05-06,42,292-->
 <?e?>
 # 切片扩容的零拷贝读取 (Zero-copy Read)
 ## 切片的本质：SliceHeader

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Docker k8s/K8S basic/","title":"K8S basic","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T22:50:33.000+08:00","updated":"2026-03-16T22:50:33.000+08:00"}
+{"dg-publish":true,"permalink":"/Work/Tools/Docker k8s/K8S basic/","title":"K8S basic","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T22:50:33.000+08:00","updated":"2026-03-16T22:50:33.000+08:00","dg-note-properties":{"title":"K8S basic","tags":["flashcards"],"reference linking":"[k8s详细教程(一)](https://znunwm.top/archives/k8s-xiang-xi-jiao-cheng)","reference linking2":"[k8s详细教程(二)](https://znunwm.top/archives/121212)","reference linking3":"[https://pan.baidu.com/s/1wXLaziqn2BKq1mN0gMXJcg?pwd=crhm](https://pan.baidu.com/s/1wXLaziqn2BKq1mN0gMXJcg?pwd=crhm)","reference linking4":null}}
 ---
 
  https://pan.baidu.com/s/15MCgIFW9vrOdNycBReEpig?pwd=3dnm 提取码: 3dnm

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 自定义命令目录/","title":"Hyperf 自定义命令目录","tags":["flashcards"],"noteIcon":"","created":"2025-01-06T16:13:54.000+08:00","updated":"2026-03-24T17:32:03.827+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 自定义命令目录/","title":"Hyperf 自定义命令目录","tags":["flashcards"],"noteIcon":"","created":"2025-01-06T16:13:54.000+08:00","updated":"2026-03-24T17:32:03.827+08:00","dg-note-properties":{"title":"Hyperf 自定义命令目录","tags":["flashcards"],"reference linking":null}}
 ---
 
 自定义命令文件为: `hyperf/my/MyCommand.php`

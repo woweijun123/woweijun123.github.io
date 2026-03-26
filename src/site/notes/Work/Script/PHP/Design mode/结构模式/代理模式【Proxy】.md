@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/代理模式【Proxy】/","title":"代理模式【Proxy】","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T11:34:34.000+08:00","updated":"2026-03-24T17:26:47.575+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/代理模式【Proxy】/","title":"代理模式【Proxy】","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T11:34:34.000+08:00","updated":"2026-03-24T17:26:47.575+08:00","dg-note-properties":{"title":"代理模式【Proxy】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

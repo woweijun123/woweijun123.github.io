@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Excel、Word/","title":"Excel、Word","tags":["flashcards","#phpspreadsheet","#csv","#excel","#word"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T17:47:28.802+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Excel、Word/","title":"Excel、Word","tags":["flashcards","#phpspreadsheet","#csv","#excel","#word"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T17:47:28.802+08:00","dg-note-properties":{"title":"Excel、Word","tags":["flashcards","#phpspreadsheet","#csv","#excel","#word"],"reference linking":null}}
 ---
 
 由于PHPExcel已经不再维护，PhpSpreadsheet是PHPExcel的下一个版本。PhpSpreadsheet是一个用纯PHP编写的库，并引入了命名空间，PSR规范等。这里简单介绍下PhpSpreadsheet的导入导出功能。

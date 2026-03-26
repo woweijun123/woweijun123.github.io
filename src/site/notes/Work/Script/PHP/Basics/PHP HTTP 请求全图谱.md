@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP HTTP 请求全图谱/","title":"PHP HTTP 请求全图谱","tags":["flashcards"],"noteIcon":"","created":"2026-03-13T10:17:37.139+08:00","updated":"2026-03-13T10:35:53.871+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP HTTP 请求全图谱/","title":"PHP HTTP 请求全图谱","tags":["flashcards"],"noteIcon":"","created":"2026-03-13T10:17:37.139+08:00","updated":"2026-03-13T10:35:53.871+08:00","dg-note-properties":{"title":"PHP HTTP 请求全图谱","tags":["flashcards"],"reference linking":null}}
 ---
 
 # PHP 发起 HTTP 请求的四种途径

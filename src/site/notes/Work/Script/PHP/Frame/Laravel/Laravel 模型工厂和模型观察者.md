@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 模型工厂和模型观察者/","title":"Laravel 模型工厂和模型观察者","tags":["flashcards"],"noteIcon":"","created":"2025-05-17T13:37:56.241+08:00","updated":"2026-03-24T17:33:52.124+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 模型工厂和模型观察者/","title":"Laravel 模型工厂和模型观察者","tags":["flashcards"],"noteIcon":"","created":"2025-05-17T13:37:56.241+08:00","updated":"2026-03-24T17:33:52.124+08:00","dg-note-properties":{"title":"Laravel 模型工厂和模型观察者","tags":["flashcards"],"reference linking":null}}
 ---
 
 在 Laravel 中，`php artisan make:factory name` 和 `php artisan make:observer UserObserver` 是两个常用的命令，分别用于创建 **模型工厂** 和 **模型观察者**。它们的使用场景和示例如下：

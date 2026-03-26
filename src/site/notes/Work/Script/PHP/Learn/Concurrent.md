@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Concurrent/","title":"Concurrent","tags":["flashcards"],"noteIcon":"","created":"2024-01-21T01:00:43.000+08:00","updated":"2026-03-24T17:47:18.324+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Concurrent/","title":"Concurrent","tags":["flashcards"],"noteIcon":"","created":"2024-01-21T01:00:43.000+08:00","updated":"2026-03-24T17:47:18.324+08:00","dg-note-properties":{"title":"Concurrent","tags":["flashcards"],"reference linking":null}}
 ---
 
 参考链接

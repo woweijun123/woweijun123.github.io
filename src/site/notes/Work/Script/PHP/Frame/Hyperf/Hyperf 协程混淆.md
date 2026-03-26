@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 协程混淆/","title":"Hyperf 协程混淆","tags":["flashcards"],"noteIcon":"","created":"2025-09-12T09:38:02.725+08:00","updated":"2026-03-24T17:32:00.190+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 协程混淆/","title":"Hyperf 协程混淆","tags":["flashcards"],"noteIcon":"","created":"2025-09-12T09:38:02.725+08:00","updated":"2026-03-24T17:32:00.190+08:00","dg-note-properties":{"title":"Hyperf 协程混淆","tags":["flashcards"],"reference linking":null}}
 ---
 
 ### 核心原则：协程内存模型

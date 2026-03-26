@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/装饰器模式【Decorator】/","title":"装饰器模式【Decorator】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:47:39.000+08:00","updated":"2026-03-24T17:29:51.763+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/装饰器模式【Decorator】/","title":"装饰器模式【Decorator】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:47:39.000+08:00","updated":"2026-03-24T17:29:51.763+08:00","dg-note-properties":{"title":"装饰器模式【Decorator】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

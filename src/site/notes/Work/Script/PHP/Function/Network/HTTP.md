@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Network/HTTP/","title":"HTTP","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:24:34.000+08:00","updated":"2026-03-24T17:35:37.822+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Network/HTTP/","title":"HTTP","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:24:34.000+08:00","updated":"2026-03-24T17:35:37.822+08:00","dg-note-properties":{"title":"HTTP","tags":["flashcards"],"reference linking":null}}
 ---
 
 # http_response_code

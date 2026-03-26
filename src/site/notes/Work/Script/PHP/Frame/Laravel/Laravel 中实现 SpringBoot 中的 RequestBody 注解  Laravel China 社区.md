@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 中实现 SpringBoot 中的 RequestBody 注解  Laravel China 社区/","title":"Laravel 中实现 SpringBoot 中的 RequestBody 注解  Laravel China 社区","tags":["flashcards"],"noteIcon":"","created":"2025-05-18T10:03:20.444+08:00","updated":"2026-03-24T17:33:57.528+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 中实现 SpringBoot 中的 RequestBody 注解  Laravel China 社区/","title":"Laravel 中实现 SpringBoot 中的 RequestBody 注解  Laravel China 社区","tags":["flashcards"],"noteIcon":"","created":"2025-05-18T10:03:20.444+08:00","updated":"2026-03-24T17:33:57.528+08:00","dg-note-properties":{"title":"Laravel 中实现 SpringBoot 中的 RequestBody 注解  Laravel China 社区","tags":["flashcards"],"reference linking":null}}
 ---
 
 ## Laravel 中实现 SpringBoot 中的 RequestBody 注解

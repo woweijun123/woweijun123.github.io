@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Network/SMTP/","title":"SMTP","tags":["flashcards"],"noteIcon":"","created":"2025-11-19T16:37:35.316+08:00","updated":"2026-03-24T17:35:30.388+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Network/SMTP/","title":"SMTP","tags":["flashcards"],"noteIcon":"","created":"2025-11-19T16:37:35.316+08:00","updated":"2026-03-24T17:35:30.388+08:00","dg-note-properties":{"title":"SMTP","tags":["flashcards"],"reference linking":null}}
 ---
 
 SMTP（Simple Mail Transfer Protocol，简单邮件传输协议）是互联网中用于**发送电子邮件**的核心协议。

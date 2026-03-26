@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Golang开发新手常犯的50个错误/","title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-16T11:23:13.058+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Golang开发新手常犯的50个错误/","title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-26T10:49:15.668+08:00","dg-note-properties":{"title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"reference linking":"[Go的50度灰：Golang新开发者要注意的陷阱和常见错误](https://colobu.com/2015/09/07/gotchas-and-common-mistakes-in-go-golang/)","origin linking":"[50 Shades of Go: Traps, Gotchas, and Common Mistakes for New Golang Devs](http://devs.cloudimmunity.com/gotchas-and-common-mistakes-in-go-golang/index.html)"}}
 ---
 
 本文总结了Go语言初学者常遇到的陷阱与误区，包括变量声明、类型断言、并发编程等多个方面，帮助开发者规避错误，提升编程效率。
@@ -1232,7 +1232,7 @@ func main() {
 ##### 5. 常见坑点 ⚠️
 - **连接泄漏**: 未读完 Body 或未 Close 会导致连接无法回归池，引发 FD 耗尽。
 - **默认配置性能差**: 默认的 `MaxIdleConnsPerHost=2` 会导致高并发下产生大量 `TIME_WAIT` 连接。
-<!--SR:!2026-03-26,10,230-->
+<!--SR:!2026-04-18,23,230-->
 <?e?>
 ### 3、JSON Encoder 会自动添加换行符
 ```go

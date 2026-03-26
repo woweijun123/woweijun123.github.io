@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/SHMOP/","title":"SHMOP","tags":["flashcards"],"noteIcon":"","created":"2025-09-04T13:45:46.717+08:00","updated":"2026-03-24T17:36:51.613+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/SHMOP/","title":"SHMOP","tags":["flashcards"],"noteIcon":"","created":"2025-09-04T13:45:46.717+08:00","updated":"2026-03-24T17:36:51.613+08:00","dg-note-properties":{"title":"SHMOP","tags":["flashcards"],"reference linking":null}}
 ---
 
 # PHP 主子进程共享内存

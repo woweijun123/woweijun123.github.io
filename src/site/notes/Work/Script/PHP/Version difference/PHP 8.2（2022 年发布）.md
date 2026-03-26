@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Version difference/PHP 8.2（2022 年发布）/","title":"PHP 8.2（2022 年发布）","tags":["flashcards"],"noteIcon":"","created":"2025-05-12T16:50:06.337+08:00","updated":"2026-03-24T17:51:06.233+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Version difference/PHP 8.2（2022 年发布）/","title":"PHP 8.2（2022 年发布）","tags":["flashcards"],"noteIcon":"","created":"2025-05-12T16:50:06.337+08:00","updated":"2026-03-24T17:51:06.233+08:00","dg-note-properties":{"title":"PHP 8.2（2022 年发布）","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 只读类（Readonly Class）  

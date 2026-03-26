@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 的服务容器/","title":"Laravel 的服务容器","tags":["flashcards"],"noteIcon":"","created":"2025-05-18T11:48:28.682+08:00","updated":"2026-03-24T17:33:49.014+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 的服务容器/","title":"Laravel 的服务容器","tags":["flashcards"],"noteIcon":"","created":"2025-05-18T11:48:28.682+08:00","updated":"2026-03-24T17:33:49.014+08:00","dg-note-properties":{"title":"Laravel 的服务容器","tags":["flashcards"],"reference linking":null}}
 ---
 
 在 Laravel 的服务容器中，`app()->singletonIf`、`app()->bindIf` 和 `app()->make` 是三个常用的方法，它们的作用和区别如下：

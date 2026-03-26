@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Docker k8s/K8S DevOps/","title":"K8S DevOps","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T23:00:02.000+08:00","updated":"2026-03-16T23:00:02.000+08:00"}
+{"dg-publish":true,"permalink":"/Work/Tools/Docker k8s/K8S DevOps/","title":"K8S DevOps","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T23:00:02.000+08:00","updated":"2026-03-16T23:00:02.000+08:00","dg-note-properties":{"title":"K8S DevOps","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 相关资料

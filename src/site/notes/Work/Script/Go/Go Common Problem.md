@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-03-14T19:37:26.000+08:00","updated":"2026-03-25T09:34:37.424+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-03-14T19:37:26.000+08:00","updated":"2026-03-25T09:34:37.424+08:00","dg-note-properties":{"title":"Go Common Problem","tags":["flashcards"]}}
 ---
 
 # 为什么 Go 语言要求 Map 键必须可比较？

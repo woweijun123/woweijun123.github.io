@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/Program execution/","title":"Program execution","tags":["flashcards"],"noteIcon":"","created":"2025-11-03T09:48:07.000+08:00","updated":"2026-03-24T17:36:50.198+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/Program execution/","title":"Program execution","tags":["flashcards"],"noteIcon":"","created":"2025-11-03T09:48:07.000+08:00","updated":"2026-03-24T17:36:50.198+08:00","dg-note-properties":{"title":"Program execution","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 简单的命令执行函数

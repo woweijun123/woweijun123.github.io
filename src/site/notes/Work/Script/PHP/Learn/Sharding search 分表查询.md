@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Sharding search 分表查询/","title":"Sharding search 分表查询","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:26:31.000+08:00","updated":"2026-03-24T17:47:54.563+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Sharding search 分表查询/","title":"Sharding search 分表查询","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:26:31.000+08:00","updated":"2026-03-24T17:47:54.563+08:00","dg-note-properties":{"title":"Sharding search 分表查询","tags":["flashcards"],"reference linking":null}}
 ---
 
 ## 数据库分表（Sharding）的应用

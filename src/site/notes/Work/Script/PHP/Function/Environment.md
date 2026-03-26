@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Environment/","title":"Environment","tags":["flashcards"],"noteIcon":"","created":"2026-03-04T11:12:29.000+08:00","updated":"2026-03-24T17:38:08.157+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Environment/","title":"Environment","tags":["flashcards"],"noteIcon":"","created":"2026-03-04T11:12:29.000+08:00","updated":"2026-03-24T17:38:08.157+08:00","dg-note-properties":{"title":"Environment","tags":["flashcards"],"reference linking":null}}
 ---
 
 # getenv()

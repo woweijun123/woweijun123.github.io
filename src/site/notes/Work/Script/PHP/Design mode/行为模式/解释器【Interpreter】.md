@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/解释器【Interpreter】/","title":"解释器【Interpreter】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:14.000+08:00","updated":"2026-03-24T17:30:00.897+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/解释器【Interpreter】/","title":"解释器【Interpreter】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:14.000+08:00","updated":"2026-03-24T17:30:00.897+08:00","dg-note-properties":{"title":"解释器【Interpreter】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Redis 队列消费自动伸缩/","title":"Redis 队列消费自动伸缩","tags":["flashcards"],"noteIcon":"","created":"2025-08-19T09:39:37.988+08:00","updated":"2026-03-24T17:47:47.833+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Redis 队列消费自动伸缩/","title":"Redis 队列消费自动伸缩","tags":["flashcards"],"noteIcon":"","created":"2025-08-19T09:39:37.988+08:00","updated":"2026-03-24T17:47:47.833+08:00","dg-note-properties":{"title":"Redis 队列消费自动伸缩","tags":["flashcards"],"reference linking":null}}
 ---
 
 ### 设计思路

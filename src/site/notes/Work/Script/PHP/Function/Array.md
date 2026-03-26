@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Array/","title":"Array","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T11:34:34.000+08:00","updated":"2026-03-24T17:38:16.961+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Array/","title":"Array","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T11:34:34.000+08:00","updated":"2026-03-24T17:38:16.961+08:00","dg-note-properties":{"title":"Array","tags":["flashcards"],"reference linking":null}}
 ---
 
 # array_pad

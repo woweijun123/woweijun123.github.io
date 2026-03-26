@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/创建模式/原型【Prototype】/","title":"原型【Prototype】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:45:28.000+08:00","updated":"2026-03-24T17:26:42.199+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/创建模式/原型【Prototype】/","title":"原型【Prototype】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:45:28.000+08:00","updated":"2026-03-24T17:26:42.199+08:00","dg-note-properties":{"title":"原型【Prototype】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

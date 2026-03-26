@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/备忘录【Memento】/","title":"备忘录【Memento】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:46:35.000+08:00","updated":"2026-03-24T17:29:53.852+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/备忘录【Memento】/","title":"备忘录【Memento】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:46:35.000+08:00","updated":"2026-03-24T17:29:53.852+08:00","dg-note-properties":{"title":"备忘录【Memento】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

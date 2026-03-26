@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/创建模式/简单工厂【Simple Factory】/","title":"简单工厂【Simple Factory】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:47:52.000+08:00","updated":"2026-03-24T17:26:33.039+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/创建模式/简单工厂【Simple Factory】/","title":"简单工厂【Simple Factory】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:47:52.000+08:00","updated":"2026-03-24T17:26:33.039+08:00","dg-note-properties":{"title":"简单工厂【Simple Factory】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/桥接模式【Bridge】/","title":"桥接模式【Bridge】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:46:57.000+08:00","updated":"2026-03-24T17:26:57.306+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/桥接模式【Bridge】/","title":"桥接模式【Bridge】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:46:57.000+08:00","updated":"2026-03-24T17:26:57.306+08:00","dg-note-properties":{"title":"桥接模式【Bridge】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

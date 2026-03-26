@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Debug/","title":"Debug","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T17:47:21.234+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Debug/","title":"Debug","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T17:47:21.234+08:00","dg-note-properties":{"title":"Debug","tags":["flashcards"],"reference linking":null}}
 ---
 
 # Debug 的原理

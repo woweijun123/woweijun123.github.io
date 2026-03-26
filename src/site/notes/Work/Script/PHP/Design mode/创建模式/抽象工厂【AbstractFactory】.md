@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/创建模式/抽象工厂【AbstractFactory】/","title":"抽象工厂【AbstractFactory】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:47:23.000+08:00","updated":"2026-03-24T17:26:26.246+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/创建模式/抽象工厂【AbstractFactory】/","title":"抽象工厂【AbstractFactory】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:47:23.000+08:00","updated":"2026-03-24T17:26:26.246+08:00","dg-note-properties":{"title":"抽象工厂【AbstractFactory】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

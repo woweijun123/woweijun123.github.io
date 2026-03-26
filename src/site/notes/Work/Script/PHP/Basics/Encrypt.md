@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/Encrypt/","title":"Encrypt","tags":["flashcards"],"noteIcon":"","created":"2025-03-18T17:39:39.767+08:00","updated":"2026-03-24T17:23:44.006+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/Encrypt/","title":"Encrypt","tags":["flashcards"],"noteIcon":"","created":"2025-03-18T17:39:39.767+08:00","updated":"2026-03-24T17:23:44.006+08:00","dg-note-properties":{"title":"Encrypt","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 非对称加密

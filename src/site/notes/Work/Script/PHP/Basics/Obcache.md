@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/Obcache/","title":"Obcache","noteIcon":"","created":"2025-12-25T09:39:50.000+08:00","updated":"2026-03-24T17:21:30.896+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/Obcache/","title":"Obcache","noteIcon":"","created":"2025-12-25T09:39:50.000+08:00","updated":"2026-03-24T17:21:30.896+08:00","dg-note-properties":{"title":"Obcache","tags":null,"reference linking":null}}
 ---
 
 # 缓冲层

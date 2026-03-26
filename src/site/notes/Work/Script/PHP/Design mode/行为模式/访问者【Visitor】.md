@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/访问者【Visitor】/","title":"访问者【Visitor】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:21.000+08:00","updated":"2026-03-24T17:29:58.085+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/访问者【Visitor】/","title":"访问者【Visitor】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:21.000+08:00","updated":"2026-03-24T17:29:58.085+08:00","dg-note-properties":{"title":"访问者【Visitor】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

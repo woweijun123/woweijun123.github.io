@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/模版方法【TemplateMethod】/","title":"模版方法【TemplateMethod】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:47:10.000+08:00","updated":"2026-03-24T17:30:04.323+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/模版方法【TemplateMethod】/","title":"模版方法【TemplateMethod】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:47:10.000+08:00","updated":"2026-03-24T17:30:04.323+08:00","dg-note-properties":{"title":"模版方法【TemplateMethod】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

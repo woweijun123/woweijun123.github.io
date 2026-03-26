@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel Horizon 使用 proc_open()而不使用pcntl_fork()/","title":"Laravel Horizon 使用 proc_open()而不使用pcntl_fork()","tags":["flashcards"],"noteIcon":"","created":"2025-11-05T16:48:17.682+08:00","updated":"2026-03-24T17:34:03.941+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel Horizon 使用 proc_open()而不使用pcntl_fork()/","title":"Laravel Horizon 使用 proc_open()而不使用pcntl_fork()","tags":["flashcards"],"noteIcon":"","created":"2025-11-05T16:48:17.682+08:00","updated":"2026-03-24T17:34:03.941+08:00","dg-note-properties":{"title":"Laravel Horizon 使用 proc_open()而不使用pcntl_fork()","tags":["flashcards"],"reference linking":null}}
 ---
 
 ### 1. 独立性和健壮性 (Robustness)

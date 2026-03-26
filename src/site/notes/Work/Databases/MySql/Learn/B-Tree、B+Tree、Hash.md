@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/MySql/Learn/B-Tree、B+Tree、Hash/","title":"B-Tree、B+Tree、Hash","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-11T17:14:12.734+08:00"}
+{"dg-publish":true,"permalink":"/Work/Databases/MySql/Learn/B-Tree、B+Tree、Hash/","title":"B-Tree、B+Tree、Hash","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-11T17:14:12.734+08:00","dg-note-properties":{"title":"B-Tree、B+Tree、Hash","tags":["flashcards"],"links":"[mp.weixin.qq.com/s/d7Zfat2fP6IX5DMKKtEIjQ](https://mp.weixin.qq.com/s/d7Zfat2fP6IX5DMKKtEIjQ)"}}
 ---
 
 # 为什么MySQL索引要用`B+tree`

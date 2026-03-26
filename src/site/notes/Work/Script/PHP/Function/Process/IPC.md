@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/IPC/","title":"IPC，Inter-Process Communication","tags":["flashcards"],"noteIcon":"","created":"2025-09-04T13:47:05.090+08:00","updated":"2026-03-24T17:36:46.404+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/IPC/","title":"IPC，Inter-Process Communication","tags":["flashcards"],"noteIcon":"","created":"2025-09-04T13:47:05.090+08:00","updated":"2026-03-24T17:36:46.404+08:00","dg-note-properties":{"title":"IPC，Inter-Process Communication","tags":["flashcards"],"reference linking":null}}
 ---
 
 ### 什么是进程间通信 (IPC)？

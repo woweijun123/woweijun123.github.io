@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 异步队列事件/","title":"Laravel 异步队列事件","tags":["flashcards"],"noteIcon":"","created":"2025-07-21T20:11:35.690+08:00","updated":"2026-03-24T17:33:56.104+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 异步队列事件/","title":"Laravel 异步队列事件","tags":["flashcards"],"noteIcon":"","created":"2025-07-21T20:11:35.690+08:00","updated":"2026-03-24T17:33:56.104+08:00","dg-note-properties":{"title":"Laravel 异步队列事件","tags":["flashcards"],"reference linking":null}}
 ---
 
 下面是一个完整的Laravel示例，展示如何使用事件和Redis队列异步执行耗时任务：

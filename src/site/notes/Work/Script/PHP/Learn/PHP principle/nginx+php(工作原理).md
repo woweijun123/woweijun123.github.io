@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/PHP principle/nginx+php(工作原理)/","title":"nginx+php(工作原理)","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:47:18.000+08:00","updated":"2026-03-24T17:46:40.471+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/PHP principle/nginx+php(工作原理)/","title":"nginx+php(工作原理)","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:47:18.000+08:00","updated":"2026-03-24T17:46:40.471+08:00","dg-note-properties":{"title":"nginx+php(工作原理)","tags":["flashcards"],"reference linking":null}}
 ---
 
 php工作原理

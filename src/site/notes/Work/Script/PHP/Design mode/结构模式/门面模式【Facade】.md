@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/门面模式【Facade】/","title":"门面模式【Facade】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:08.000+08:00","updated":"2026-03-24T17:26:53.906+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/门面模式【Facade】/","title":"门面模式【Facade】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:08.000+08:00","updated":"2026-03-24T17:26:53.906+08:00","dg-note-properties":{"title":"门面模式【Facade】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

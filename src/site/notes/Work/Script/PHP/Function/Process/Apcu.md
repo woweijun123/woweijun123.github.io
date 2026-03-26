@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/Apcu/","title":"Apcu","tags":["flashcards"],"noteIcon":"","created":"2026-01-09T11:53:19.605+08:00","updated":"2026-03-24T17:36:44.569+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/Apcu/","title":"Apcu","tags":["flashcards"],"noteIcon":"","created":"2026-01-09T11:53:19.605+08:00","updated":"2026-03-24T17:36:44.569+08:00","dg-note-properties":{"title":"Apcu","tags":["flashcards"],"reference linking":null}}
 ---
 
 APCu（APC User Cache）是一个为 PHP 设计的**内存驻留级键值存储扩展**。它是早期 APC（Alternative PHP Cache）扩展的延续，但剥离了过时的操作码缓存（Opcode Cache）功能，专注于**用户数据缓存**。

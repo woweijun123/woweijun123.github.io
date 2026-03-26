@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Guzzle 异步原理/","title":"Guzzle 异步原理","tags":["flashcards"],"noteIcon":"","created":"2025-06-05T13:03:22.682+08:00","updated":"2026-03-24T17:47:34.760+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Guzzle 异步原理/","title":"Guzzle 异步原理","tags":["flashcards"],"noteIcon":"","created":"2025-06-05T13:03:22.682+08:00","updated":"2026-03-24T17:47:34.760+08:00","dg-note-properties":{"title":"Guzzle 异步原理","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 1. 核心原理

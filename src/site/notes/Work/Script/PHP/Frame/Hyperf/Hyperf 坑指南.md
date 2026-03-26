@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 坑指南/","title":"Hyperf 坑指南","tags":["flashcards"],"noteIcon":"","created":"2025-09-12T09:39:38.026+08:00","updated":"2026-03-24T17:31:58.727+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 坑指南/","title":"Hyperf 坑指南","tags":["flashcards"],"noteIcon":"","created":"2025-09-12T09:39:38.026+08:00","updated":"2026-03-24T17:31:58.727+08:00","dg-note-properties":{"title":"Hyperf 坑指南","tags":["flashcards"],"reference linking":null}}
 ---
 
 Hyperf 确实能显著提升 PHP 应用的性能，但深入使用后，你可能会遇到一些特定的情况。下面我梳理了 Hyperf 中容易踩坑的地方，以及关于协程读写是否需要加锁的解释和建议。

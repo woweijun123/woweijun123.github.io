@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/PCNTL/","title":"PCNTL","tags":["flashcards"],"noteIcon":"","created":"2025-05-29T13:46:57.137+08:00","updated":"2026-03-24T17:36:47.696+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/PCNTL/","title":"PCNTL","tags":["flashcards"],"noteIcon":"","created":"2025-05-29T13:46:57.137+08:00","updated":"2026-03-24T17:36:47.696+08:00","dg-note-properties":{"title":"PCNTL","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 函数

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Network/Grpc 原理/","title":"Grpc 原理","tags":["flashcards"],"noteIcon":"","created":"2025-04-07T21:18:31.884+08:00","updated":"2026-03-24T17:35:40.293+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Network/Grpc 原理/","title":"Grpc 原理","tags":["flashcards"],"noteIcon":"","created":"2025-04-07T21:18:31.884+08:00","updated":"2026-03-24T17:35:40.293+08:00","dg-note-properties":{"title":"Grpc 原理","tags":["flashcards"],"reference linking":"[tech| 再探 grpc - 简书](https://www.jianshu.com/p/f3221df39e6f)"}}
 ---
 
 # tech| 再探 grpc

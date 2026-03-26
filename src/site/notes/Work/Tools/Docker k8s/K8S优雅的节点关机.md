@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Docker k8s/K8S优雅的节点关机/","title":"K8S优雅的节点关机","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T22:51:09.000+08:00","updated":"2026-03-16T22:51:09.000+08:00"}
+{"dg-publish":true,"permalink":"/Work/Tools/Docker k8s/K8S优雅的节点关机/","title":"K8S优雅的节点关机","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T22:51:09.000+08:00","updated":"2026-03-16T22:51:09.000+08:00","dg-note-properties":{"title":"K8S优雅的节点关机","tags":["flashcards"],"reference linking":null}}
 ---
 
 在Kubernetes（K8S）中，进行优雅的节点关机维护是确保集群稳定性和可用性的关键步骤。以下是一个详细的指南，涵盖了从准备到恢复的全过程：

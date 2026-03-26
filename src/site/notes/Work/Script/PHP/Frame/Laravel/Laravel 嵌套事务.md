@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 嵌套事务/","title":"Laravel 嵌套事务","tags":["flashcards"],"noteIcon":"","created":"2025-07-31T21:40:32.636+08:00","updated":"2026-03-24T17:33:53.453+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 嵌套事务/","title":"Laravel 嵌套事务","tags":["flashcards"],"noteIcon":"","created":"2025-07-31T21:40:32.636+08:00","updated":"2026-03-24T17:33:53.453+08:00","dg-note-properties":{"title":"Laravel 嵌套事务","tags":["flashcards"],"reference linking":null}}
 ---
 
 ## Laravel 中嵌套事务的处理逻辑与回滚

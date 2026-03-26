@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/Reflection与Annotation/","title":"Reflection与Annotation","noteIcon":"","created":"2024-06-15T17:27:23.000+08:00","updated":"2026-03-24T17:22:15.306+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/Reflection与Annotation/","title":"Reflection与Annotation","noteIcon":"","created":"2024-06-15T17:27:23.000+08:00","updated":"2026-03-24T17:22:15.306+08:00","dg-note-properties":{"title":"Reflection与Annotation","tags":null,"reference linking":null}}
 ---
 
 

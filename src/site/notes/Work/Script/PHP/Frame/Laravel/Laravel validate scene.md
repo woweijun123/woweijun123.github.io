@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel validate scene/","title":"Laravel validate scene","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:47:15.000+08:00","updated":"2026-03-24T17:34:07.290+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel validate scene/","title":"Laravel validate scene","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:47:15.000+08:00","updated":"2026-03-24T17:34:07.290+08:00","dg-note-properties":{"title":"Laravel validate scene","tags":["flashcards"],"reference linking":null}}
 ---
 
 参考链接: https://www.jb51.net/article/184253.htm

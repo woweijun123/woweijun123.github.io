@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Hypef、PHP-FPM 进程类型及作用/","title":"Hypef、PHP-FPM 进程类型及作用","tags":["flashcards"],"noteIcon":"","created":"2025-04-09T09:50:21.902+08:00","updated":"2026-03-24T17:50:05.037+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Hypef、PHP-FPM 进程类型及作用/","title":"Hypef、PHP-FPM 进程类型及作用","tags":["flashcards"],"noteIcon":"","created":"2025-04-09T09:50:21.902+08:00","updated":"2026-03-24T17:50:05.037+08:00","dg-note-properties":{"title":"Hypef、PHP-FPM 进程类型及作用","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 1.Hyperf 启动的进程类型及作用

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/观察者【Observer】/","title":"观察者【Observer】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:12.000+08:00","updated":"2026-03-24T17:29:59.324+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/观察者【Observer】/","title":"观察者【Observer】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:12.000+08:00","updated":"2026-03-24T17:29:59.324+08:00","dg-note-properties":{"title":"观察者【Observer】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

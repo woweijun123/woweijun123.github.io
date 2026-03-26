@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/PHP-FPM优化策略/","title":"PHP-FPM优化策略","tags":["flashcards"],"noteIcon":"","created":"2025-04-12T20:07:02.869+08:00","updated":"2026-03-24T17:47:44.632+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/PHP-FPM优化策略/","title":"PHP-FPM优化策略","tags":["flashcards"],"noteIcon":"","created":"2025-04-12T20:07:02.869+08:00","updated":"2026-03-24T17:47:44.632+08:00","dg-note-properties":{"title":"PHP-FPM优化策略","tags":["flashcards"],"reference linking":null}}
 ---
 
 # `php-fpm.conf` 参数详解

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Performance improvement/","title":"Performance improvement","tags":["flashcards"],"noteIcon":"","created":"2026-02-05T17:26:11.847+08:00","updated":"2026-03-24T17:47:41.363+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Performance improvement/","title":"Performance improvement","tags":["flashcards"],"noteIcon":"","created":"2026-02-05T17:26:11.847+08:00","updated":"2026-03-24T17:47:41.363+08:00","dg-note-properties":{"title":"Performance improvement","tags":["flashcards"],"reference linking":null}}
 ---
 
 ## 字符串优化 (Strings)

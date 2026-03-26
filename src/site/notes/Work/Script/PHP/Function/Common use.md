@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Common use/","title":"Common use","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:23:33.000+08:00","updated":"2026-03-24T17:38:11.160+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Common use/","title":"Common use","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:23:33.000+08:00","updated":"2026-03-24T17:38:11.160+08:00","dg-note-properties":{"title":"Common use","tags":["flashcards"],"reference linking":null}}
 ---
 
 # get_parent_class

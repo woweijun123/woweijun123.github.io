@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-03-20T23:49:04.000+08:00","updated":"2026-03-25T12:08:57.521+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-03-25T23:52:47.000+08:00","updated":"2026-03-26T10:47:36.114+08:00","dg-note-properties":{"title":"Go By Example","tags":["flashcards"],"links":"[Go by Example 中文版](https://gobyexample-cn.github.io/)"}}
 ---
 
 # Hello World
@@ -2159,7 +2159,7 @@ go2:  pong
 ```
 # 通道缓冲
 无缓冲通道的发送操作是 (?)  必须等到 (?) 才能完成发送? <?:?> 同步的; 有接收者准备好接收时
-<!--SR:!2026-03-26,45,290-->
+<!--SR:!2026-08-04,131,290-->
 在**主协程**使用无缓冲通道并且**没有接收者**准备好接收时(在**子协程**中使用无缓冲通道不会触发死锁)
 ```go
 package main
@@ -6114,7 +6114,7 @@ go list -m all | grep text
 > 		- 如果你传递的是**指针**，并且通过 **`Elem()` 方法**获取指针指向的内容，反射对象才是**可设置**的。
 > 3. 从**反射对象**到`interface{}`：v.Interface() 将反射对象**重新装箱**。
 > 	- 通过调用 `reflect.Value` 的 `Interface()` 方法，我们可以将反射出来的对象打包回接口类型，随后可以通过**类型断言**将其还原为**原始类型**。
-<!--SR:!2026-03-26,7,273-->
+<!--SR:!2026-04-15,20,273-->
 <?e?>
 ### 基础结构
 ```go
@@ -6702,7 +6702,7 @@ for i := 0; i < vSvc.NumMethod(); i++ {
    Pointer接收成功: M4-Core-Data
 */
 ```
-<!--SR:!2026-03-26,3,255-->
+<!--SR:!2026-04-03,8,255-->
 <?e?>
 ## 实现结构体方法动态回调
 <?l?>
@@ -6859,7 +6859,7 @@ func main() {
 【业务执行】原因: 设备升级，重新下单, 订单ID: ORD_M4_2026
 【调用完成】返回状态码: 2
 ```
-<!--SR:!2026-03-14,1,254-->
+<!--SR:!2026-03-26,1,194-->
 <?e?>
 ## GO VS PHP 反射耗时对比
 ### Go

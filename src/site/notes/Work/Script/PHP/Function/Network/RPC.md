@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Network/RPC/","title":"RPC","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T17:35:33.917+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Network/RPC/","title":"RPC","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T17:35:33.917+08:00","dg-note-properties":{"title":"RPC","tags":["flashcards"],"reference linking":null}}
 ---
 
 ## RPC（远程过程调用）

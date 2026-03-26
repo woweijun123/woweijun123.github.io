@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/策略【Strategy】/","title":"策略【Strategy】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:04.000+08:00","updated":"2026-03-24T17:29:55.236+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/策略【Strategy】/","title":"策略【Strategy】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:04.000+08:00","updated":"2026-03-24T17:29:55.236+08:00","dg-note-properties":{"title":"策略【Strategy】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

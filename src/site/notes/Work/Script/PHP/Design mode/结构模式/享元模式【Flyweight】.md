@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/享元模式【Flyweight】/","title":"享元模式【Flyweight】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:44:52.000+08:00","updated":"2026-03-24T17:29:49.717+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/享元模式【Flyweight】/","title":"享元模式【Flyweight】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:44:52.000+08:00","updated":"2026-03-24T17:29:49.717+08:00","dg-note-properties":{"title":"享元模式【Flyweight】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

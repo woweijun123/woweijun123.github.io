@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/创建模式/建造者【Builder】/","title":"建造者【Builder】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:46:48.000+08:00","updated":"2026-03-24T17:26:36.872+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/创建模式/建造者【Builder】/","title":"建造者【Builder】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:46:48.000+08:00","updated":"2026-03-24T17:26:36.872+08:00","dg-note-properties":{"title":"建造者【Builder】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

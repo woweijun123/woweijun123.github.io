@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Network/Socket、Stream/","title":"Socket、Stream","tags":["flashcards","#select","#epoll","#kqueue"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T17:35:21.043+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Network/Socket、Stream/","title":"Socket、Stream","tags":["flashcards","#select","#epoll","#kqueue"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T17:35:21.043+08:00","dg-note-properties":{"title":"Socket、Stream","tags":["flashcards","#select","#epoll","#kqueue"],"reference linking":null}}
 ---
 
 # Stream vs Socket

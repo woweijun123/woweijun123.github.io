@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/String/","title":"String","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T11:34:34.000+08:00","updated":"2026-03-24T17:37:51.343+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/String/","title":"String","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T11:34:34.000+08:00","updated":"2026-03-24T17:37:51.343+08:00","dg-note-properties":{"title":"String","tags":["flashcards"],"reference linking":null}}
 ---
 
 # substr_count

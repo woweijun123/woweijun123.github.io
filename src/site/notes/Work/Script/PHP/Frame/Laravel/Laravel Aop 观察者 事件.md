@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel Aop 观察者 事件/","title":"Laravel Aop 观察者 事件","tags":["flashcards"],"noteIcon":"","created":"2025-05-17T13:41:35.621+08:00","updated":"2026-03-24T17:34:00.734+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel Aop 观察者 事件/","title":"Laravel Aop 观察者 事件","tags":["flashcards"],"noteIcon":"","created":"2025-05-17T13:41:35.621+08:00","updated":"2026-03-24T17:34:00.734+08:00","dg-note-properties":{"title":"Laravel Aop 观察者 事件","tags":["flashcards"],"reference linking":null}}
 ---
 
 在 Laravel 中，虽然没有原生的 **AOP（面向切面编程）** 支持，但可以通过 **中间件、事件与监听器、观察者模式** 等机制实现类似 AOP 的功能。以下是详细分析：

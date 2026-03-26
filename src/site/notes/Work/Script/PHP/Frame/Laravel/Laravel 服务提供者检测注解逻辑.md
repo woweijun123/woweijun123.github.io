@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 服务提供者检测注解逻辑/","title":"Laravel 服务提供者检测注解逻辑","tags":["flashcards"],"noteIcon":"","created":"2025-05-18T11:57:23.814+08:00","updated":"2026-03-24T17:33:50.687+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 服务提供者检测注解逻辑/","title":"Laravel 服务提供者检测注解逻辑","tags":["flashcards"],"noteIcon":"","created":"2025-05-18T11:57:23.814+08:00","updated":"2026-03-24T17:33:50.687+08:00","dg-note-properties":{"title":"Laravel 服务提供者检测注解逻辑","tags":["flashcards"],"reference linking":null}}
 ---
 
 [riven/laravel-amqp - Packagist](https://packagist.org/packages/riven/laravel-amqp)

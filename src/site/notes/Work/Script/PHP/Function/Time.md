@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Time/","title":"Time","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:25:38.000+08:00","updated":"2026-03-24T17:37:48.368+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Time/","title":"Time","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:25:38.000+08:00","updated":"2026-03-24T17:37:48.368+08:00","dg-note-properties":{"title":"Time","tags":["flashcards"],"reference linking":null}}
 ---
 
 # hrtime

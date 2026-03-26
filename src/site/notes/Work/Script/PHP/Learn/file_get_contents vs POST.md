@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/file_get_contents vs POST/","title":"file_get_contents vs POST","tags":["flashcards"],"noteIcon":"","created":"2024-02-22T01:01:02.000+08:00","updated":"2026-03-24T17:47:31.761+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/file_get_contents vs POST/","title":"file_get_contents vs POST","tags":["flashcards"],"noteIcon":"","created":"2024-02-22T01:01:02.000+08:00","updated":"2026-03-24T17:47:31.761+08:00","dg-note-properties":{"title":"file_get_contents vs POST","tags":["flashcards"],"reference linking":null}}
 ---
 
 ### 1. 发送数据的文件

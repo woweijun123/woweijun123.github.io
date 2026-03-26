@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Learn/Obsidian 分享笔记/","title":"Obsidian 分享笔记","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:26:15.000+08:00","updated":"2026-03-11T17:43:11.140+08:00"}
+{"dg-publish":true,"permalink":"/Learn/Obsidian 分享笔记/","title":"Obsidian 分享笔记","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:26:15.000+08:00","updated":"2026-03-11T17:43:11.140+08:00","dg-note-properties":{"title":"Obsidian 分享笔记","tags":["flashcards"],"links":"[Creating your Digital Garden](https://iondrive.cc/guides/digitalgarden/)","links2":"[Digital Garden - Publish Obsidian Notes For Free](https://dg-docs.ole.dev/)"}}
 ---
 
 ## 简介

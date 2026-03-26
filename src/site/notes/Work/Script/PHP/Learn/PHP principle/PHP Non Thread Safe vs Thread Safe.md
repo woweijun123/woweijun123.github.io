@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/PHP principle/PHP Non Thread Safe vs Thread Safe/","title":"PHP Non Thread Safe vs Thread Safe","tags":["flashcards"],"noteIcon":"","created":"2023-10-14T01:34:18.000+08:00","updated":"2026-03-24T17:46:49.629+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/PHP principle/PHP Non Thread Safe vs Thread Safe/","title":"PHP Non Thread Safe vs Thread Safe","tags":["flashcards"],"noteIcon":"","created":"2023-10-14T01:34:18.000+08:00","updated":"2026-03-24T17:46:49.629+08:00","dg-note-properties":{"title":"PHP Non Thread Safe vs Thread Safe","tags":["flashcards"],"reference linking":null}}
 ---
 
 ### 1. 核心定义

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/迭代器【Iterator】/","title":"迭代器【Iterator】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:28.000+08:00","updated":"2026-03-24T17:29:56.728+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/迭代器【Iterator】/","title":"迭代器【Iterator】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:28.000+08:00","updated":"2026-03-24T17:29:56.728+08:00","dg-note-properties":{"title":"迭代器【Iterator】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

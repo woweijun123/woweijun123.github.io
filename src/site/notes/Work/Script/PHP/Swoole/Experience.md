@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Experience/","title":"Experience","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:16:17.000+08:00","updated":"2026-03-24T17:50:03.758+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Experience/","title":"Experience","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:16:17.000+08:00","updated":"2026-03-24T17:50:03.758+08:00","dg-note-properties":{"title":"Experience","tags":["flashcards"],"reference linking":null}}
 ---
 
 TP框架继承swoole问题

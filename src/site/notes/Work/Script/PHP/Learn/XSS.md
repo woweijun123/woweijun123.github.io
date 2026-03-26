@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/XSS/","title":"XSS","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:26:36.000+08:00","updated":"2026-03-24T17:47:57.684+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/XSS/","title":"XSS","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:26:36.000+08:00","updated":"2026-03-24T17:47:57.684+08:00","dg-note-properties":{"title":"XSS","tags":["flashcards"],"reference linking":null}}
 ---
 
 ```php

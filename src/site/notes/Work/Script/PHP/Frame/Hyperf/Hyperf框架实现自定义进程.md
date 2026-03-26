@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf框架实现自定义进程/","title":"Hyperf框架实现自定义进程","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T17:42:08.000+08:00","updated":"2026-03-24T17:32:07.008+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf框架实现自定义进程/","title":"Hyperf框架实现自定义进程","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T17:42:08.000+08:00","updated":"2026-03-24T17:32:07.008+08:00","dg-note-properties":{"title":"Hyperf框架实现自定义进程","tags":["flashcards"],"reference linking":null}}
 ---
 
 在实际项目中经常需要写一些长期运行的脚本，如基于 Redis、Kafka、RabbitMQ 实现的多进程队列消费者，多进程爬虫、定时器等等,由于hyperf的自定义进程是通过swoole\server的addProcess方式实现的，默认会跟随server一起启动，虽然可通过isEnable方法控制是否跟随服务一同启动，但是在server集群架构下，由于其耦合程度较高，在服务高可用以及横向扩容时会相当麻烦。

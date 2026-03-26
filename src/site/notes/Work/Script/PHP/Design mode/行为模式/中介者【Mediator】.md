@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/中介者【Mediator】/","title":"中介者【Mediator】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:45:12.000+08:00","updated":"2026-03-24T17:30:07.555+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/中介者【Mediator】/","title":"中介者【Mediator】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:45:12.000+08:00","updated":"2026-03-24T17:30:07.555+08:00","dg-note-properties":{"title":"中介者【Mediator】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

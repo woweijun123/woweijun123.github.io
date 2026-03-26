@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Learn/QPS、TPS、RT、吞吐量/","title":"QPS、TPS、RT、吞吐量","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-11T15:17:50.348+08:00"}
+{"dg-publish":true,"permalink":"/Learn/QPS、TPS、RT、吞吐量/","title":"QPS、TPS、RT、吞吐量","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-11T15:17:50.348+08:00","dg-note-properties":{"title":"QPS、TPS、RT、吞吐量","tags":["flashcards"],"reference linking":"[技术分享 | 如何计算 MySQL 的 QPS/TPS - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/406153871#:~:text=QPS%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%201%20%E6%96%B9%E6%B3%95%E4%B8%80%E3%80%81QPS%20%3D%20DQL%20%28select%29-per-sec%20...%202,%E8%AE%A1%E7%AE%97%20commit%E3%80%81rollback%20%E6%80%BB%E5%92%8C%207%20%E6%96%B9%E6%B3%95%E4%B8%89%E3%80%81%E7%94%A8%20GTID%20%E8%AE%A1%E7%AE%97%20TPS)"}}
 ---
 
 ## 一、QPS「每秒查询」

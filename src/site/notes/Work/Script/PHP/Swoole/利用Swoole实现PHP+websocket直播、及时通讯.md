@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/利用Swoole实现PHP+websocket直播、及时通讯/","title":"利用Swoole实现PHP+websocket直播、及时通讯","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T17:49:56.533+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/利用Swoole实现PHP+websocket直播、及时通讯/","title":"利用Swoole实现PHP+websocket直播、及时通讯","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T17:49:56.533+08:00","dg-note-properties":{"title":"利用Swoole实现PHP+websocket直播、及时通讯","tags":["flashcards"],"reference linking":null}}
 ---
 
 websocket

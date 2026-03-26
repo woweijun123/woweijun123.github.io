@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/命令【Command】/","title":"命令【Command】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:46:05.000+08:00","updated":"2026-03-24T17:30:02.667+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/行为模式/命令【Command】/","title":"命令【Command】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:46:05.000+08:00","updated":"2026-03-24T17:30:02.667+08:00","dg-note-properties":{"title":"命令【Command】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

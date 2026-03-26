@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 缓存驱动/","title":"Hyperf 缓存驱动","tags":["flashcards"],"noteIcon":"","created":"2025-09-04T13:50:00.646+08:00","updated":"2026-03-24T17:31:57.486+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 缓存驱动/","title":"Hyperf 缓存驱动","tags":["flashcards"],"noteIcon":"","created":"2025-09-04T13:50:00.646+08:00","updated":"2026-03-24T17:31:57.486+08:00","dg-note-properties":{"title":"Hyperf 缓存驱动","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 优化用户信息查询：避免每次请求读取 Redis

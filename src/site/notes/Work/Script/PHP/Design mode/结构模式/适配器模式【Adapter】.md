@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/适配器模式【Adapter】/","title":"适配器模式【Adapter】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:01.000+08:00","updated":"2026-03-24T17:29:47.522+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/适配器模式【Adapter】/","title":"适配器模式【Adapter】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:48:01.000+08:00","updated":"2026-03-24T17:29:47.522+08:00","dg-note-properties":{"title":"适配器模式【Adapter】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

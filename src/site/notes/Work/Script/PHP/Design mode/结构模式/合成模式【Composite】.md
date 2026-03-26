@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/合成模式【Composite】/","title":"合成模式【Composite】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:46:29.000+08:00","updated":"2026-03-24T17:26:50.215+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Design mode/结构模式/合成模式【Composite】/","title":"合成模式【Composite】","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:46:29.000+08:00","updated":"2026-03-24T17:26:50.215+08:00","dg-note-properties":{"title":"合成模式【Composite】","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 实例

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Path/","title":"Path","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T11:34:34.000+08:00","updated":"2026-03-24T17:37:57.008+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Path/","title":"Path","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T11:34:34.000+08:00","updated":"2026-03-24T17:37:57.008+08:00","dg-note-properties":{"title":"Path","tags":["flashcards"],"reference linking":null}}
 ---
 
 # debug_backtrace()

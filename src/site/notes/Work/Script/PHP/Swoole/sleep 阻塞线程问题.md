@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/sleep 阻塞线程问题/","title":"sleep 阻塞线程问题","tags":["flashcards"],"noteIcon":"","created":"2025-12-15T13:38:05.842+08:00","updated":"2026-03-24T17:50:11.252+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/sleep 阻塞线程问题/","title":"sleep 阻塞线程问题","tags":["flashcards"],"noteIcon":"","created":"2025-12-15T13:38:05.842+08:00","updated":"2026-03-24T17:50:11.252+08:00","dg-note-properties":{"title":"sleep 阻塞线程问题","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 写在前面

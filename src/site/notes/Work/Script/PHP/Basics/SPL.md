@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/SPL/","title":"SPL","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:26:14.000+08:00","updated":"2026-03-24T17:22:36.346+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/SPL/","title":"SPL","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:26:14.000+08:00","updated":"2026-03-24T17:22:36.346+08:00","dg-note-properties":{"title":"SPL","tags":["flashcards"],"reference linking":null}}
 ---
 
 [PHP: SPL - Manual](https://www.php.net/manual/zh/book.spl.php)

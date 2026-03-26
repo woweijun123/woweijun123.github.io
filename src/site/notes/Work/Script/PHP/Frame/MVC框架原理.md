@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/MVC框架原理/","title":"MVC框架原理","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-25T17:33:58.045+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/MVC框架原理/","title":"MVC框架原理","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-25T17:33:58.045+08:00","dg-note-properties":{"title":"MVC框架原理","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 1.什么是MVC

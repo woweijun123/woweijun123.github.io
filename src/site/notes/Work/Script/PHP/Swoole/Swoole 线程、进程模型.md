@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Swoole 线程、进程模型/","title":"Swoole 线程、进程模型","tags":["flashcards"],"noteIcon":"","created":"2025-06-05T13:03:00.360+08:00","updated":"2026-03-24T17:50:13.572+08:00"}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Swoole 线程、进程模型/","title":"Swoole 线程、进程模型","tags":["flashcards"],"noteIcon":"","created":"2025-06-05T13:03:00.360+08:00","updated":"2026-03-24T17:50:13.572+08:00","dg-note-properties":{"title":"Swoole 线程、进程模型","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 1. Swoole 的多线程支持

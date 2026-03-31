@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Gareway/Nginx + APISIX + Hyperf/","title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:06:43.000+08:00","updated":"2026-03-31T09:50:29.285+08:00","dg-note-properties":{"title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Gareway/Nginx + APISIX + Hyperf/","title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:06:43.000+08:00","updated":"2026-03-31T09:54:45.058+08:00","dg-note-properties":{"title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"reference linking":null}}
 ---
 
 ## 整体架构
@@ -881,6 +881,96 @@ curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f03433
 1.  **PATCH vs PUT**: `PUT` 会覆盖整个路由配置，`PATCH` 可以在不改变其他配置的情况下只更新 `plugins`。
 2.  **组合拳**: 一个路由可以同时配置 `limit-count` + `ip-restriction` + `response-rewrite`。
 3.  **生效优先级**: 插件执行是有先后顺序的（Priority），通常安全/认证类插件最先执行。
+## DDos防御
+### 1. 针对登录接口的“暴力破解”与“DDoS”防御
+这个示例结合了 **请求频率限制** 和 **并发连接限制**，是最有效的“速效药”。
+**场景：** 限制每个客户端 IP 每秒只能请求 1 次登录，允许 2 次突发请求，且同时只能保持 1 个活跃连接。
+```bash
+curl http://127.0.0.1:9180/apisix/admin/routes/login_split \
+-H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT -d '
+{
+    "uri": "/api/login",
+    "plugins": {
+        "limit-req": {
+            "rate": 1,
+            "burst": 2,
+            "key": "remote_addr",
+            "rejected_code": 429,
+            "rejected_msg": "Too Many Requests, please try again later"
+        },
+        "limit-conn": {
+            "conn": 1,
+            "burst": 1,
+            "key": "remote_addr",
+            "rejected_code": 429
+        }
+    },
+    "upstream": {
+        "type": "roundrobin",
+        "nodes": {
+            "127.0.0.1:8080": 1
+        }
+    }
+}'
+```
+### 2. 识别并拦截“恶意爬虫/人机”
+如果你发现攻击者使用 `python` 或 `curl` 等脚本工具不断刷接口，可以使用 `bot-restriction`。
+**场景：** 禁止常见的工具类 User-Agent，但允许搜索引擎（如百度、谷歌）抓取。
+```bash
+curl http://127.0.0.1:9180/apisix/admin/global_rules/2 \
+-H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT -d '
+{
+    "plugins": {
+        "bot-restriction": {
+            "whitelist": [
+                "googlebot",
+                "baiduspider"
+            ],
+            "blacklist": [
+                "curl",
+                "python-requests",
+                "httpclient",
+                "wget"
+            ]
+        }
+    }
+}'
+```
+### 3. 开启全链路监控（Prometheus + 自定义 Header）
+为了确认防御是否生效，以及请求到底有没有走到 APISIX，我们需要开启监控和来源标识。
+**场景：** 全局开启监控，并在所有响应中添加 `X-Proxy-By` 标识。
+```bash
+curl http://127.0.0.1:9180/apisix/admin/global_rules/1 \
+-H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT -d '
+{
+    "plugins": {
+        "prometheus": {},
+        "response-rewrite": {
+            "headers": {
+                "set": {
+                    "X-Proxy-By": "APISIX-Gateway",
+                    "X-Server-ID": "Chengdu-Node-01"
+                }
+            }
+        }
+    }
+}'
+```
+### 4. 配合日志分析攻击特征
+如果你想把拦截到的攻击记录下来发给日志服务器（如 ELK），可以配置 `http-logger`。
+```bash
+"http-logger": {
+    "uri": "http://127.0.0.1:5000/log-collector",
+    "batch_max_size": 10,
+    "include_req_body": true,
+    "concat_method": "json"
+}
+```
+### 小结：防御生效检查清单
+1.  **验证标识：** 执行 `curl -I https://你的域名/接口`，检查 Header 是否包含 `X-Proxy-By: APISIX-Gateway`。
+2.  **验证限流：** 快速连续刷新页面，确认是否触发了 `HTTP 429` 错误码。
+3.  **验证监控：** 访问 `http://apisix-ip:9091/apisix/prometheus/metrics`，搜索 `apisix_http_status`。如果看到 `code="429"` 的数值在增加，说明 APISIX 正在帮你挡刀。
+4.  **防火墙锁死：** > **关键安全步骤：** 登录你的服务器执行 `iptables` 规则，只允许来自 Cloudflare 的回源 IP 段访问 APISIX 的监听端口（如 81）。这样攻击者即便知道你的 IP，也无法绕过 CF 直接攻击 APISIX。
 ## Hyperf 监控接口响应时间
 ### 1. 安装与配置组件
 首先，你需要安装 Hyperf 的监控组件以及 Prometheus 适配器。

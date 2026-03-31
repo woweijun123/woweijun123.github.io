@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Gareway/Nginx + APISIX + Hyperf/","title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:06:43.000+08:00","updated":"2026-03-31T10:01:10.799+08:00","dg-note-properties":{"title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Gareway/Nginx + APISIX + Hyperf/","title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:06:43.000+08:00","updated":"2026-03-31T10:25:41.378+08:00","dg-note-properties":{"title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"reference linking":null}}
 ---
 
 ## 整体架构
@@ -974,16 +974,15 @@ curl http://127.0.0.1:9180/apisix/admin/global_rules/1 \
 ## Hyperf 监控接口响应时间
 ### 1. 安装与配置组件
 首先，你需要安装 Hyperf 的监控组件以及 Prometheus 适配器。
+#### php>=8.3
 ```shell
 composer require hyperf/metric
-# 如果你使用 Prometheus 适配器
 composer require promphp/prometheus_client_php
 ```
-#### 若上一步安装不了则仅安装 `hyperf/metric` 核心，不更新其他包
-报错提示中提到 `phpoffice/phpspreadsheet` 被锁定在 1.30.2 且未请求更新。由于 `hyperf/metric` 本身并不依赖 `phpspreadsheet`，你可以尝试只安装这一个包：
+#### php>=8.2
 ```shell
-composer require "hyperf/metric:*" --no-update
-composer update hyperf/metric --ignore-platform-reqs
+composer require "hyperf/metric:^3.0"
+composer require "promphp/prometheus_client_php:^2.2"
 ```
 发布配置：
 ```shell

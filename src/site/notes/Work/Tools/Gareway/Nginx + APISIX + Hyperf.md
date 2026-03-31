@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Gareway/Nginx + APISIX + Hyperf/","title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:06:43.000+08:00","updated":"2026-03-31T09:54:45.058+08:00","dg-note-properties":{"title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Gareway/Nginx + APISIX + Hyperf/","title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:06:43.000+08:00","updated":"2026-03-31T10:01:10.799+08:00","dg-note-properties":{"title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"reference linking":null}}
 ---
 
 ## 整体架构
@@ -1019,7 +1019,7 @@ Router::addRoute(['GET'], '/metrics', function() {
 > **提示：** 生产环境下，请确保 `/metrics` 接口只能被 Prometheus 服务器内网访问，或者增加基础认证。
 ### 4. Grafana 配置与查询
 在 Grafana 中添加 Prometheus 数据源后，你可以创建 Dashboard 来可视化响应时间，下载控制台 [json 文件](https://cdn.jsdelivr.net/gh/hyperf/hyperf/src/metric/grafana.json)，导入 Grafana 中即可使用。
-![Pasted image 20260331094539](http://wcj.x3322.net:88/i/2026/03/31/69cb281a30bdf.png)
+![Pasted image 20260331094539](https://weichengjun2.dpdns.org/i/2026/03/31/69cb281a30bdf.png)
 ## 总结
 这套 Docker Compose 方案完整实现了 **Nginx（边缘层）→ APISIX（网关层）→ Hyperf（应用层）** 的三层架构，具备以下生产级特性：
 1. **职责清晰**：Nginx 处理连接、静态资源和基础防护；APISIX 处理动态路由、精细化限流、认证鉴权；Hyperf 专注业务逻辑 

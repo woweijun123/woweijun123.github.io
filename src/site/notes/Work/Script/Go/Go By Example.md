@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-03-25T23:52:47.000+08:00","updated":"2026-03-26T10:47:36.114+08:00","dg-note-properties":{"title":"Go By Example","tags":["flashcards"],"links":"[Go by Example 中文版](https://gobyexample-cn.github.io/)"}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:55:50.000+08:00","updated":"2026-03-29T22:55:50.000+08:00","dg-note-properties":{"title":"Go By Example","tags":["flashcards"],"links":"[Go by Example 中文版](https://gobyexample-cn.github.io/)"}}
 ---
 
 # Hello World
@@ -2870,7 +2870,7 @@ request 4 2026-01-22 11:48:26.20147 +0800 CST m=+1.201640668
 request 5 2026-01-22 11:48:26.401497 +0800 CST m=+1.401665960
 ```
 # 原子计数器
-<!--SR:!2026-03-28,3,271-->
+<!--SR:!2026-04-06,8,271-->
 <?e?>
 原子计数器关键代码
 <?l?>
@@ -4168,7 +4168,7 @@ func main() {
 6.Nanos Transform Time: 2026-01-22 15:49:43.084436 +0800 CST
 7.String Transform Time: 2026-01-01 00:00:00 +0000 UTC
 ```
-<!--SR:!2026-03-29,42,292-->
+<!--SR:!2026-07-30,123,292-->
 <?e?>
 # 时间的格式化和解析
 <?e?>
@@ -6160,7 +6160,7 @@ func (s *MyService) HandlePtr(p *Player) {
 3. 谨慎：反射可以==1;;读取==私有字段(PkgPath != "")，但绝对无法通过反射 SetString ==1;;修改==它们（除非使用 unsafe）。
 4. 类型安全：反射绕过了==1;;编译器==检查。如果 SetString 到了一个 int 字段，程序会直接 ==1;;Panic==。
 5. 对齐：Method.Call 对参数极其严格。传入 Value 还是 Pointer 必须与 ==1;;Method.Type().In(i)== 严格匹配。
-<!--SR:!2026-03-27,8,273-->
+<!--SR:!2026-04-20,22,273-->
 <?e?>
 ### 元数据探索
 - **`TypeOf`（说明书）**：负责描述。关注 **Kind**（本质类别，如 `struct`）与 **Type**（定义名称，如 `User`）。
@@ -6232,7 +6232,7 @@ for j := 0; j < vo.NumField(); j++ {
    4. Type: int        | 静态类型
 */
 ```
-<!--SR:!2026-03-27,8,273-->
+<!--SR:!2026-04-21,23,273-->
 <?e?>
 ### 动态值操作与可设置性
 💡重点：CanSet() 的前提是 `ValueOf(&x).Elem()`
@@ -6256,7 +6256,7 @@ if vPtr.CanSet() {
    修改结果: x = 3.1415
 */
 ```
-<!--SR:!2026-03-29,9,273-->
+<!--SR:!2026-04-23,25,273-->
 <?e?>
 ### 方法动态调用
 💡重点：Call 接收并返回 `[]reflect.Value` 切片
@@ -6368,7 +6368,7 @@ valPtr.Elem().FieldByName("Name").SetString("NewBot")
 // 4.【类型还原】将反射 Value 打包回 interface{}，触发运行时类型断言输出
 fmt.Printf("动态结构体: %+v\n", valPtr.Interface()) // 动态结构体: &{Name:NewBot age:0}
 ```
-<!--SR:!2026-03-28,5,253-->
+<!--SR:!2026-04-11,13,253-->
 <?e?>
 #### slice
 `reflect.MakeSlice` 模拟了内建函数 `make([]T, len, cap)` 的底层行为。
@@ -6413,7 +6413,7 @@ vMap.SetMapIndex(reflect.ValueOf("Go"), reflect.ValueOf(2026))
 // 4.【类型导出】通过 .Interface() 卸载反射外壳，回归标准的 map 视图
 fmt.Printf("动态映射: %v\n", vMap.Interface()) // 动态映射: map[Go:2026]
 ```
-<!--SR:!2026-03-28,7,273-->
+<!--SR:!2026-04-17,19,273-->
 <?e?>
 #### chan
 `reflect.MakeChan` 模拟了内建函数 `make(chan T, buffer)` 的底层行为。
@@ -6439,7 +6439,7 @@ msg, _ := vChan.Recv()
 // 5.【类型导出】通过 .String() 直接提取底层字符串，或使用 .Interface() 还原类型
 fmt.Printf("动态通道接收: %s\n", msg.String()) // 动态通道接收: 反射消息
 ```
-<!--SR:!2026-03-29,8,273-->
+<!--SR:!2026-04-19,21,273-->
 <?e?>
 #### func
 💡重点：这是反射最**黑魔法**的部分，运行时“捏”出一个逻辑函数
@@ -7172,5 +7172,5 @@ func main() {
 [Log] <-- 响应返回
 [Recovery] 防护任务结束
 ```
-<!--SR:!2026-03-29,33,287-->
+<!--SR:!2026-07-01,94,287-->
 <?e?>

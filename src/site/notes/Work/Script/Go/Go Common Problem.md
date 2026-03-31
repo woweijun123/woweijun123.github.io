@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-03-14T19:37:26.000+08:00","updated":"2026-03-25T09:34:37.424+08:00","dg-note-properties":{"title":"Go Common Problem","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:54:32.000+08:00","updated":"2026-03-29T22:54:32.000+08:00","dg-note-properties":{"title":"Go Common Problem","tags":["flashcards"]}}
 ---
 
 # 为什么 Go 语言要求 Map 键必须可比较？
@@ -23,7 +23,7 @@ func MapKeys[k comparable, v any](m map[k]v) []k {
 	return r
 }
 ```
-<!--SR:!2026-03-28,12,270-->
+<!--SR:!2026-05-01,33,270-->
 <?e?>
 # 关于死锁
 因为 channel 的接收操作是==1;;阻塞==的，runtime 只有在==1;;所有协程==都处于==1;;阻塞==无法继续执行 时才会报 `fatal error: all goroutines are asleep - deadlock!`

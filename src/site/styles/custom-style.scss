@@ -60,7 +60,7 @@ body {
         --dg-filetree-width: 240px;
     }
 
-    @media screen and (max-width: 1300px) {
+    @media screen and (max-width: 1400px) {
         /* 屏幕进一步缩小时，侧边栏转为非固定模式，避免遮挡 */
         .sidebar {
             display: none !important;

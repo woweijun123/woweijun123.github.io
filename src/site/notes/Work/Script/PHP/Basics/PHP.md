@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-23T18:51:01.272+08:00","dg-note-properties":{"title":"PHP","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-04-04T23:19:08.000+08:00","updated":"2026-04-04T23:19:08.000+08:00","dg-note-properties":{"title":"PHP","tags":["flashcards"]}}
 ---
 
 # 基本语法 [¶](https://www.php.net/manual/zh/language.basic-syntax.php#language.basic-syntax)
@@ -4797,7 +4797,7 @@ echo "逻辑长度「Logic Length」: " . mb_strlen($str, 'UTF-8') . PHP_EOL; //
 * **关键点**：l10n 是针对**特定地区**的重复过程。
 ### 编码与 i18n 的关系
 字符编码是 i18n 的底层基石。如果一个程序的底层逻辑不支持 UTF-8（Unicode），那么它的 i18n 设计就是不完整的，因为在进行某些语种的 l10n（如阿拉伯语或泰语）时，会出现严重的乱码或显示错误。
-<!--SR:!2026-04-04,23,252-->
+<!--SR:!2026-06-02,59,252-->
 <?e?>
 # 内置函数
 ## 常用函数

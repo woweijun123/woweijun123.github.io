@@ -4,7 +4,7 @@
 
 # PHP 发起 HTTP 请求的四种途径
 ### 1. 文件流封装器 (Stream Wrappers)
-[[Work/Script/PHP/Function/Network/Socket、Stream#Stream\|Socket、Stream#Stream]] 这是 PHP 最内置、最简单的请求方式。它将 HTTP 协议模拟成本地文件操作。
+[[Work/Script/PHP/Function/Socket、Stream#Stream\|Socket、Stream#Stream]] 这是 PHP 最内置、最简单的请求方式。它将 HTTP 协议模拟成本地文件操作。
 - **常用函数**：`file_get_contents()`, `fopen()`, `readfile()`。
 - **底层逻辑**：使用 PHP 内置的 **HTTP Stream Provider**。它是一个非常原始的封装，每次调用都会重新解析 URL、寻找 DNS、建立 TCP 连接。
 - **特点**：
@@ -21,7 +21,7 @@
     - **高性能并发**：支持 `curl_multi` 异步并发处理多个请求。
 - **适用场景**：几乎所有专业的 API 对接和高性能爬虫。
 ### 3. 原生 Socket 编程 (Low-Level Sockets)
-[[Work/Script/PHP/Function/Network/Socket、Stream#Socket\|Socket、Stream#Socket]] 这是最底层的请求方式，不依赖任何 HTTP 协议库。
+[[Work/Script/PHP/Function/Socket、Stream#Socket\|Socket、Stream#Socket]] 这是最底层的请求方式，不依赖任何 HTTP 协议库。
 - **常用函数**：`fsockopen()`, `pfsockopen()`, `socket_create()`。
 - **底层逻辑**：直接通过内核系统调用开启一个 TCP 连接，你需要**手动编写 HTTP 协议报文**（构造 `GET / HTTP/1.1\r\nHost: ...`）。
 - **特点**：

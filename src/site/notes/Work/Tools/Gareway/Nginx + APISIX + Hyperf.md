@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Gareway/Nginx + APISIX + Hyperf/","title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:06:43.000+08:00","updated":"2026-03-31T10:25:41.378+08:00","dg-note-properties":{"title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Gareway/Nginx + APISIX + Hyperf/","title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:06:43.000+08:00","updated":"2026-03-31T10:53:38.641+08:00","dg-note-properties":{"title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"reference linking":null}}
 ---
 
 ## 整体架构
@@ -789,7 +789,7 @@ curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f03433
 {
     "plugins": {
         "limit-count": {
-            "count": 10,
+            "count": 100,
             "time_window": 60,
             "rejected_code": 429,
             "key": "remote_addr" 

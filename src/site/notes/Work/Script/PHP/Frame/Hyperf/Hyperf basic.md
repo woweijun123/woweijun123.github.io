@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf basic/","title":"Hyperf basic","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:44:40.000+08:00","updated":"2026-03-24T17:32:05.312+08:00","dg-note-properties":{"title":"Hyperf basic","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf basic/","title":"Hyperf basic","tags":["flashcards"],"noteIcon":"","created":"2026-04-06T16:27:49.000+08:00","updated":"2026-04-06T16:27:49.000+08:00","dg-note-properties":{"title":"Hyperf basic","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 常用命令
@@ -8,7 +8,7 @@
 php bin/hyperf.php gen:model -F --path app/Model/Account user
 ```
 # 集成`Symfony、Monolog`打印日志到控制台
-1. /Users/weichengjun/dnmp/www/localhost/hyperf/internal/Logger/Handler/StdoutHandler.php
+`/Users/weichengjun/dnmp/www/localhost/hyperf/internal/Logger/Handler/StdoutHandler.php`
 ```php
 namespace Internal\Logger\Handler;
 
@@ -38,7 +38,7 @@ class StdoutHandler extends AbstractProcessingHandler
     }
 }
 ```
-# 2.添加日志配置handler
+2. 添加日志配置handler
 ```php
 declare(strict_types=1);
 use Internal\Logger\Handler\StdoutHandler;

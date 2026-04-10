@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:54:32.000+08:00","updated":"2026-03-29T22:54:32.000+08:00","dg-note-properties":{"title":"Go Common Problem","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:54:32.000+08:00","updated":"2026-04-02T09:55:18.840+08:00","dg-note-properties":{"title":"Go Common Problem","tags":["flashcards"]}}
 ---
 
 # 为什么 Go 语言要求 Map 键必须可比较？
@@ -132,7 +132,7 @@ if len(b) == cap(b) {
 ### 关键结论
 * **修改 Len 的开销极小**：仅仅是 CPU 寄存器级别的整数赋值，不涉及数组拷贝。
 * **零拷贝思想**：预留 `Cap`  底层填充  更新 `Len`。这是 Go 处理高性能 I/O 的核心套路。
-<!--SR:!2026-04-02,12,232-->
+<!--SR:!2026-04-30,28,232-->
 <?e?>
 ## Append 扩容机制
 ### 扩容公式 (Go 1.18+)

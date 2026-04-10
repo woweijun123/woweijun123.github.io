@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 协程混淆/","title":"Hyperf 协程混淆","tags":["flashcards"],"noteIcon":"","created":"2025-09-12T09:38:02.725+08:00","updated":"2026-03-24T17:32:00.190+08:00","dg-note-properties":{"title":"Hyperf 协程混淆","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 协程混淆/","title":"Hyperf 协程混淆","tags":["flashcards"],"noteIcon":"","created":"2026-04-06T16:46:04.000+08:00","updated":"2026-04-06T16:46:04.000+08:00","dg-note-properties":{"title":"Hyperf 协程混淆","tags":["flashcards"],"reference linking":null}}
 ---
 
 ### 核心原则：协程内存模型
@@ -29,9 +29,10 @@ class UnsafeService {
 }
 ```
 2.  **被长期持有的对象**：例如，一个被放在**静态变量**、**全局变量**或某个**常驻内存数组**中的对象，其属性也会被所有能访问到它的协程共享。
-**总结：只要一个对象实例被多个协程共享，并且该对象包含可变的（mutable）状态（属性），在没有保护的情况下，其属性就会发生协程混淆。**
+#### 总结
+只要一个对象实例被多个协程共享，并且该对象包含可变的（mutable）状态（属性），在没有保护的情况下，其属性就会发生**协程混淆**。
 ### 二、为什么慎用静态（Static）字段？
-**因为静态字段是“协程混淆”的重灾区，本质上是一种全局变量。**
+因为静态字段是 **“协程混淆”的重灾区**，本质上是一种**全局变量**。
 静态字段不属于任何对象实例，它属于类本身，在类第一次被加载时初始化，并存在于整个进程的生命周期中。因此，**所有协程访问的都是同一块内存地址**。
 ```php
 class CounterService {
@@ -56,9 +57,9 @@ go(function () {
 }
 // 最终结果 self::$count 很可能远小于 1000
 ```
-**结论：应绝对避免使用静态字段来存储与请求相关的状态数据。** 它的唯一安全用途是存储一些只读的、应用启动后就不会改变的配置或缓存。
+#### 总结
+应绝对避免使用静态字段来存储与请求相关的状态数据。它的唯一安全用途是存储一些只读的、应用启动后就不会改变的配置或缓存。
 ### 三、数据混淆的情况有哪些？
-数据混淆可以归纳为以下几类典型场景：
 #### 1. 身份混淆（最常见且危险）
 *   **场景**：在单例服务中用一个属性存储当前请求的用户信息。
 *   **后果**：用户A的请求操作，读取到的却是用户B的数据，造成严重的越权漏洞。
@@ -79,7 +80,7 @@ class UserService {
 *   **示例**：如上文的 `CounterService` 例子。
 #### 3. 资源混淆
 *   **场景**：在单例服务中持有数据库连接、文件句柄、Redis连接等资源，并假设它们是完全隔离的。
-*   **后果**：协程A可能协程B未完成的查询结果，或者事务被意外提交/回滚。
+*   **后果**：协程A可能拿到协程B**未完成**的查询结果，或者事务被意外提交/回滚。
 ```php
 class DbService {
 	private $dbConnection;
@@ -105,8 +106,8 @@ class CacheService {
 }
 ```
 ### 正确的解决方案
-1.  **使用协程上下文（Coroutine Context）**：
-*   这是存储**请求级数据**的首选方案。它为每个协程提供了一个独立的、隔离的存储空间。
+#### 1.  使用协程上下文（Coroutine Context）
+*   这是存储**请求级**数据的首选方案。它为每个协程提供了一个**独立的、隔离的**存储空间。
 ```php
 use Hyperf\Context\Context; // Hyperf v3.x+
 // use Hyperf\Utils\Context; // Hyperf v2.x
@@ -117,7 +118,7 @@ Context::set('user_info', $userInfo);
 // 获取值
 $userInfo = Context::get('user_info');
 ```
-2.  **依赖注入时使用短生命周期**：
+#### 2.  依赖注入时使用短生命周期
 *   对于需要有状态的服务，可以将其定义为非单例，每次使用时都创建一个新实例。
 ```php
 #[Injectable(scope: Scope::PROTOTYPE)] // 每次依赖注入时都创建新实例
@@ -125,7 +126,7 @@ class StatefulService {
 	public $state;
 }
 ```
-3.  **使用同步原语保护共享资源**：
+#### 3.  使用同步原语保护共享资源
 *   如果必须共享状态，使用锁、Channel 或 Atomic 来保护。
 ```php
 use Swoole\Coroutine\Channel;
@@ -145,5 +146,5 @@ go(function () use ($chan) {
 $atomic = new Atomic(0);
 $atomic->add(1); // 原子性操作，安全
 ```
-4.  **彻底避免使用静态字段和全局变量存储状态**。
-**最终建议：** 在 Hyperf 开发中，养成一个思维习惯——**默认认为任何对象属性都不是协程安全的**，除非你能明确证明它只被一个协程访问（如原型Scope的实例）或已被妥善保护。始终使用 `Context` 来传递和存储请求上下文数据。
+#### 4.  彻底避免使用静态字段和全局变量存储状态
+**最终建议：** 在 Hyperf 开发中，养成一个思维习惯——**默认认为任何对象属性都不是协程安全的**，除非你能明确证明它只被一个协程访问（如原型Scope的实例）或已被妥善保护。**始终使用 `Context` 来传递和存储请求上下文数据**。

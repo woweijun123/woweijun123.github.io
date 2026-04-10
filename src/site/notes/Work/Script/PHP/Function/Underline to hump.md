@@ -1,9 +1,9 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Underline to hump/","title":"Underline to hump","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:25:46.000+08:00","updated":"2026-03-24T17:37:44.116+08:00","dg-note-properties":{"title":"Underline to hump","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Underline to hump/","title":"Underline to hump","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:25:46.000+08:00","updated":"2026-04-07T15:02:19.962+08:00","dg-note-properties":{"title":"Underline to hump","tags":["flashcards"],"reference linking":null}}
 ---
 
 ```php
-// 下划线转驼峰(首字母小写)
+// 💡推荐：下划线转驼峰(首字母小写)
 function underlineToHump($str)
 {
     return lcfirst(strtr(

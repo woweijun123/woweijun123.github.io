@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:55:48.000+08:00","updated":"2026-03-29T22:55:48.000+08:00","dg-note-properties":{"title":"4、MySql锁机制","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-04-06T11:36:57.000+08:00","updated":"2026-04-08T09:54:37.556+08:00","dg-note-properties":{"title":"4、MySql锁机制","tags":["flashcards"]}}
 ---
 
 # 定义
@@ -298,7 +298,7 @@ InnoDB 能够实现读写并行的核心技术是 **MVCC（Multi-Version Concurr
 3. **元数据锁 (MDL)**：事务 A 是否执行了修改表结构的 DDL 语句？MDL 锁会阻塞一切读写。
 ### 总结
 排他锁遵循“**写-写冲突**”和“**写-带锁读冲突**”的原则，但通过 MVCC 技术完美避开了“**写-快照读冲突**”。这正是 MySQL 能够在高并发场景下保持高效的原因。
-<!--SR:!2026-04-05,41,290-->
+<!--SR:!2026-08-02,118,290-->
 <?e?>
 <?e?>
 ## 死锁
@@ -587,7 +587,7 @@ Lock wait timeout exceeded; try restarting transaction
 1. 允许其它事务也增加共享锁读取
 2. 不允许其它事务增加排他锁 (for update)
 3. 当事务同时增加共享锁时候，事务的更新必须等待先执行的事务 commit 后才行，如果同时**并发太大**可能很**容易**造成**死锁**
-<!--SR:!2026-04-06,41,290-->
+<!--SR:!2026-08-03,119,290-->
 <?e?>
 <?e?>
 ## 间隙锁
@@ -1010,7 +1010,7 @@ Innodb_row_lock_time_avg # 💡每次等待所花平均时间;
 Innodb_row_lock_time_max # 系统启动到现在最长等待时间;
 Innodb_row_lock_waits # 💡系统启动后到现在总共等待的次数;
 ```
-<!--SR:!2026-04-02,4,210-->
+<!--SR:!2026-04-16,8,190-->
 <?e?>
 # 锁的实时分布
 <?l?>
@@ -1061,7 +1061,7 @@ FROM performance_schema.data_lock_waits w
 ```mysql
 KILL [阻塞者的 进程 ID];
 ```
-<!--SR:!2026-03-27,31,271-->
+<!--SR:!2026-06-26,86,271-->
 <?e?>
 # 数据库优化建议
 ### 1. 索引与锁的精准控制

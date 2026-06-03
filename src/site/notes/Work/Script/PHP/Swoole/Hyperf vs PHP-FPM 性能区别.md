@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Hyperf vs PHP-FPM 性能区别/","title":"Hyperf vs PHP-FPM 性能区别","tags":["flashcards"],"noteIcon":"","created":"2025-04-09T09:49:25.563+08:00","updated":"2026-03-24T17:50:07.788+08:00","dg-note-properties":{"title":"Hyperf vs PHP-FPM 性能区别","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Hyperf vs PHP-FPM 性能区别/","title":"Hyperf vs PHP-FPM 性能区别","tags":["flashcards"],"noteIcon":"","created":"2025-04-09T09:49:25.563+08:00","updated":"2026-05-21T11:11:59.496+08:00","dg-note-properties":{"title":"Hyperf vs PHP-FPM 性能区别","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 栈大小
@@ -377,7 +377,7 @@ sequenceDiagram
     Note over Main, Worker: 完成一次往返(2次切换)
 ```
 #### 编译与运行
-```bash
+```shell
 # 编译代码
 gcc -o thread thread.c -lpthread -O2
 # 运行测试
@@ -688,7 +688,7 @@ Transfer/sec:     18.83MB
 ubuntu服务器8核16线程32G实际测试
 ### wrk
 #### Hyperf
-```bash
+```shell
 wrk -c 1024 -t 8 http://10.0.0.6:4000/index/index
 Running 10s test @ http://10.0.0.6:4000/index/index
   8 threads and 1024 connections
@@ -700,7 +700,7 @@ Requests/sec:  12184.82
 Transfer/sec:      2.21MB
 ```
 #### PHP-FPM
-```bash
+```shell
 wrk -c 1024 -t 8 http://10.0.0.6/benchmark.php
 Running 10s test @ http://10.0.0.6/benchmark.php
   8 threads and 1024 connections
@@ -714,7 +714,7 @@ Transfer/sec:      1.92MB
 ```
 ### ab  
 #### Hyperf
-```bash
+```shell
 ab -n 10000 -c 1024 http://10.0.0.6:4000/index/index
 This is ApacheBench, Version 2.3 <$Revision: 1901567 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/

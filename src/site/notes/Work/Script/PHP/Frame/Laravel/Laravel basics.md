@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel basics/","title":"Laravel basics","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:45:00.000+08:00","updated":"2026-03-24T17:34:02.270+08:00","dg-note-properties":{"title":"Laravel basics","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel basics/","title":"Laravel basics","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:45:00.000+08:00","updated":"2026-06-02T14:18:12.564+08:00","dg-note-properties":{"title":"Laravel basics","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 安装(composer)
@@ -540,84 +540,6 @@ public static function getQueryLog(): string
     }
     return '';
 }
-```
-# Guzzle(CURL)
-文档：[Quickstart — Guzzle Documentation](https://docs.guzzlephp.org/en/stable/quickstart.html#making-a-request)
-```php
-// basic
-$client = new Client([
-    'base_uri' => 'http://www.laravel.com/api/',
-    'timeout' => 5
-]);
-
-// post
-$options = [
-    'headers' => ['Authorization' => 'abc'],
-    'form_params' => ['name' => '啦啦啦']
-];
-$method = 'test/add';
-$data = json_decode($client->request('POST', $method, $options)->getBody()->getContents(), true);
-
-// delete
-$options = [
-    'headers' => ['Authorization' => 'abc'],
-    'query' => ['id' => 1]
-];
-$method = 'test/delete';
-$data = json_decode($client->request('DELETE', $method, $options)->getBody()->getContents(), true);
-
-// put
-$options = [
-    'headers' => ['Authorization' => 'abc'],
-    'form_params' => ['id' => 1, 'name' => '啦啦啦']
-];
-$method = 'test/update';
-$data = json_decode($client->request('PUT', $method, $options)->getBody()->getContents(), true);
-
-// get
-$options = [
-    'headers' => ['Authorization' => 'abc'],
-    'query' => ['name' => 'z3']
-];
-$method = 'test/read';
-$data = json_decode($client->request('GET', $method, $options)->getBody()->getContents(), true);
-
-
-// 并发请求代码
-$route = route('api.test.concurrentOrder');
-
-// 异步请求多条
-$promises = [
-    $client->postAsync($route, ['form_params' => ['num' => 1]]),
-    $client->postAsync($route, ['form_params' => ['num' => 1]]),
-    $client->postAsync($route, ['form_params' => ['num' => 1]]),
-    $client->postAsync($route, ['form_params' => ['num' => 1]])
-];
-$results = Utils::unwrap($promises);
-$list = [];
-foreach ($results as $result) {
-    $list[] = json_decode($result->getBody()->getContents(), true);
-}
-
-// 并发请求多次
-$requests = function ($total) use ($client, $route) {
-    for ($i = 0; $i < $total; $i++) {
-        yield function () use ($client, $route) {
-            return $client->postAsync($route, ['form_params' => ['num' => 1]]);
-        };
-    }
-};
-
-$success = $error = [];
-(new Pool($client, $requests(10), [
-    'concurrency' => 2,
-    'fulfilled' => function (Response $response, $index) use (&$success) {
-        $success[] = json_decode($response->getBody()->getContents(), true);
-    },
-    'rejected' => function (RequestException $reason, $index) use (&$error) {
-        $error[] = json_decode($reason->getMessage(), true);
-    },
-]))->promise()->wait();
 ```
 # 子查询
 [聊一聊laravel query builder 使用子查询\_laravel 子查询作为表名-CSDN博客](https://blog.csdn.net/Tim_phper/article/details/78606253)

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Hyperf vs PHP-FPM 进程内存消耗计算/","title":"Hyperf vs PHP-FPM 进程内存消耗计算","tags":["flashcards"],"noteIcon":"","created":"2025-04-13T14:56:55.098+08:00","updated":"2026-03-24T17:50:06.492+08:00","dg-note-properties":{"title":"Hyperf vs PHP-FPM 进程内存消耗计算","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Hyperf vs PHP-FPM 进程内存消耗计算/","title":"Hyperf vs PHP-FPM 进程内存消耗计算","tags":["flashcards"],"noteIcon":"","created":"2025-04-13T14:56:55.098+08:00","updated":"2026-05-21T11:11:59.999+08:00","dg-note-properties":{"title":"Hyperf vs PHP-FPM 进程内存消耗计算","tags":["flashcards"],"reference linking":null}}
 ---
 
 # PHP-FPM 进程
@@ -30,7 +30,7 @@ i: 78, pid: 164, Memory Usage: 1.622314453125MB, Peak Memory Usage: 1.7999191284
 ```
 （注意：PHP 函数返回的是脚本内部使用的内存，而非整个进程的物理内存。）
 2. 通过系统命令验证进程内存：
-```bash
+```shell
 # 启动 PHP 脚本并获取 PID
 php memory_test.php & echo $!
 # 假设 PID 是 164
@@ -66,7 +66,7 @@ i: 41, pid: 7, Memory Usage: 2.8706130981445MB, Peak Memory Usage: 2.87144470214
 3. **通过 PHP-FPM 测量真实进程内存**：
 访问路由后，通过命令行查看进程内存：
 >主要看参数VmRSS「进程当前使用的物理内存大小」
-```bash
+```shell
 cat /proc/7/status
 ```
  **预期输出**
@@ -166,7 +166,7 @@ Route::get('/complex', function () {
 打开浏览器或用 `curl` 访问 `http://laravel.prod.com/complex`，输出：
 >注意：PHP 内置服务器的内存统计可能不完全反映 FPM 的实际消耗。
 
- ```bash
+ ```shell
  ps -p <PID> -o rss,vsz,comm
  # 或
  htop --sort=MEM
@@ -268,7 +268,7 @@ i: 10, pid: 12, Memory Usage: 6.7391128540039MB, Peak Memory Usage: 6.9345321655
 3. **通过测量真实进程内存**：
 访问路由后，通过命令行查看进程内存：
 >主要看参数VmRSS「进程当前使用的物理内存大小」
-```bash
+```shell
 # hyperf.Worker.0 进程的初始内存为
 watch -n 1 sh memory_total.sh 12
 Total RSS: 28216 KB「约27.55MB」

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Gareway/Nginx + APISIX + Hyperf/","title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:06:43.000+08:00","updated":"2026-03-31T10:53:38.641+08:00","dg-note-properties":{"title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Gareway/Nginx + APISIX + Hyperf/","title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:06:43.000+08:00","updated":"2026-05-21T11:12:00.327+08:00","dg-note-properties":{"title":"Nginx + APISIX + Hyperf","tags":["flashcards"],"reference linking":null}}
 ---
 
 ## 整体架构
@@ -19,7 +19,7 @@
 - **APISIX Dashboard**：可视化管理界面
 - **Hyperf**：业务逻辑处理（Swoole 协程）
 ## 目录结构
-```bash
+```shell
 /opt/apisix-hyperf/
 ├── docker-compose.yml
 ├── .env
@@ -42,7 +42,7 @@
 ```
 ## 核心配置文件
 ### 环境变量文件 `.env`
-```bash
+```shell
 # 网络配置
 NETWORK_SUBNET=172.20.0.0/24
 
@@ -471,7 +471,7 @@ CMD ["php", "bin/hyperf.php", "start"]
 ```
 ## 启动与验证
 ### 启动所有服务
-```bash
+```shell
 cd /opt/apisix-hyperf
 
 # 创建必要目录
@@ -487,7 +487,7 @@ docker-compose ps
 docker-compose logs -f
 ```
 ### 验证各层连通性
-```bash
+```shell
 # 1. 验证 etcd
 docker exec apisix-etcd etcdctl endpoint health
 
@@ -507,7 +507,7 @@ curl http://localhost/
 ```
 ### 配置 APISIX 路由
 通过 Admin API 创建路由，将流量转发到 Hyperf：
-```bash
+```shell
 # 创建上游（指向 Hyperf）
 curl -X PUT http://localhost:9180/apisix/admin/upstreams/hyperf \
   -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' \
@@ -596,7 +596,7 @@ grafana:
     - apisix-hyperf-network
 ```
 ## 常用运维命令
-```bash
+```shell
 # 启动所有服务
 docker-compose up -d
 
@@ -625,7 +625,7 @@ docker exec apisix-etcd etcdctl snapshot save /tmp/snapshot.db
 这种方式最稳定，适合 Hyperf 节点变动不频繁的场景。
 #### APISIX 路由配置 (Admin API)
 创建一个指向 Hyperf 服务的路由，开启 `prometheus` 监控和 `key-auth` 鉴权。
-```bash
+```shell
 curl http://127.0.0.1:19180/apisix/admin/routes/hyperf-route -X PUT \
 -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' \
 -d '
@@ -710,7 +710,7 @@ return [
 ```
 #### Step 3: APISIX 绑定发现的服务
 此时创建路由，`upstream` 不再写死 IP，而是写服务名称。
-```bash
+```shell
 curl http://127.0.0.1:19180/apisix/admin/routes/hyperf-auto -X PUT \
 -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' \
 -d '
@@ -734,16 +734,16 @@ curl http://127.0.0.1:19180/apisix/admin/routes/hyperf-auto -X PUT \
 ### 连通性与 Admin API 探测
 在 Dashboard 抽风或配置不生效时，这是最快的自检手段。
 * **检查插件列表 (确认 Key 和端口)**：
-```bash
+```shell
 curl -i http://127.0.0.1:19180/apisix/admin/plugins?all=true -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1'
 ```
 * **查看已创建的所有路由**：
-```bash
+```shell
 curl -i http://127.0.0.1:19180/apisix/admin/routes -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1'
 ```
 ### 路由管理 (增删改查)
 * **快速创建一个路由 (指向 Hyperf)**：
-```bash
+```shell
 curl http://127.0.0.1:19180/apisix/admin/routes/1 -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT -d '
 {
     "uri": "/index/index",
@@ -756,7 +756,7 @@ curl http://127.0.0.1:19180/apisix/admin/routes/1 -H 'X-API-KEY: edd1c9f034335f1
 }'
 ```
 * **局部更新插件 (PATCH)**：不影响原有路由结构，只增改插件。
-```bash
+```shell
 curl http://127.0.0.1:19180/apisix/admin/routes/1 -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PATCH -d '
 {
     "plugins": {
@@ -769,7 +769,7 @@ curl http://127.0.0.1:19180/apisix/admin/routes/1 -H 'X-API-KEY: edd1c9f034335f1
 }'
 ```
 * **删除指定路由**：
-```bash
+```shell
 curl -i http://127.0.0.1:19180/apisix/admin/routes/1 -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X DELETE
 ```
 ### 核心插件配置模版
@@ -783,7 +783,7 @@ curl -i http://127.0.0.1:19180/apisix/admin/routes/1 -H 'X-API-KEY: edd1c9f03433
 ## 限流、熔断
 ### 限流 (Limit Count) —— 固定窗口计数
 最常用的场景：限制一个接口每分钟只能被调用 100 次。
-```bash
+```shell
 # 限制 60 秒内 10 次，超出返回 429
 curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PATCH -d '
 {
@@ -800,7 +800,7 @@ curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f03433
 * **key**: `remote_addr` (按 IP 限流), `consumer_name` (按用户限流), `http_x_api_key` (按自定义 Header)。
 ### 限速 (Limit Req) —— 漏桶算法
 用于应对突发流量，使请求平滑均匀地到达后端。
-```bash
+```shell
 # 每秒处理 1 个请求，允许瞬间爆发 2 个（burst），多余的直接拒绝
 curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PATCH -d '
 {
@@ -816,7 +816,7 @@ curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f03433
 ```
 ### 限并发 (Limit Conn)
 防止后端数据库或服务被过多的长连接撑爆。
-```bash
+```shell
 # 限制单个 IP 同时只能有 2 个并发连接
 curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PATCH -d '
 {
@@ -832,7 +832,7 @@ curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f03433
 ```
 ### 熔断 (Api Breaker) —— 自动切断故障后端
 当后端 Hyperf 疯狂报错（比如 500）时，APISIX 自动停止转发请求，直接返回错误，给后端喘息时间。
-```bash
+```shell
 # 如果后端连续返回 3 次 500 或 503，触发熔断 60 秒
 curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PATCH -d '
 {
@@ -853,7 +853,7 @@ curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f03433
 ```
 ### 黑白名单 (IP Restriction)
 最直接的安全防护手段。
-```bash
+```shell
 # 仅允许 192.168.1.0 段访问，其他全部拦截
 curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PATCH -d '
 {
@@ -866,7 +866,7 @@ curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f03433
 ```
 ### 请求改写 (Proxy Rewrite) —— 笔记重点
 如果你后端 Hyperf 的接口是 `/api/v1/user`，但你想对外暴露为 `/user`：
-```bash
+```shell
 curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PATCH -d '
 {
     "plugins": {
@@ -885,7 +885,7 @@ curl http://127.0.0.1:19180/apisix/admin/routes/{id} -H 'X-API-KEY: edd1c9f03433
 ### 1. 针对登录接口的“暴力破解”与“DDoS”防御
 这个示例结合了 **请求频率限制** 和 **并发连接限制**，是最有效的“速效药”。
 **场景：** 限制每个客户端 IP 每秒只能请求 1 次登录，允许 2 次突发请求，且同时只能保持 1 个活跃连接。
-```bash
+```shell
 curl http://127.0.0.1:9180/apisix/admin/routes/login_split \
 -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT -d '
 {
@@ -916,7 +916,7 @@ curl http://127.0.0.1:9180/apisix/admin/routes/login_split \
 ### 2. 识别并拦截“恶意爬虫/人机”
 如果你发现攻击者使用 `python` 或 `curl` 等脚本工具不断刷接口，可以使用 `bot-restriction`。
 **场景：** 禁止常见的工具类 User-Agent，但允许搜索引擎（如百度、谷歌）抓取。
-```bash
+```shell
 curl http://127.0.0.1:9180/apisix/admin/global_rules/2 \
 -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT -d '
 {
@@ -939,7 +939,7 @@ curl http://127.0.0.1:9180/apisix/admin/global_rules/2 \
 ### 3. 开启全链路监控（Prometheus + 自定义 Header）
 为了确认防御是否生效，以及请求到底有没有走到 APISIX，我们需要开启监控和来源标识。
 **场景：** 全局开启监控，并在所有响应中添加 `X-Proxy-By` 标识。
-```bash
+```shell
 curl http://127.0.0.1:9180/apisix/admin/global_rules/1 \
 -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT -d '
 {
@@ -958,7 +958,7 @@ curl http://127.0.0.1:9180/apisix/admin/global_rules/1 \
 ```
 ### 4. 配合日志分析攻击特征
 如果你想把拦截到的攻击记录下来发给日志服务器（如 ELK），可以配置 `http-logger`。
-```bash
+```shell
 "http-logger": {
     "uri": "http://127.0.0.1:5000/log-collector",
     "batch_max_size": 10,

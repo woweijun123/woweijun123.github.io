@@ -1,10 +1,10 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 异步队列事件/","title":"Laravel 异步队列事件","tags":["flashcards"],"noteIcon":"","created":"2025-07-21T20:11:35.690+08:00","updated":"2026-03-24T17:33:56.104+08:00","dg-note-properties":{"title":"Laravel 异步队列事件","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 异步队列事件/","title":"Laravel 异步队列事件","tags":["flashcards"],"noteIcon":"","created":"2025-07-21T20:11:35.690+08:00","updated":"2026-05-21T11:12:00.148+08:00","dg-note-properties":{"title":"Laravel 异步队列事件","tags":["flashcards"],"reference linking":null}}
 ---
 
 下面是一个完整的Laravel示例，展示如何使用事件和Redis队列异步执行耗时任务：
 ### 1. 创建事件类
-```bash
+```shell
 php artisan make:event OrderImEvent
 ```
 **app/Events/OrderImEvent.php**
@@ -41,7 +41,7 @@ class OrderImEvent
 }
 ```
 ### 2. 创建监听器类（实现ShouldQueue接口）
-```bash
+```shell
 php artisan make:listener ProcessOrderImNotification --event=OrderImEvent
 ```
 **app/Listeners/ProcessOrderImNotification.php**
@@ -185,7 +185,7 @@ REDIS_PORT=6379
 REDIS_QUEUE=default
 ```
 ### 6. 启动队列处理器
-```bash
+```shell
 # 处理指定队列
 php artisan queue:work redis --queue=im_notifications
 
@@ -194,7 +194,7 @@ php artisan queue:work redis --queue=im_notifications
 ```
 ### 7. 监控队列（可选）
 使用Laravel Horizon进行高级监控：
-```bash
+```shell
 composer require laravel/horizon
 
 # 发布配置文件
@@ -215,7 +215,7 @@ php artisan horizon:install
 ],
 ```
 常用命令
-```bash
+```shell
 horizon:clear : 删除指定队列中的所有任务。
 horizon:clear-metrics : 删除所有任务和队列的指标数据。
 horizon:continue : 指示主监控器（master supervisor）继续处理任务。

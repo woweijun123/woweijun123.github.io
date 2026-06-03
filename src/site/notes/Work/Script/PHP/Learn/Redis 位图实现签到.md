@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Redis 位图实现签到/","title":"Redis 位图实现签到","tags":["flashcards"],"noteIcon":"","created":"2025-01-06T16:13:54.000+08:00","updated":"2026-03-24T17:47:51.134+08:00","dg-note-properties":{"title":"Redis 位图实现签到","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Redis 位图实现签到/","title":"Redis 位图实现签到","tags":["flashcards"],"noteIcon":"","created":"2025-01-06T16:13:54.000+08:00","updated":"2026-05-21T11:12:00.076+08:00","dg-note-properties":{"title":"Redis 位图实现签到","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 需求
@@ -63,29 +63,29 @@ CREATE TABLE `sign_in`
 Redis 的位图操作是基于 String 类型的，最大支持  位（512MB）。在签到场景中，通常以 `sign:user_id:yyyyMM` 作为 Key。
 #### 1. 用户签到 (SETBIT)
 假设用户 ID 为 2，在 2019 年 10 月 3 日签到（偏移量通常从 0 开始，即日期 - 1）：
-```bash
+```shell
 # SETBIT key offset value
 SETBIT sign:2:201910 2 1
 ```
 #### 2. 检查某天是否签到 (GETBIT)
 检查用户在 10 月 3 日是否打卡：
-```bash
+```shell
 GETBIT sign:2:201910 2
 # 返回 1 表示已签到，0 表示未签到
 ```
 #### 3. 统计当月签到总次数 (BITCOUNT)
-```bash
+```shell
 BITCOUNT sign:2:201910
 ```
 #### 4. 获取指定范围的签到数据 (BITFIELD)
 获取本月前 31 天的状态，返回一个十进制整数：
-```bash
+```shell
 # 获取从第 0 位开始的 31 位无符号整数
 BITFIELD sign:2:201910 GET u31 0
 ```
 #### 5. 多用户活跃统计 (BITOP)
 计算 10 月 1 日和 10 月 2 日都活跃的用户（交集）：
-```bash
+```shell
 BITOP AND result_key sign:20191001 sign:20191002
 ```
 ### MySQL 操作 Bit 常用示例

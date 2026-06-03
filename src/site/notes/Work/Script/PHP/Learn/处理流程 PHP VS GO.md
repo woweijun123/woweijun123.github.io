@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/处理流程 PHP VS GO/","title":"处理流程 PHP VS GO","tags":["flashcards"],"noteIcon":"","created":"2025-10-18T10:43:23.158+08:00","updated":"2026-03-24T17:46:53.697+08:00","dg-note-properties":{"title":"处理流程 PHP VS GO","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/处理流程 PHP VS GO/","title":"处理流程 PHP VS GO","tags":["flashcards","#epoll","#kqueue"],"noteIcon":"","created":"2025-10-18T10:43:23.158+08:00","updated":"2026-05-21T11:11:59.471+08:00","dg-note-properties":{"title":"处理流程 PHP VS GO","tags":["flashcards","#epoll","#kqueue"],"reference linking":null}}
 ---
 
 ## Go 语言处理 HTTP 请求的完整流程
@@ -29,7 +29,7 @@ func main() {
 ```
 **2. 请求到达阶段**
 - Go 的 `net/http` 包在底层创建监听 socket
-- 使用 #epoll (Linux) 或 #kqueue(BSD) 进行 I/O 多路复用
+- 使用 `epoll` (Linux) 或 `kqueue`(BSD) 进行 I/O 多路复用
 - 主循环等待连接事件
 **3. 连接处理阶段**
 ```go
@@ -90,7 +90,7 @@ server {
 }
 ```
 **2. PHP-FPM 处理阶段**
-```bash
+```shell
 # PHP-FPM 进程管理器配置
 # /etc/php/8.1/fpm/pool.d/www.conf
 [www]

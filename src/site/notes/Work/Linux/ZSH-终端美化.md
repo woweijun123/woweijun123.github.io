@@ -1,18 +1,18 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Linux/ZSH-终端美化/","title":"ZSH-终端美化","tags":["flashcards"],"noteIcon":"","created":"2025-01-21T12:57:27.000+08:00","updated":"2026-03-25T19:04:05.780+08:00","dg-note-properties":{"title":"ZSH-终端美化","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Linux/ZSH-终端美化/","title":"ZSH-终端美化","noteIcon":"","created":"2026-05-18T22:59:24.000+08:00","updated":"2026-05-21T11:12:00.013+08:00","dg-note-properties":{"title":"ZSH-终端美化","tags":null,"reference linking":null}}
 ---
 
 
 [iTerm2安装配置使用指南——保姆级 - 知乎](https://zhuanlan.zhihu.com/p/550022490)
 [这篇 iTerm2 + Oh My Zsh 教程手把手让你成为这条街最靓的仔 - 知乎](https://zhuanlan.zhihu.com/p/145437836)
-
 # 安装oh-my-zsh
 ```shell
+sudo apt update && sudo apt install -y zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 ## 设置默认 Shell
 安装完成后我们需要把zsh设为默认的Shell，下面提供几个常用的命令，供大家参考：
-```bash
+```shell
 #查看系统安装的所有Shell
 cat /etc/Shells
 #查看当前使用的Shell
@@ -22,11 +22,11 @@ chsh -s /bin/zsh
 ```
 # 安装插件
 ## **声明高亮插件zsh-syntax-highlighting**
-```bash
+```shell
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 ```
 ## **自动填充建议插件zsh-autosuggestions**
-```bash
+```shell
 git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 ```
 ## **快速跳转插件autojump**
@@ -37,7 +37,7 @@ git clone https://github.com/wting/autojump.git && cd autojump && ./install.py
 ./uninstall.py
 ```
 ## 安装成功后，进行如下操作:
-```bash
+```shell
 #编辑配置文件
 vim ~/.zshrc
 
@@ -50,7 +50,7 @@ autoload -U compinit && compinit -u
 source ~/.zshrc
 ```
 # 主题
-## Powerlevel10k
+## Powerlevel10k「**慎用**会导致格式错乱」
 ### 安装
 ```shell
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
@@ -80,8 +80,6 @@ mkfontscale
 mkfontdir
 fc-cache -fv
 ```
-
-
 # CentOS 7 安装高版本的zsh教程
 ### 背景
 生产服务器安装的Linux为[Centos7](https://so.csdn.net/so/search?q=Centos7&spm=1001.2101.3001.7020).9，默认使用yum安装zsh只能到5.0.2版本；想要使用[powerlevel10k](https://github.com/romkatv/powerlevel10k#oh-my-zsh)主题就需要≥5.2版本的zsh。因此手动编译安装一下5.8版本的zsh

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/PCNTL/","title":"PCNTL","tags":["flashcards"],"noteIcon":"","created":"2025-05-29T13:46:57.137+08:00","updated":"2026-03-24T17:36:47.696+08:00","dg-note-properties":{"title":"PCNTL","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/PCNTL/","title":"PCNTL","tags":["flashcards"],"noteIcon":"","created":"2025-05-29T13:46:57.137+08:00","updated":"2026-05-21T11:12:00.025+08:00","dg-note-properties":{"title":"PCNTL","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 函数
@@ -460,16 +460,16 @@ while (true) {
 ### 运行步骤和测试
 1. 保存代码为 `signal_example.php`
 2. 在终端运行：
-```bash
+```shell
 php signal_example.php
 ```
 1. 在另一个终端窗口发送信号：
 - **同步信号**（需等待 `pcntl_signal_dispatch()`）：
- ```bash
+ ```shell
  kill -SIGUSR1 <PID>
  ```
 - **异步信号**（立即触发）：
- ```bash
+ ```shell
  kill -SIGUSR2 <PID>
  ```
 ### 关键说明
@@ -558,7 +558,7 @@ while (true) {
 }
 ```
 #### 步骤 2：发送信号并观察输出
-```bash
+```shell
 kill -INT <PID>  # 发送 SIGINT 信号
 ```
 #### 预期输出：

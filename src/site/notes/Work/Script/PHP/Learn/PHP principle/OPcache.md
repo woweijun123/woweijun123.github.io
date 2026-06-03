@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/PHP principle/OPcache/","title":"OPcache","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T22:18:39.000+08:00","updated":"2026-03-16T22:18:39.000+08:00","dg-note-properties":{"title":"OPcache","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/PHP principle/OPcache/","title":"OPcache","tags":["flashcards"],"noteIcon":"","created":"2026-03-16T22:18:39.000+08:00","updated":"2026-05-21T11:11:59.994+08:00","dg-note-properties":{"title":"OPcache","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 一、引言：重要概念
@@ -280,7 +280,7 @@ echo json_encode($opcache_status);
 >理想状态：命中率应超过 90%，否则需调整配置（如增加 `memory_consumption` 或 `max_accelerated_files`）。
 #### 计算 max_accelerated_files 的数量
 OPcache 缓存的最大文件数量 (根据应用调整，确保足够大以容纳所有 PHP 文件)
-```bash
+```shell
 find . -type f -name "*.php" | wc -l
 ```
 #### 图形化监控「OPcache GUI」

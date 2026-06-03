@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Learn/Welcome/","title":"Welcome","tags":["flashcards","gardenEntry"],"noteIcon":"","created":"2026-03-11T17:42:58.882+08:00","updated":"2026-03-12T16:55:47.292+08:00","dg-note-properties":{"title":"Welcome","tags":["flashcards","gardenEntry"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Learn/Welcome/","title":"Welcome","tags":["gardenEntry"],"noteIcon":"","created":"2026-03-11T17:42:58.882+08:00","updated":"2026-05-15T10:17:33.101+08:00","dg-note-properties":{"title":"Welcome","tags":null,"reference linking":null}}
 ---
 
 # 🏡 欢迎来到我的数字花园

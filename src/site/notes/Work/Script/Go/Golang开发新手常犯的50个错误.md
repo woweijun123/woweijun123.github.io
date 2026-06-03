@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Golang开发新手常犯的50个错误/","title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"noteIcon":"","created":"2026-04-06T11:34:31.000+08:00","updated":"2026-04-09T15:47:06.515+08:00","dg-note-properties":{"title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"reference linking":"[Go的50度灰：Golang新开发者要注意的陷阱和常见错误](https://colobu.com/2015/09/07/gotchas-and-common-mistakes-in-go-golang/)","origin linking":"[50 Shades of Go: Traps, Gotchas, and Common Mistakes for New Golang Devs](http://devs.cloudimmunity.com/gotchas-and-common-mistakes-in-go-golang/index.html)"}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Golang开发新手常犯的50个错误/","title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"noteIcon":"","created":"2026-04-12T20:45:10.000+08:00","updated":"2026-06-03T10:07:51.419+08:00","dg-note-properties":{"title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"reference linking":"[Go的50度灰：Golang新开发者要注意的陷阱和常见错误](https://colobu.com/2015/09/07/gotchas-and-common-mistakes-in-go-golang/)","origin linking":"[50 Shades of Go: Traps, Gotchas, and Common Mistakes for New Golang Devs](http://devs.cloudimmunity.com/gotchas-and-common-mistakes-in-go-golang/index.html)"}}
 ---
 
 本文总结了Go语言初学者常遇到的陷阱与误区，包括变量声明、类型断言、并发编程等多个方面，帮助开发者规避错误，提升编程效率。
@@ -12,7 +12,7 @@ package main
 import "fmt"
 
 func main()
-{ // ❌不允许左大括号单独一行
+{ // ❌不允许左大括号单独一行「PHP是要求独立一行」
 	fmt.Println("hello there!")
 }
 ```
@@ -54,7 +54,7 @@ func main() {
 	_ = time.Now
 }
 ```
-<!--SR:!2026-04-26,45,290-->
+<!--SR:!2026-09-05,131,290-->
 <?e?>
 ### 4、短的变量声明只能在**函数内部**使用
 ```go
@@ -115,8 +115,7 @@ func main() {
 	fmt.Printf("info: %+v\n", data) // info: {result:13}
 }
 ```
-<!--SR:!2026-04-11,31,270-->
-<?e?>
+<!--SR:!2026-06-05,39,250-->
 <?e?>
 ### 7、意外的变量幽灵
 <?l?>
@@ -143,7 +142,6 @@ func main() {
 使用 `go-ynet` 命令会执行更多幽灵变量的检测。
 <!--SR:!2026-06-18,72,270-->
 <?e?>
-<?e?>
 ### 8、不能使用 nil 初始化一个未指定类型的变量
 <?l?>
 ```go
@@ -151,13 +149,12 @@ func main() {
 var x interface{} = nil // OK
 _ = x
 ```
-<!--SR:!2026-04-10,30,270-->
+<!--SR:!2026-06-30,81,270-->
 <?e?>
-<?e?>
-### 9、使用  nil 切片与 Map 的差异
+### 9、使用  nil Slice与 Map 的差异
 <?l?>
 #### ❌ Map：禁止直接写入
-当定义 `var m map[string]int` 时，`m` 的值为 `nil`。Map 在底层是一个复杂的哈希表结构，向 `nil` Map 写入数据时，由于没有初始化的哈希桶（Buckets），运行时会直接抛出错误。
+定义`var m map[string]int`时，`m`为`nil`。Map在底层是一个复杂的哈希表结构，向`nil`Map写入数据时，由于**没有初始化**的哈希桶（Buckets），运行时会直接抛出错误。
 #### ✅ 切片：允许追加（Append）
 当定义 `var s []int` 时，`s` 是一个 `nil` 切片。调用 `append` 函数时，Go 会检测到切片尚未分配空间，从而自动创建一个新的底层数组并将值放入其中。
 #### 深入理解底层原理
@@ -195,11 +192,17 @@ var s []int // s 是 nil
 s = append(s, 1) // ✅success：append 会自动分配内存
 fmt.Println(s) // 输出: [1]
 ```
-<!--SR:!2026-04-12,31,270-->
+<!--SR:!2026-06-08,41,250-->
 <?e?>
-<?e?>
-### 10、map使用make分配内存时可指定`capicity`，但是不能对map使用cap函数
+### 10、map不能用cap函数「make分配内存时可指定`capicity`」
 <?l?>
+#### 核心差异对比
+| **特性**         | **Slice (一排座位)**     | **Map (储物柜阵列)**  |
+| -------------- | -------------------- | ---------------- |
+| **存储方式**       | 物理连续内存               | 散列分布的桶 (Buckets) |
+| **空间定义**       | 确定：`capacity` = 元素个数 | 不确定：受哈希分布和冲突影响   |
+| **查询性能**       | $O(1)$ 直接索引          | $O(1)$ 但需经历计算与查找 |
+| **是否需要 `cap`** | 是，需要知道边界以便扩容         | 否，容量是动态统计结果，意义不大 |
 #### 注意事项与相关注意内容
 - **len vs cap**：记住 Map 只有 `len()`（返回当前键值对数量），没有 `cap()`。
 - **垃圾回收**：大容量的 Map 即使删除了所有元素（`delete`），其占用的底层内存（桶）通常也不会立即释放给操作系统。如果需要释放内存，可能需要重新创建 Map 或等待 GC。
@@ -225,7 +228,6 @@ fmt.Println(cap(m)) // 3
 ```
 <!--SR:!2026-06-17,72,270-->
 <?e?>
-<?e?>
 ### 11、字符串不允许使用 nil 值
 <?l?>
 在`golang`中，nil只能赋值给 **`*`指针、`channel`、`func`、`interface`、`map`、`slice`** 类型的变量。
@@ -246,7 +248,6 @@ if x == "" {
 }
 ```
 <!--SR:!2026-06-20,74,270-->
-<?e?>
 <?e?>
 ### 12、数组用于函数传参时是**值复制**
 <?l?>
@@ -329,7 +330,7 @@ for i := range tableB {
 }
 fmt.Println(tableB) // [[0 0 0 0] [0 0 0 0]]
 ```
-<!--SR:!2026-04-14,33,270-->
+<!--SR:!2026-07-11,88,270-->
 <?e?>
 ### 15、从不存在key的map中取值时，返回的总是”0值”
 ```go
@@ -352,7 +353,7 @@ xbytes[0] = 'T' // ✅修改切片是合法的
 fmt.Println(string(xbytes)) // 输出: Text
 ```
 #### 深入：Unicode 与多字节字符的陷阱
-虽然 `[]byte` 转换对 ASCII 字符（如 `a-z`）有效，但对于中文、表情符号或带重音符号的字符，直接操作字节会导致**乱码**。
+虽然 `[]byte` 转换对 ASCII 字符（如 `a-z`）有效，但对于**中文**、**表情符号**、**带重音符号**的字符，直接操作字节会导致**乱码**。
 - **原因**：Go 字符串使用 UTF-8 编码。一个中文字符通常占用 **3 个字节**，一个复杂的表情符号可能占用更多。
 - **解决方案**：使用 `[]rune`（码点切片）来处理文本。
 ##### 示例：处理多字节字符
@@ -363,8 +364,7 @@ runes := []rune(s)
 runes[0] = '您'
 fmt.Println(string(runes)) // 输出: 您好世界
 ```
-<!--SR:!2026-06-28,80,270-->
-<?e?>
+<!--SR:!2026-06-06,12,236-->
 <?e?>
 ### 17、字符串和字节切片之间的转换
 <?l?>
@@ -419,7 +419,7 @@ func BenchmarkLargeMapLookup(b *testing.B) {
 }
 ```
 执行命令`go test -bench=. -benchmem`输出如下
-```bash
+```shell
 goos: darwin
 goarch: arm64
 pkg: benchmark
@@ -429,11 +429,15 @@ BenchmarkLargeMapLookup/Optimized-8             179124416                6.508 n
 PASS
 ok      benchmark       4.238s
 ```
-<!--SR:!2026-04-13,32,270-->
+<!--SR:!2026-07-08,86,270-->
 <?e?>
 ### 18、字符串和索引操作符
-在 Go 语言中，字符串的索引操作返回的是**原始字节（byte/uint8）**，而非直观上的“字符”。
-想获取字符可使用 `for range` ，也可使用 `unicode/utf8` 包和 `golang.org/x/exp/utf8string` 包的 `At()` 方法。
+<?l?>
+在 Go 语言中，字符串的索引操作返回的是**原始字节（byte/uint8）**，而非直观上的**字符**。
+想获取**字符**可使用 `for range` ，也可使用 `unicode/utf8` 包和 `golang.org/x/exp/utf8string` 包的 `At()` 方法。
+- UTF-8 编码下：
+	- 英文**1**个字节
+	- 中文**3**个字节
 ```go
 x := "text"
 fmt.Println(x[0]) // print 116
@@ -443,7 +447,7 @@ s := "Go语言"
 
 // 1. 索引操作：得到的是字节（UTF-8 编码的一部分）
 fmt.Printf("Index 0: %v, Type: %T\n", s[0], s[0]) // Index 0: 71(字母 G), Type: uint8
-fmt.Printf("Index 2: %v\n", s[2])                 // Index 2: 232(中文“语”的第一个字节)
+fmt.Printf("Index 2: %v\n", s[2])                 // Index 2: 232(中文“语”的第一个字节「💡语占3个字节」)
 
 // 2. 遍历获取字符：使用 range 得到 rune（Unicode 码点）
 for i, r := range s {
@@ -460,8 +464,20 @@ for i, r := range s {
 runes := []rune(s)
 fmt.Printf("Third Char: %c\n", runes[2]) // Third Char: 语
 ```
+<!--SR:!2026-06-04,10,215-->
+<?e?>
 ### 19、字符串并不总是UTF8的文本
-在 Go 语言中，字符串本质上是**只读的字节切片（ReadOnly Byte Slice）**，并不强制要求符合 UTF-8 编码。
+<?l?>
+在 Go 语言中，字符串本质上是**只读的字节切片（ReadOnly Byte Slice）**，并**不强制**要求**符合 UTF-8 编码**。
+`\xfe` 是一个**十六进制的字节值**（十进制为 254），它不是独立的文件格式，而是常用于二进制数据的特定标记：
+1. **UTF-16 文本标志 (BOM)**：
+	* 如果文件开头是 `\xfe\xff`，代表这是 **UTF-16 大端序** 文本格式。
+	* 如果是 `\xff\xfe`，代表 **UTF-16 小端序**。
+2. **无效的 UTF-8 字节**：
+	* 在 UTF-8 编码规范中，`\xfe` 属于**非法字节**。如果出现在 UTF-8 文本中，会导致**乱码**或解析**报错**。
+3. **协议控制符/魔数**：
+	* 在网络协议或二进制文件中，常被用作消息的**起始/结束边界符**或特定数据的特征码。
+**核心结论**：看到 `\xfe`，优先排查是否为 **UTF-16 文本文件的开头**；如果是普通流数据，它只是一个普通的二进制控制特征码。
 ```go
 // 1. 正常 UTF-8：双引号定义的字符串字面量通常是有效的 UTF-8
 s1 := "Go语言"
@@ -469,12 +485,14 @@ fmt.Println(utf8.ValidString(s1)) // true
 
 // 2. 任意字节：字符串可以包含无效的 UTF-8 序列
 // \xfe 是一个非法的 UTF-8 起始字节
-s2 := "A\xfeC"
+s2 := "A \xfe C"
 fmt.Println(utf8.ValidString(s2)) // false
 
 // 3. 长度陷阱：len() 返回的是字节数，而非字符（码点）数
 fmt.Println(len(s2)) // 3 字节
 ```
+<!--SR:!2026-06-05,2,150-->
+<?e?>
 ### 20、 字符串长度
 `len(str)` 返回的是字符串的**字节数**，获取字符串的rune数是使用 `unicode/utf8.RuneCountInString()` 函数，但注意一些字符也可能是由多个rune组成，如 `é` 是两个rune组成。
 ```go
@@ -490,7 +508,7 @@ fmt.Println(len(accent))                    // 3
 fmt.Println(utf8.RuneCountInString(accent)) // 2 (虽然视觉上是一个字)
 ```
 ### 21、在多行切片、数组和映射文字中缺少逗号
-在 Go 语言中，当**复合字面量**（Slice, Array, Map, Struct）分多行书写时，每一行（包括最后一行）都**必须**以逗号 `,` 结尾。
+在 Go 语言中，当**复合字面量**（Slice、Array、Map、Struct）分多行书写时，每一行（包括最后一行）都**必须**以逗号 `,` 结尾。
 ```go
 // ❌ 错误：多行书写时，最后一行的 2 后面缺少逗号
 /*
@@ -530,8 +548,7 @@ log.Fatalln("Fatal Level: 程序直接退出")
 
 fmt.Println("这段代码永远不会执行")
 ```
-<!--SR:!2026-04-11,31,270-->
-<?e?>
+<!--SR:!2026-07-04,84,270-->
 <?e?>
 ### 23、内置数据结构非线程安全
 <?l?>
@@ -581,7 +598,7 @@ go func() {
 	}
 }()
 ```
-<!--SR:!2026-04-14,33,270-->
+<!--SR:!2026-07-12,89,270-->
 <?e?>
 ### 24、使用for range迭代String，是以rune来迭代的。
 在 Go 中，对字符串进行 `for range` 迭代时，有两个关键机制需要注意：
@@ -592,13 +609,13 @@ go func() {
 2. UTF-8 解析与非法序列
 	`range` 会尝试按 **UTF-8 解码**字符串：
 	- **正常数据**：返回对应的 Unicode 码点。
-	- **非法序列**：若遇到非 UTF-8 编码的字节，会返回 **0xfffd**（Unicode 替换字符）。
+	- **非法序列**：若遇到非 UTF-8 编码的字节，会返回 `0xfffd`（Unicode 替换字符）。
 	- **处理建议**：若需处理原始二进制数据，请先将字符串转换为 **`[]byte`**。
 ```go
 // 1. 索引跳转：i 是字符起始字节的下标，而非字符序号
 s := "Go语言"
 for i, r := range s {
-	fmt.Printf("索引:%d 字符:%c\n", i, r) 
+	fmt.Printf("索引:%d 字符:%c\n", i, r)
 }
 /*
 索引:0 字符:G
@@ -607,7 +624,7 @@ for i, r := range s {
 索引:5 字符:言
 */
 
-// 2. 乱码替换：Range 遇到非法 UTF-8 字节会返回 0xfffd ()
+// 2. 乱码替换：Range 遇到非法 UTF-8 字节会返回 0xfffd
 data := "A\xfeC" // \xfe 是非法字节
 for _, v := range data {
 	fmt.Printf("%#x ", v) // 输出: 0x41 0xfffd 0x43 (数据被损坏)
@@ -680,8 +697,7 @@ fmt.Println(i) // 输出 2
 i--
 fmt.Println(i) // 输出 1
 ```
-<!--SR:!2026-04-11,33,270-->
-<?e?>
+<!--SR:!2026-06-14,46,250-->
 <?e?>
 ### 28、按位取反与独特的 AND NOT
 <?l?>
@@ -701,9 +717,10 @@ fmt.Printf("A XOR B:  %08b\n", a^b) // 10000000
 // 逻辑：如果 B 的某位是 1，则将 A 对应的位强制清零
 fmt.Printf("A &^ B:   %08b\n", a&^b) // 10000000
 ```
-<!--SR:!2026-04-10,30,270-->
+<!--SR:!2026-06-07,41,250-->
 <?e?>
 ### 29、位运算优先级与主流语言的显著差异
+<?l?>
 **位运算**(与、或、异或、取反)**优先级高于四则运算**(加、减、乘、除、取余)，有别于C语言。
 ```go
 // 1. 位与 (&) vs 加法 (+)
@@ -721,6 +738,8 @@ fmt.Printf("0x2 + 0x2 << 0x1 = %#x\n", 0x2 + 0x2 << 0x1) // 0x2 + 0x2 << 0x1 = 0
 // C: ^ 优先级高于 |，先算 0xf | (0x2 ^ 0x2) = 0xf | 0 = 0xf
 fmt.Printf("0xf | 0x2 ^ 0x2  = %#x\n", 0xf | 0x2 ^ 0x2) // 0xf | 0x2 ^ 0x2  = 0xd
 ```
+<!--SR:!2026-06-12,17,254-->
+<?e?>
 ### 30、结构体私有字段在序列化中会被忽略
 在 Go 中，结构体字段的可见性由**首字母大小**写决定。`json`、`xml` 等包属于外部包，它们无法通过反射访问你定义的 **小写开头（未导出）** 字段。
 ```go
@@ -749,8 +768,10 @@ func main() {
     fmt.Printf("%+v\n", result) // {Name:Gemini age:0}
 }
 ```
+<?e?>
 ### 31、主协程退出导致程序提前终止与 WaitGroup 传参陷阱
-**`main` 函数不会等待其他协程执行完毕**。如果 `main` 返回，程序会立即退出，所有正在运行的协程都会被强行终结。
+<?l?>
+**`main` 函数不会等待其他协程执行完毕**。如果 `main` 返回，程序会立即退出，**所有**正在运行的**子协程**都会被**强行终结**。
 ```go
 package main
 
@@ -777,9 +798,17 @@ func worker(id int, wg *sync.WaitGroup) {
     defer wg.Done() // 函数结束时计数器 -1
     fmt.Printf("工人 %d 开始工作\n", id)
 }
+/*
+工人 1 开始工作
+工人 0 开始工作
+所有任务完成，主程序退出
+*/
 ```
+<!--SR:!2026-06-15,19,254-->
+<?e?>
 ### 32、无缓冲通道的发送行为与主协程退出竞争
-无缓冲通道（Unbuffered Channel）是**同步**的。发送者在消息被接收者接手的那一刻就会解除阻塞，但这并不意味着接收者已经完成了对该消息的处理。
+<?l?>
+无缓冲通道（Unbuffered Channel）是**同步**的。**发送者**在消息被**接收者接收的那一刻**就会**解除阻塞**，但这并不意味着接收者已经完成了对该消息的处理。
 ```go
 ch := make(chan string)
 go func() {
@@ -793,16 +822,19 @@ ch <- "指令 1"
 ch <- "指令 2"
 // 主协程执行完毕并退出，此时协程可能还没来得及打印 "指令 2" 的处理结果
 fmt.Println("主程序退出")
-```
-输出
-```
+
+/*
 接收者开始处理: 指令 1
 主程序退出
+*/
 ```
+<!--SR:!2026-06-20,25,274-->
 <?e?>
 ### 33、向已关闭的通道发送数据引发 Panic
 <?l?>
-Go 语言对通道（Channel）的操作有着严格的对称性规则：**从已关闭的通道读取是安全的，但向已关闭的通道发送会直接引发程序崩溃（Panic）。**
+Go 语言对通道（Channel）的操作有着严格的对称性规则：
+- 从**已关闭**的**通道读取**是**安全**的
+- 向**已关闭**的**通道发送**会直接引发程序**崩溃**（Panic）。
 ```go
 ch := make(chan int)
 done := make(chan struct{})
@@ -823,9 +855,13 @@ close(ch)
 // 3. ✅正确做法：关闭信号通道 done，让其他协程安全退出
 close(done)
 time.Sleep(1 * time.Second)
+/*
+工人 2 发送成功
+收到结果: 2
+panic: send on closed channel
+*/
 ```
 <!--SR:!2026-06-27,79,270-->
-<?e?>
 <?e?>
 ### 34、nil 通道的阻塞特性及其在 select 中的巧妙应用
 <?l?>
@@ -865,10 +901,15 @@ go func() {
 inch <- 100
 inch <- 200
 time.Sleep(time.Second)
+/*
+Result: 100
+Result: 200
+*/
 ```
 <!--SR:!2026-06-19,73,270-->
 <?e?>
 ### 35、值接收者与指针接收者的修改权限差异
+<?l?>
 方法接收者（Receiver）本质上是函数的第一个参数。如果使用**值接收者**，方法内部得到的是原始数据的一份**完整拷贝**；如果使用**指针接收者**，则得到指向原数据的指针。
 ```go
 package main
@@ -901,17 +942,19 @@ func main() {
     fmt.Println(d.num) // 输出 7
 
     d.vmethod()
-    fmt.Println(d.num) // 输出 7 (没有变成 8)
-    fmt.Println(*d.key) // 输出 v.key (指针内容变了)
-    fmt.Println(d.items) // 输出 map[v:true] (Map 内容变了)
+    fmt.Println(d.num) // 输出 7 (❌没有变成 8)
+    fmt.Println(*d.key) // 输出 v.key (✅指针内容变了)
+    fmt.Println(d.items) // 输出 map[v:true] (✅Map 内容变了)
 }
 ```
+<!--SR:!2026-06-20,23,254-->
+<?e?>
 # 二、中级
 <?e?>
 ### 1、HTTP 响应体关闭的正确姿势与连接复用陷阱
 在 Go 中处理 HTTP 请求时，管理 `resp.Body` 的生命周期至关重要。处理不当会导致内存==1;;泄漏==、文件句柄==1;;耗尽==，甚至阻碍底层 TCP 连接的==1;;复用==。
 > - 所有语言底层都需要**关闭**资源。
-> - PHP/Java 通过请求销毁机制或 GC**自动关闭**资源
+> - PHP/Java 通过**请求销毁机制**或 **GC自动关闭**资源
 > - Go 为了==1;;极致==性能与==1;;显式==控制，拒绝滞后的自动处理，要求开发者==1;;显式== `Close`资源立即精准释放文件句柄并实现 TCP 连接复用。
 #### 1. `resp`为`nil`导致的Panic
 在检查错误之前就调用了 `defer resp.Body.Close()`。当网络超时或 DNS 解析失败时，`resp` 是 `nil`，访问 `resp.Body` 会直接引发==1;;panic崩溃==。
@@ -1118,7 +1161,7 @@ func bestPractice() {
 | **网络请求失败** | 在 `if err != nil` 前 `defer` | 程序 Panic 崩溃           |
 | **重定向失败**  | 仅在 `err == nil` 时 Close     | 文件描述符泄露               |
 | **高频短连接**  | 未读取完 Body 直接 Close          | 产生大量 TIME_WAIT，无法复用连接 |
-<!--SR:!2026-05-30,56,250-->
+<!--SR:!2026-10-19,140,250-->
 <?e?>
 ### 2、强制关闭连接：防止空闲连接堆积与内存溢出
 虽然 HTTP/1.1 默认启用 ==1;;Keep-Alive== 以提升性能，但在**高并发请求大量**==1;;不同==服务器（如搜索引擎爬虫）的场景下，默认的长连接机制会带来资源风险。
@@ -1151,65 +1194,64 @@ func run(name string, callee func(*http.Request, *http.Transport)) {
 	// 申明访问域名
 	url := "https://www.baidu.com"
 	for i := 1; i <= 2; i++ {
-		// 创建跟踪
-		tc := &httptrace.ClientTrace{
-			GotConn: func(connInfo httptrace.GotConnInfo) {
-				fmt.Printf(
-					"id:%d|reuse:%-5v|addr:%s\n",
-					i, connInfo.Reused, connInfo.Conn.LocalAddr(),
-				)
-			},
-		}
-		// 创建请求
-		req, _ := http.NewRequest("GET", url, nil)
-		// 添加跟踪
-		req = req.WithContext(httptrace.WithClientTrace(req.Context(), tc))
-		// 执行配置逻辑
-		callee(req, tp)
-		// 发送请求
-		resp, err := ct.Do(req)
-		if err == nil {
-			// 💡先排空再关闭，否则连接不复用
-			io.Copy(io.Discard, resp.Body)
-			resp.Body.Close()
-		}
+		func() {
+			// 创建跟踪
+			tc := &httptrace.ClientTrace{
+				GotConn: func(connInfo httptrace.GotConnInfo) {
+					fmt.Printf(
+						"id:%d|reuse:%-5v|addr:%s\n",
+						i, connInfo.Reused, connInfo.Conn.LocalAddr(),
+					)
+				},
+			}
+			// 创建请求
+			req, _ := http.NewRequest("GET", url, nil)
+			// 添加跟踪
+			req = req.WithContext(httptrace.WithClientTrace(req.Context(), tc))
+			// 执行配置逻辑
+			callee(req, tp)
+			// 发送请求
+			resp, err := ct.Do(req)
+			// 优先处理 resp 的清理，防止重定向等情况下的泄露
+			if resp != nil {
+				defer func() {
+					// 为了复用连接，先耗尽 Body 再关闭
+					io.Copy(io.Discard, resp.Body)
+					resp.Body.Close()
+				}()
+			}
+			// 检查错误
+			if err != nil {
+				fmt.Printf("Request %d failed: %v\n", i, err)
+			}
+		}()
 	}
 	fmt.Println()
 }
 func main() {
-	// 对照：默认行为 (Keep-Alive)
 	run("默认长连接", func(r *http.Request, t *http.Transport) {})
-	// 方式 A：req.Close = true
-	run("req.Close = true", func(r *http.Request, t *http.Transport) {
-		r.Close = true
-	})
-	// 方式 B：Header Connection: close
-	run("Header Connection: close", func(r *http.Request, t *http.Transport) {
-		r.Header.Add("Connection", "close")
-	})
-	// 方式 C：DisableKeepAlives 全局禁用
-	run("DisableKeepAlives 全局设置", func(r *http.Request, t *http.Transport) {
-		t.DisableKeepAlives = true
-	})
+	run("req.Close = true", func(r *http.Request, t *http.Transport) { r.Close = true })
+	run("Connection: close", func(r *http.Request, t *http.Transport) { r.Header.Add("Connection", "close") })
+	run("DisableKeepAlives 全局禁用", func(r *http.Request, t *http.Transport) { t.DisableKeepAlives = true })
 }
 ```
 输出
 ```
 --- 场景: 默认长连接 ---
-迭代 1 | 复用连接: false | 本地端口: 192.168.2.110:56999
-迭代 2 | 复用连接: true  | 本地端口: 192.168.2.110:56999
+id:1|reuse:false|addr:192.168.2.225:60186
+id:2|reuse:true |addr:192.168.2.225:60186
 
 --- 场景: req.Close = true ---
-迭代 1 | 复用连接: false | 本地端口: 192.168.2.110:57001
-迭代 2 | 复用连接: false | 本地端口: 192.168.2.110:57002
+id:1|reuse:false|addr:192.168.2.225:60187
+id:2|reuse:false|addr:192.168.2.225:60188
 
---- 场景: Header Connection: close ---
-迭代 1 | 复用连接: false | 本地端口: 192.168.2.110:57003
-迭代 2 | 复用连接: false | 本地端口: 192.168.2.110:57004
+--- 场景: Connection: close ---
+id:1|reuse:false|addr:192.168.2.225:60189
+id:2|reuse:false|addr:192.168.2.225:60190
 
---- 场景: DisableKeepAlives 全局设置 ---
-迭代 1 | 复用连接: false | 本地端口: 192.168.2.110:57005
-迭代 2 | 复用连接: false | 本地端口: 192.168.2.110:57006
+--- 场景: DisableKeepAlives 全局禁用 ---
+id:1|reuse:false|addr:192.168.2.225:60191
+id:2|reuse:false|addr:192.168.2.225:60192
 ```
 #### http.Transport 深度解析
 ##### 1. 定义
@@ -1234,9 +1276,10 @@ func main() {
 ##### 5. 常见坑点 ⚠️
 - **连接泄漏**: 未读完 Body 或未 Close 会导致连接无法回归池，引发 FD 耗尽。
 - **默认配置性能差**: 默认的 `MaxIdleConnsPerHost=2` 会导致高并发下产生大量 `TIME_WAIT` 连接。
-<!--SR:!2026-04-18,23,230-->
+<!--SR:!2026-06-11,14,150-->
 <?e?>
 ### 3、JSON Encoder 会自动添加换行符
+<?l?>
 ```go
 package main
 
@@ -1265,65 +1308,62 @@ func main() {
     }
 }
 ```
+<!--SR:!2026-06-13,12,233-->
+<?e?>
 ### 4、JSON 包会自动转义 HTML 特殊字符
-为了防止跨站脚本攻击（XSS），Go 的 `encoding/json` 包默认会将字符串中的 `<`、`>`、`&` 等 HTML 特殊字符转义为对应的 Unicode 编码（如 `\u003c`）。虽然初衷是安全，但这往往会干扰非 Web 场景下的数据展示，如配置文件或 REST API。
+<?l?>
+为了防止跨站脚本攻击（XSS），Go 的 `encoding/json` 包默认会将字符串中的 `<`、`>`、`&` 等 HTML 特殊字符转义为对应的 **Unicode** 编码（如 `\u003c`）。虽然**初衷是安全**，但这往往会**干扰非 Web 场景**下的数据展示，如配置文件或 REST API。
 ```go
-package main
+data := "a < b & c > d"
 
-import (
-    "bytes"
-    "encoding/json"
-    "fmt"
-)
+// 1. json.Marshal：默认转义，且无法关闭此行为
+raw, _ := json.Marshal(data)
+fmt.Println("Marshal:", string(raw)) // Marshal: "a \u003c b \u0026 c \u003e d"
 
-func main() {
-    data := "a < b & c > d"
+// 2. json.Encoder：默认也转义
+var b1 bytes.Buffer
+json.NewEncoder(&b1).Encode(data)
+fmt.Print("Default Encoder: ", b1.String()) // Default Encoder: "a \u003c b \u0026 c \u003e d"
 
-    // 1. json.Marshal：默认转义，且无法关闭此行为
-    raw, _ := json.Marshal(data)
-    fmt.Println("Marshal:", string(raw)) 
-    // 输出: "a \u003cb \u0026 c \u003e d"
-
-    // 2. json.Encoder：默认也转义
-    var b1 bytes.Buffer
-    json.NewEncoder(&b1).Encode(data)
-    fmt.Print("Default Encoder: ", b1.String())
-
-    // 3. 禁用 HTML 转义：必须使用 Encoder 的 SetEscapeHTML 方法
-    var b2 bytes.Buffer
-    enc := json.NewEncoder(&b2)
-    enc.SetEscapeHTML(false) // ✅ 关键：关闭自动转义
-    enc.Encode(data)
-    fmt.Print("NoEscape Encoder: ", b2.String())
-}
+// 3. 禁用 HTML 转义：必须使用 Encoder 的 SetEscapeHTML 方法
+var b2 bytes.Buffer
+enc := json.NewEncoder(&b2)
+enc.SetEscapeHTML(false) // ✅ 关键：关闭自动转义
+enc.Encode(data)
+fmt.Print("NoEscape Encoder: ", b2.String()) // NoEscape Encoder: "a < b & c > d"
 ```
+<!--SR:!2026-06-04,3,213-->
+<?e?>
 ### 5、将 JSON 数字解析为 Interface 时的 float64 陷阱
-在 Go 中，如果将 JSON 数据解析到 `interface{}` 或 `map[string]interface{}`，JSON 标准规范中的所有数字默认都会被处理为 **float64**。这意味着直接将其断言为 `int` 会引发程序崩溃（Panic）。
+- 方案1：浮点数中转
+- 方案2：使用 `json.Number` (保留精度)
+- 方案3：预定义结构体 (工程最优解)
+- 方案4：延迟解析 `json.RawMessage` (应对动态类型)
+<?l?>
+在 Go 中，如果将 JSON 数据解析到 `interface{}` 或 `map[string]interface{}`，JSON 标准规范中的所有数字默认都会被处理为 **float64**。这意味着直接将其**断言为 `int` 会引发程序崩溃（Panic）**。
 #### 基础陷阱：直接断言 (导致 Panic)
 这是最常见的错误。Go 会将接口中的数字视为 `float64`。
 ```go
-// ❌ 错误示范
 var result map[string]interface{}
 json.Unmarshal([]byte(`{"status": 200}`), &result)
 fmt.Printf("%T \n", result["status"]) // float64
-// panic: interface conversion: interface is float64, not int
-status := result["status"].(int)
+status := result["status"].(int) // ❌panic: interface conversion: interface {} is float64, not int   
 fmt.Println(status)
 ```
 #### 方案1：浮点数中转
-适用于已经解析完成，且确定数字不会超过 （即 `float64` 能精确表示的整数范围）的情况。
+适用于已经**解析完成**且**数字不会超过范围** （即 `float64` 能精确表示的整数范围）的情况。
 ```go
 // ✅ 方案：先断言为 float64 再强制转换
 status := int(result["status"].(float64))
 ```
 #### 方案2：使用 `json.Number` (保留精度)
-这是处理大整数（如 ID）或不确定类型的**标准做法**。它本质上是将数字作为字符串存储，直到你调用转换方法。
+这是处理**大整数**（如 ID）或不确定类型的**标准做法**。它本质上是将数字作为字符串存储，直到你调用转换方法。
 ```go
 // ✅ 方案：通过 Decoder 开启 UseNumber
 var result map[string]interface{}
 data := []byte(`{"status": 200}`)
 decoder := json.NewDecoder(bytes.NewReader(data))
-decoder.UseNumber() // 关键：开启此选项
+decoder.UseNumber() // 💡关键：开启此选项
 
 if err := decoder.Decode(&result); err == nil {
 	// 灵活转换：Int64(), Float64(), 或 String()
@@ -1333,7 +1373,7 @@ if err := decoder.Decode(&result); err == nil {
 }
 ```
 #### 方案3：预定义结构体 (工程最优解)
-如果 JSON 结构固定，这是性能最好、最安全的方法。Go 会自动处理类型转换。
+如果 JSON 结构固定，这是**性能最好、最安全**的方法。Go 会自动处理类型转换。
 ```go
 // ✅ 方案：利用 Struct Tag 自动映射
 type Response struct {
@@ -1346,7 +1386,7 @@ json.Unmarshal(data, &res)
 fmt.Println(res.Status) // 自动变为 uint64
 ```
 #### 方案4：延迟解析 `json.RawMessage` (应对动态类型)
-当同一个字段在不同情况下返回不同类型（如数字或字符串）时，此方案最为优雅。
+当同一个字段在**不同情况**下返回**不同类型**（如数字或字符串）时，此方案最为优雅。
 ```go
 // ✅ 方案：先“保持原样”，后续按需解析
 type DynamicResponse struct {
@@ -1373,6 +1413,8 @@ if err := json.Unmarshal(res.Status, &s); err == nil {
 * **默认机制**：`interface{}` + `Number` = `float64`。
 * **精度风险**：大整数进入 `float64` 会丢失精度，必须用 `UseNumber` 或 `json.RawMessage`。
 * **代码健壮性**：生产环境建议配合 `v, ok := result["key"].(float64)` 进行安全断言。
+<!--SR:!2026-06-06,5,153-->
+<?e?>
 ### 6、JSON 字符串中的非 UTF-8 字符与十六进制转义限制
 Go 的 `encoding/json` 包严格遵循 JSON 规范，要求所有字符串必须是有效的 **UTF-8** 编码。这意味着你不能像在 C 或 Python 中那样直接在 JSON 字符串中使用十六进制转义序列（如 `\xNN`），否则会导致解析失败。
 #### 错误示范：直接使用 Hex 转义
@@ -2837,7 +2879,7 @@ func main() {
 #### 3. 如何监测逃逸？
 你可以通过编译器提供的标记来查看变量的分配决策。
 **执行命令：**
-```bash
+```shell
 go run -gcflags "-m" app.go
 ```
 **输出示例：**

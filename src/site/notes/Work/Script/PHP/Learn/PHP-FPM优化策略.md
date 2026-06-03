@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/PHP-FPM优化策略/","title":"PHP-FPM优化策略","tags":["flashcards"],"noteIcon":"","created":"2025-04-12T20:07:02.869+08:00","updated":"2026-03-24T17:47:44.632+08:00","dg-note-properties":{"title":"PHP-FPM优化策略","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/PHP-FPM优化策略/","title":"PHP-FPM优化策略","tags":["flashcards"],"noteIcon":"","created":"2025-04-12T20:07:02.869+08:00","updated":"2026-05-21T11:12:00.144+08:00","dg-note-properties":{"title":"PHP-FPM优化策略","tags":["flashcards"],"reference linking":null}}
 ---
 
 # `php-fpm.conf` 参数详解
@@ -67,7 +67,7 @@ pm.max_requests = 1000
 #### 单进程内存占用估算：
 1. **`ps` 筛选并排序**：获取所有 `php-fpm` 进程的内存使用量（RSS），按从高到低排序。
 2. **`awk` 计算平均值**：对所有 `php-fpm` 进程的 RSS 求和，计算平均值（单位 MB），并保留两位小数输出。
-```bash
+```shell
 # 列出所有 php-fpm 进程，并按 内存使用量（RSS） 排序
 ps -ylC php-fpm --sort:rss | awk '{sum+=$8} END {printf "%.2f MB\n", sum/NR/1024}'
 ```
@@ -344,7 +344,7 @@ opcache.jit_debug=1 ; 记录JIT编译日志
    - 监控 `opcache.jit_blacklist_*` 计数（过高需调整参数）
 #### 计算 max_accelerated_files 的数量
 OPcache 缓存的最大文件数量 (根据应用调整，确保足够大以容纳所有 PHP 文件)
-```bash
+```shell
 find . -type f -name "*.php" | wc -l
 ```
 ### 内存与执行限制
@@ -372,7 +372,7 @@ open_basedir = /var/www/html:/tmp  ; 限制文件访问范围
 ```  
 ### Laravel 优化
 #### 1. 缓存与预加载
-```bash
+```shell
 # 清除配置缓存文件
 php artisan config:clear
 # 清除应用缓存文件
@@ -418,13 +418,13 @@ Nginx 代理供 Prometheus 采集指标。
 - **Telescope**：  
 Laravel 内置调试工具（仅限非生产环境临时启用）。
 #### 3. 定期维护命令
-```bash
+```shell
 php artisan optimize:clear    # 更新代码后清除缓存
 php artisan queue:restart    # 优雅重启队列
 ```
 # 验证与监控
 #### 实时状态查看
-```bash
+```shell
 # 查看 PHP-FPM 进程池状态
 systemctl status php-fpm
 # 监控活跃进程数
@@ -487,7 +487,7 @@ slow requests:         0
 ```
 - **结论：** 如果 `active processes` 经常是 90，`idle processes` 经常是 0，`listen queue` 很大且持续增长，`max children reached` 持续增长，那么 PHP-FPM 进程池已经饱和。原因要么是 `max_children` 设置过低，要么是**每个请求处理时间太长**，导致进程无法快速释放来处理新请求。1500ms 的延迟和 100QPS 也印证了这一点 (90个进程 * 1000ms/1500ms ≈ 60 QPS 的理论上限，实际 100QPS 可能因为波动或统计方式略有差异，但基本吻合瓶颈在饱和的进程池)。
 #### 压力测试
-```bash
+```shell
 # 使用 ab 测试并发能力
 ab -n 5000 -c 100 http://your-site.com/
 ```

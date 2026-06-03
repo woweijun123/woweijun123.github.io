@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 中使用 Job 队列/","title":"Laravel 中使用 Job 队列","tags":["flashcards"],"noteIcon":"","created":"2025-07-25T11:11:31.677+08:00","updated":"2026-03-24T17:33:59.282+08:00","dg-note-properties":{"title":"Laravel 中使用 Job 队列","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 中使用 Job 队列/","title":"Laravel 中使用 Job 队列","tags":["flashcards"],"noteIcon":"","created":"2025-07-25T11:11:31.677+08:00","updated":"2026-05-21T11:11:59.461+08:00","dg-note-properties":{"title":"Laravel 中使用 Job 队列","tags":["flashcards"],"reference linking":null}}
 ---
 
 ### 一、环境配置 (`.env`)
@@ -13,7 +13,7 @@ REDIS_DB=0
 QUEUE_FAILED_DRIVER=database-uuids
 ```
 ### 二、创建 Job 类
-```bash
+```shell
 php artisan make:job ProcessOrder
 ```
 
@@ -103,7 +103,7 @@ ProcessOrder::dispatch($order)->delay(now()->addMinutes(10));
    - 实现 `failed()` 方法处理异常
    - 记录日志并更新业务状态
    - 配置失败任务表：
- ```bash
+ ```shell
  php artisan queue:failed-table
  php artisan migrate
  ```
@@ -140,7 +140,7 @@ class OrderController extends Controller
 }
 ```
 ### 五、启动队列 Worker
-```bash
+```shell
 # 基本命令（处理默认队列）
 php artisan queue:work
 
@@ -156,7 +156,7 @@ php artisan queue:work redis \
 ```
 ### 六、监控与维护
 1. **队列仪表板** (使用 Horizon)：
-```bash
+```shell
 composer require laravel/horizon
 php artisan horizon:install
 ```
@@ -171,7 +171,7 @@ protected function schedule(Schedule $schedule)
 }
 ```
 3. **压力测试指标**：
-```bash
+```shell
 # 监控关键指标
 QUEUE_WAIT_TIME=$(redis-cli llen queues:orders)
 AVG_PROCESS_TIME=$(php artisan queue:monitor --max=100)
@@ -194,12 +194,12 @@ php artisan queue:work redis --queue=bulk_orders --sleep=0 --max-jobs=1000
    - 检查 `queue:restart` 是否被调用
    - 增加 `--timeout` 值（大于最长任务时间）
 2. **内存泄漏**：
-```bash
+```shell
 # 使用 --max-jobs 参数自动重启
 php artisan queue:work --max-jobs=100
 ```
 3. **优先级反转**：
-```bash
+```shell
 # 正确处理队列优先级
 php artisan queue:work --queue=critical,high,default,low
 ```

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/POSIX/","title":"POSIX","tags":["flashcards"],"noteIcon":"","created":"2025-11-04T15:32:55.184+08:00","updated":"2026-03-24T17:36:49.195+08:00","dg-note-properties":{"title":"POSIX","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/POSIX/","title":"POSIX","tags":["flashcards"],"noteIcon":"","created":"2025-11-04T15:32:55.184+08:00","updated":"2026-05-21T11:11:59.931+08:00","dg-note-properties":{"title":"POSIX","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 函数
@@ -103,22 +103,22 @@ while (true) {
 ```
 ### 运行和验证
 1.  运行
-```bash
+```shell
 php setsid.php
 ```
 命令行会立即返回。
 2.  验证后台运行（检查 PPID 是否为 `1`，表示已成功后台化。）
-```bash
+```shell
 ps -ef | grep 'setsid.php'
 501 79303     1   0  5:07下午 ??         0:00.00 php setsid.php
 ```
 3.  验证日志（检查日志文件是否每 5 秒更新一次。）
-```bash
+```shell
 tail -f /tmp/setsid.log
 daemon working...
 ```
 4.  停止
-```bash
+```shell
 kill <PID> # 使用上面 ps 命令查到的 PID
 pkill -f 'setsid.php'
 ```

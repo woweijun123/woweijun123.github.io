@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/CLI/","title":"CLI","tags":["flashcards"],"noteIcon":"","created":"2025-07-18T11:16:41.837+08:00","updated":"2026-03-24T17:38:14.472+08:00","dg-note-properties":{"title":"CLI","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/CLI/","title":"CLI","tags":["flashcards"],"noteIcon":"","created":"2025-07-18T11:16:41.837+08:00","updated":"2026-05-21T11:11:59.452+08:00","dg-note-properties":{"title":"CLI","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 核心
@@ -133,18 +133,18 @@ $server->start();
 > **热更新配置**：修改代码后需执行`php think swoole restart`重启服务
 ### 调试与优化
 #### 1. Opcache调优参数
-```bash
+```shell
 php -d opcache.enable_cli=1 \
      -d opcache.jit_buffer_size=64M \
      -d opcache.jit=1235 \
      script.php
 ```
 #### 2. 内存泄漏检测
-```bash
+```shell
 USE_ZEND_ALLOC=0 valgrind --leak-check=full php script.php
 ```
 #### 3. 生成Opcode（需vld扩展）
-```bash
+```shell
 php -d vld.active=1 -d vld.execute=0 test.php
 ```
 > **底层机制**：vld通过覆盖`zend_execute`函数指针实现
@@ -326,7 +326,7 @@ zend_gc_collect_cycles(); // 当缓冲区满时触发
 ```
 ### CLI 特有优化技术
 1. **Opcache 调优**：
-```bash
+```shell
 php -d opcache.enable_cli=1 -d opcache.jit=1205 -d opcache.jit_buffer_size=64M script.php
 ```
 2. **持久化资源复用**：
@@ -347,17 +347,17 @@ pcntl_signal(SIGTERM, function() {
 ```
 ### 调试与性能分析
 1. **GDB 调试示例**：
-```bash
+```shell
 gdb --args php -r 'echo "test";'
 (gdb) b zend_execute
 (gdb) run
 ```
 2. **Valgrind 内存检测**：
-```bash
+```shell
 USE_ZEND_ALLOC=0 valgrind --leak-check=full php script.php
 ```
 3. **JIT 反汇编**：
-```bash
+```shell
 php -d opcache.jit=1205 -d opcache.jit_debug=1 script.php
 ```
 ### ⚠️ 高级注意事项

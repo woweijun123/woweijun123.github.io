@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Array/","title":"Array","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T11:34:34.000+08:00","updated":"2026-03-24T17:38:16.961+08:00","dg-note-properties":{"title":"Array","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Array/","title":"Array","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T11:34:34.000+08:00","updated":"2026-04-29T16:36:12.355+08:00","dg-note-properties":{"title":"Array","tags":["flashcards"],"reference linking":null}}
 ---
 
 # array_pad
@@ -229,6 +229,36 @@ array (
 )
 */
 ```
+# array_fill_keys
+使用指定的键和值填充数组
+```php
+$keys = ['foo', 5, 10, 'bar'];  
+$a    = array_fill_keys($keys, 'banana');  
+var_export($a);
+/*
+array (
+  'foo' => 'banana',
+  5 => 'banana',
+  10 => 'banana',
+  'bar' => 'banana',
+)
+*/
+```
+# array_combine
+创建一个数组，用一个数组的值作为其键名，另一个数组的值作为其值 
+```php
+$a = ['01:00' => 1, '02:00' => 2, '03:00' => 3];
+$b = [4, 5, 6];
+$combine = array_combine(array_keys($a), array_values($b));
+var_export($combine);
+/*
+array (
+  '01:00' => 4,
+  '02:00' => 5,
+  '03:00' => 6,
+)
+*/
+```
 # array_chunk
 将一个数组分割成多个
 ```php
@@ -310,21 +340,6 @@ array (
             'user_id' => 2,
             'name' => '李四',
         ),
-)
-*/
-```
-# array_combine
-创建一个数组，用一个数组的值作为其键名，另一个数组的值作为其值 
-```php
-$a = ['01:00' => 1, '02:00' => 2, '03:00' => 3];
-$b = [4, 5, 6];
-$combine = array_combine(array_keys($a), array_values($b));
-var_export($combine);
-/*
-array (
-  '01:00' => 4,
-  '02:00' => 5,
-  '03:00' => 6,
 )
 */
 ```
@@ -1110,26 +1125,57 @@ array (
 - **忽略原有键**：函数只关注值，不保留键值对的关联性。
 - **使用场景**：当你不关心数组原有键，只需要对值进行排序时，`usort()` 非常适用，例如对一个简单的数字或字符串列表进行排序。
 ```php
-// #1
+// #1 数组
 // 在第一个参数小于，等于或大于第二个参数时，
 // 该比较函数必须相应地返回一个小于，等于或大于 0 的整数。
 $a = [3, 2, 4, 5, 1];
 usort($a, function ($a, $b) {
-    if ($a == $b) return 0;
-    return ($a < $b) ? -1 : 1;
+    return $a <=> $b; // 0=相等，1=大于，-1=小于「升序：$a <=> $b，降序：$b <=> $a」
 });
-foreach ($a as $k => $v) {
-    echo $k, ':', $v, PHP_EOL;
-}
+var_export($a);
 /*
-0:1
-1:2
-2:3
-3:4
-4:5
+array (
+    0 => 1,
+    1 => 2,
+    2 => 3,
+    3 => 4,
+    4 => 5,
+) 
 */
 
-// #2
+// #2 二维键值对数组排序
+$a = [['a' => 1, 'b' => 1], ['a' => 1, 'b' => 2], ['a' => 3, 'b' => 3]];
+usort($a, function ($a, $b) {
+    // 先按'a'键降序排序
+    if ($a['a'] !== $b['a']) {
+        return $b['a'] <=> $a['a'];
+    }
+
+    // 再按'b'键升序排序
+    return $a['b'] <=> $b['b'];
+});
+var_export($a);
+/*
+array (
+  0 =>
+  array (
+    'a' => 3,
+    'b' => 3,
+  ),
+  1 =>
+  array (
+    'a' => 1,
+    'b' => 1,
+  ),
+  2 =>
+  array (
+    'a' => 1,
+    'b' => 2,
+  ),
+)
+*/
+
+// #3 对象数组排序
 class Test
 {
     var $name;
@@ -1139,35 +1185,28 @@ class Test
         $this->name = $name;
     }
 
-    public static function cmpObj($a, $b)
+    public static function cmp($a, $b)
     {
-        $al = strtolower($a->name);
-        $bl = strtolower($b->name);
-        if ($al == $bl) return 0;
-        return ($al > $bl) ? 1 : -1;
+        return $a->name <=> $b->name;
     }
 }
 
-$a[] = new Test('c');
-$a[] = new Test('b');
-$a[] = new Test('d');
-
-usort($a, ['Test', 'cmpObj']);
-
+$a = [new Test('b'), new Test('a'), new Test('c')];
+usort($a, ['Test', 'cmp']);
 foreach ($a as $item) {
     echo $item->name, PHP_EOL;
 }
 /*
+a
 b
 c
-d
 */
 
-// #3
+// #4 构建排序函数
 $array = [
     ['key_a' => 'z', 'key_b' => 'c'],
     ['key_a' => 'x', 'key_b' => 'b'],
-    ['key_a' => 'y', 'key_b' => 'a']
+    ['key_a' => 'y', 'key_b' => 'a'],
 ];
 function build_sorter($key)
 {

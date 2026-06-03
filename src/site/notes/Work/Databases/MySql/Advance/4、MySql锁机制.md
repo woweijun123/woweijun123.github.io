@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-04-06T11:36:57.000+08:00","updated":"2026-04-08T09:54:37.556+08:00","dg-note-properties":{"title":"4、MySql锁机制","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-04-06T11:36:57.000+08:00","updated":"2026-06-01T10:49:23.747+08:00","dg-note-properties":{"title":"4、MySql锁机制","tags":["flashcards"]}}
 ---
 
 # 定义
@@ -218,7 +218,7 @@ MyISAM 的调度机制默认认为**写操作比读操作更重要**：
 * **调节优先级**：若业务必须以读为主，可设置 `low_priority_updates = 1`，将写操作的优先级降到读操作之后。
 * **单条控制**：在特定的 `INSERT/UPDATE` 后添加 `LOW_PRIORITY` 关键字。
 * **强制整理**：定期使用 `OPTIMIZE TABLE` 整理碎片，提高锁的释放效率。
-<!--SR:!2026-04-29,46,250-->
+<!--SR:!2026-07-14,53,230-->
 <?e?>
 # 行锁(偏写)
 ## 特点：InnoDB 引擎特有
@@ -386,7 +386,7 @@ COMMIT; -- 立即提交
 3. **调整数据库配置**
 	- **降低锁超时时间**：适当调小 `SET innodb_lock_wait_timeout = 10; -- 10秒`（默认 50 秒），减少长时间等待导致的超时错误。
 	- **启用死锁检测**：MySQL 默认会自动检测死锁并回滚最小事务，无需手动干预。
-<!--SR:!2026-05-31,69,270-->
+<!--SR:!2026-12-04,186,270-->
 <?e?>
 <?e?>
 ### 死锁保留机制
@@ -461,14 +461,14 @@ SHOW VARIABLES LIKE 'innodb_print_all_deadlocks';
 SHOW VARIABLES LIKE 'log_error';
 ```
 2. **查看物理日志**（以 Linux 为例）：
-```bash
+```shell
 tail -f /var/log/mysql/error.log
 ```
 3. **日志核心解析指标**：
 	* **`HOLDS THE LOCK(S)`**：当前事务已占有的锁。
 	* **`WAITING FOR THIS LOCK TO BE GRANTED`**：正在申请并导致阻塞的锁。
 	* **`WE ROLL BACK TRANSACTION`**：最终被系统判定牺牲（回滚）的事务。
-<!--SR:!2026-04-22,24,250-->
+<!--SR:!2026-06-21,60,250-->
 <?e?>
 ### 死锁案例
 #### 案例1：间隙锁 (Gap Lock) 导致的插入意向锁冲突「IODKU」
@@ -708,7 +708,7 @@ Lock wait timeout exceeded; try restarting transaction
 **所以，如果没有 Session A 的存在，Session B 永远不会等自己。**
 ### 关键结论
 **间隙锁是“损人利己”的锁**：它保护了当前事务不会读到“幻影数据”，但代价是牺牲了其他事务的插入并发度。
-<!--SR:!2026-04-30,61,311-->
+<!--SR:!2026-08-26,86,291-->
 <?e?>
 ## RC隔离级别
  RC（Read Committed）与 RR（Repeatable Read）在不同实战场景下的锁行为对比。
@@ -1010,7 +1010,7 @@ Innodb_row_lock_time_avg # 💡每次等待所花平均时间;
 Innodb_row_lock_time_max # 系统启动到现在最长等待时间;
 Innodb_row_lock_waits # 💡系统启动后到现在总共等待的次数;
 ```
-<!--SR:!2026-04-16,8,190-->
+<!--SR:!2026-07-01,33,170-->
 <?e?>
 # 锁的实时分布
 <?l?>

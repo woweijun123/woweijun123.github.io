@@ -1,9 +1,14 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/SPL/","title":"SPL","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:26:14.000+08:00","updated":"2026-03-24T17:22:36.346+08:00","dg-note-properties":{"title":"SPL","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/SPL/","title":"SPL","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:26:14.000+08:00","updated":"2026-05-27T10:03:06.244+08:00","dg-note-properties":{"title":"SPL","tags":["flashcards"],"reference linking":null}}
 ---
 
-[PHP: SPL - Manual](https://www.php.net/manual/zh/book.spl.php)
+普通队列、优先级队列的类名分别是什么？
+<?l?>
+`new SplQueue()`、`new SplPriorityQueue()`
+<!--SR:!2026-06-18,22,250-->
+<?e?>
 # 普通队列
+[PHP: SPL - Manual](https://www.php.net/manual/zh/book.spl.php)
 ## 先入先出(FIFO)
 ```php
 $queue = new SplQueue;
@@ -41,15 +46,6 @@ $queue->push(3); // 此时队列中的节点为 3 - 2 - 1
 $queue->pop();      // 次数队列中的节点为 2 - 1
 $queue->pop();      // 次数队列中的节点为 1
 $queue->pop();      // 次数队列中的节点为 空
-
-// 入列
-$queue->enqueue(1); // 此时队列中的节点为 1
-$queue->enqueue(2); // 此时队列中的节点为 2 - 1
-$queue->enqueue(3); // 此时队列中的节点为 3 - 2 - 1
-// 出列
-$queue->dequeue();  // 此时队列中的节点为 3 - 2
-$queue->dequeue();  // 此时队列中的节点为 3
-$queue->dequeue();  // 此时队列中的节点为 空
 ```
 ## 迭代器指针
 ```php

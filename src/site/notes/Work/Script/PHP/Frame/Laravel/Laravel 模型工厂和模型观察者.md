@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 模型工厂和模型观察者/","title":"Laravel 模型工厂和模型观察者","tags":["flashcards"],"noteIcon":"","created":"2025-05-17T13:37:56.241+08:00","updated":"2026-03-24T17:33:52.124+08:00","dg-note-properties":{"title":"Laravel 模型工厂和模型观察者","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 模型工厂和模型观察者/","title":"Laravel 模型工厂和模型观察者","tags":["flashcards"],"noteIcon":"","created":"2025-05-17T13:37:56.241+08:00","updated":"2026-05-21T11:12:00.026+08:00","dg-note-properties":{"title":"Laravel 模型工厂和模型观察者","tags":["flashcards"],"reference linking":null}}
 ---
 
 在 Laravel 中，`php artisan make:factory name` 和 `php artisan make:observer UserObserver` 是两个常用的命令，分别用于创建 **模型工厂** 和 **模型观察者**。它们的使用场景和示例如下：
@@ -12,7 +12,7 @@
 假设有一个 `User` 模型，需要生成测试用户数据：
 1. **创建工厂类**  
    运行命令：
-```bash
+```shell
 php artisan make:factory UserFactory --model=User
 ```
    生成文件：`database/factories/UserFactory.php`。
@@ -55,7 +55,7 @@ public function run()
 假设需要在用户创建后自动发送欢迎邮件：
 1. **创建观察者类**  
    运行命令：
-```bash
+```shell
 php artisan make:observer UserObserver --model=User
 ```
    生成文件：`app/Observers/UserObserver.php`。

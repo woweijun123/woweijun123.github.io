@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-03-29T22:54:32.000+08:00","updated":"2026-04-02T09:55:18.840+08:00","dg-note-properties":{"title":"Go Common Problem","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-05-05T17:29:29.000+08:00","updated":"2026-05-25T11:53:13.448+08:00","dg-note-properties":{"title":"Go Common Problem","tags":["flashcards"]}}
 ---
 
 # 为什么 Go 语言要求 Map 键必须可比较？
@@ -23,7 +23,7 @@ func MapKeys[k comparable, v any](m map[k]v) []k {
 	return r
 }
 ```
-<!--SR:!2026-05-01,33,270-->
+<!--SR:!2026-07-31,87,270-->
 <?e?>
 # 关于死锁
 因为 channel 的接收操作是==1;;阻塞==的，runtime 只有在==1;;所有协程==都处于==1;;阻塞==无法继续执行 时才会报 `fatal error: all goroutines are asleep - deadlock!`
@@ -54,7 +54,7 @@ func main() {
 ### 解决方式
 1. 确保有发送者（在其他 goroutine 里发送）
 2. 用带缓冲的通道、select+default 等避免长期阻塞。
-<!--SR:!2026-05-06,42,292-->
+<!--SR:!2026-09-06,123,292-->
 <?e?>
 # 切片扩容的零拷贝读取 (Zero-copy Read)
 ## 切片的本质：SliceHeader
@@ -132,7 +132,7 @@ if len(b) == cap(b) {
 ### 关键结论
 * **修改 Len 的开销极小**：仅仅是 CPU 寄存器级别的整数赋值，不涉及数组拷贝。
 * **零拷贝思想**：预留 `Cap`  底层填充  更新 `Len`。这是 Go 处理高性能 I/O 的核心套路。
-<!--SR:!2026-04-30,28,232-->
+<!--SR:!2026-06-13,30,212-->
 <?e?>
 ## Append 扩容机制
 ### 扩容公式 (Go 1.18+)
@@ -216,7 +216,7 @@ if cap > doublecap {
 - **预分配 (Pre-allocation)**：如果你预知数据量（比如文件大小），直接 `make([]byte, 0, fileSize)`。这能让你的代码从 $O(N)$ 的多次拷贝优化到 ==1;;零==拷贝。
 - **大内存常驻**：由于切片引用==1;;底层==数组，如果一个==1;;小==切片引用了一个==1;;巨大==的数组，整个数组都不会被 ==1;;GC 回收==。在处理大数据后，建议将有用部分 `copy` 到新切片。
 - **复用切片**：在循环中通过 `s = s[:0]` 重置切片，可以复用已有的底层数组，避免重新触发扩容逻辑。
-<!--SR:!2026-04-10,18,252-->
+<!--SR:!2026-09-13,111,252-->
 <?e?>
 ## 切片视图与 io.Reader 的读取契约
 ```go

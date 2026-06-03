@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 缓存驱动/","title":"Hyperf 缓存驱动","tags":["flashcards"],"noteIcon":"","created":"2025-09-04T13:50:00.646+08:00","updated":"2026-03-24T17:31:57.486+08:00","dg-note-properties":{"title":"Hyperf 缓存驱动","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 缓存驱动/","title":"Hyperf 缓存驱动","tags":["flashcards"],"noteIcon":"","created":"2026-04-11T08:16:03.000+08:00","updated":"2026-04-11T08:16:03.000+08:00","dg-note-properties":{"title":"Hyperf 缓存驱动","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 优化用户信息查询：避免每次请求读取 Redis
@@ -347,14 +347,13 @@ private function recordCacheHit(string $type): void
 }
 ```
 ## 💡 总结与建议
+### 推荐方案
+从策略一开始实施，80% 的应用只需要这一级优化就能满足需求。只有在监控数据显示 Redis 仍然是瓶颈时，才考虑添加更复杂的缓存策略。
 1. **首要实施**：务必使用 **请求级缓存 (Context)**，这是最简单且效果最显著的优化
 2. **按需添加**：对于读多写少的场景，可以考虑添加 **进程级缓存 (APCu)**
 3. **高性能场景**：极端性能要求时使用 **本地缓存层**，但要处理好一致性
 4. **始终牢记**：任何缓存策略都必须配套相应的 **缓存清理机制**
 5. **监控验证**：通过监控确认优化效果，确保 Redis 查询次数显著下降
-
-**推荐方案**：从策略一开始实施，80% 的应用只需要这一级优化就能满足需求。只有在监控数据显示 Redis 仍然是瓶颈时，才考虑添加更复杂的缓存策略。
-
 # Swoole Table 缓存：深度解析与最佳实践
 使用 Swoole Table 作为缓存来避免重复查询 Redis 是一个高性能方案，但在内存管理和使用模式上与 Context 缓存有本质区别。
 ## 📊 Swoole Table 特性一览
@@ -563,7 +562,6 @@ class TableMonitor
 - ❌ 需要持久化的重要数据
 - ❌ 对数据一致性要求极高的场景
 **推荐方案**：采用 **多级缓存架构**，用 Swoole Table 作为 Redis 和 Context 之间的中间层，既能享受性能优势，又能通过 Redis 保证数据的持久性和一致性。同时建立完善的内存监控和清理机制，避免内存无限增长。
-
 # Hyperf 中实现跨进程共享内存的最佳实践（不使用 Redis）
 在 Hyperf 中不使用 Redis 实现跨进程共享内存，确实有一些成熟的方案。我将为你提供完整的最佳实践，从基础实现到高级用法。
 ## 📊 跨进程共享内存方案对比

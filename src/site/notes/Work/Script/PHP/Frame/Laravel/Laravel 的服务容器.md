@@ -1,11 +1,11 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 的服务容器/","title":"Laravel 的服务容器","tags":["flashcards"],"noteIcon":"","created":"2025-05-18T11:48:28.682+08:00","updated":"2026-03-24T17:33:49.014+08:00","dg-note-properties":{"title":"Laravel 的服务容器","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 的服务容器/","title":"Laravel 的服务容器","tags":["flashcards"],"noteIcon":"","created":"2026-04-12T21:22:00.000+08:00","updated":"2026-04-12T21:22:00.000+08:00","dg-note-properties":{"title":"Laravel 的服务容器","tags":["flashcards"],"reference linking":null}}
 ---
 
 在 Laravel 的服务容器中，`app()->singletonIf`、`app()->bindIf` 和 `app()->make` 是三个常用的方法，它们的作用和区别如下：
 ### 1. `app()->bindIf`
 #### 作用  
-`bindIf` 用于 **条件绑定**。只有在服务容器中尚未绑定指定的抽象类或接口时，才会注册一个新的绑定。如果已经存在绑定，则不会覆盖。
+`bindIf` 用于 **绑定实例**。只有在服务容器中**尚未绑定**指定的抽象类或接口时，才会注册一个新的绑定。如果已经存在绑定，则**不会覆盖**。
 #### 语法  
 ```php
 app()->bindIf($abstract, $concrete, $shared = false);
@@ -25,7 +25,7 @@ app()->bindIf('Logger', FileLogger::class);
 ```
 ### 2. `app()->singletonIf`
 #### 作用  
-`singletonIf` 是 `bindIf` 的单例版本。只有在服务容器中尚未绑定指定的抽象类或接口时，才会注册一个 **单例绑定**。如果已经存在绑定，则不会覆盖。
+`singletonIf` 用于 **绑定实例** 是 `bindIf` 的**单例**版本。只有在服务容器中**尚未绑定**指定的抽象类或接口时，才会注册一个 **单例绑定**。如果已经存在绑定，则不**会覆盖**。
 #### 语法  
 ```php
 app()->singletonIf($abstract, $concrete);
@@ -42,7 +42,7 @@ app()->singletonIf('Database', MySqlConnection::class);
 ```
 ### 3. `app()->make`
 #### 作用  
-`make` 用于 **从服务容器中解析实例**。它会根据绑定的规则（`bind` 或 `singleton`）创建并返回一个实例。如果未绑定，则会尝试通过反射自动解析依赖。
+`make` 用于 从服务**容器**中**解析实例**。它会根据绑定的规则（`bind` 或 `singleton`）创建并**返回一个实例**。如果未绑定，则会尝试通过反射自动解析依赖。
 #### 语法  
 ```php
 $instance = app()->make($abstract, $parameters = []);

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Golang开发新手常犯的50个错误/","title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"noteIcon":"","created":"2026-04-12T20:45:10.000+08:00","updated":"2026-06-03T10:07:51.419+08:00","dg-note-properties":{"title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"reference linking":"[Go的50度灰：Golang新开发者要注意的陷阱和常见错误](https://colobu.com/2015/09/07/gotchas-and-common-mistakes-in-go-golang/)","origin linking":"[50 Shades of Go: Traps, Gotchas, and Common Mistakes for New Golang Devs](http://devs.cloudimmunity.com/gotchas-and-common-mistakes-in-go-golang/index.html)"}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Golang开发新手常犯的50个错误/","title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"noteIcon":"","created":"2026-04-12T20:45:10.000+08:00","updated":"2026-06-04T10:09:29.749+08:00","dg-note-properties":{"title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"reference linking":"[Go的50度灰：Golang新开发者要注意的陷阱和常见错误](https://colobu.com/2015/09/07/gotchas-and-common-mistakes-in-go-golang/)","origin linking":"[50 Shades of Go: Traps, Gotchas, and Common Mistakes for New Golang Devs](http://devs.cloudimmunity.com/gotchas-and-common-mistakes-in-go-golang/index.html)"}}
 ---
 
 本文总结了Go语言初学者常遇到的陷阱与误区，包括变量声明、类型断言、并发编程等多个方面，帮助开发者规避错误，提升编程效率。
@@ -464,7 +464,7 @@ for i, r := range s {
 runes := []rune(s)
 fmt.Printf("Third Char: %c\n", runes[2]) // Third Char: 语
 ```
-<!--SR:!2026-06-04,10,215-->
+<!--SR:!2026-06-26,22,215-->
 <?e?>
 ### 19、字符串并不总是UTF8的文本
 <?l?>
@@ -1332,7 +1332,7 @@ enc.SetEscapeHTML(false) // ✅ 关键：关闭自动转义
 enc.Encode(data)
 fmt.Print("NoEscape Encoder: ", b2.String()) // NoEscape Encoder: "a < b & c > d"
 ```
-<!--SR:!2026-06-04,3,213-->
+<!--SR:!2026-06-10,6,213-->
 <?e?>
 ### 5、将 JSON 数字解析为 Interface 时的 float64 陷阱
 - 方案1：浮点数中转

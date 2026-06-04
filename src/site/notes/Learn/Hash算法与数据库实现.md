@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Learn/Hash算法与数据库实现/","title":"Hash算法与数据库实现","tags":["flashcards"],"noteIcon":"","created":"2026-04-25T11:00:28.000+08:00","updated":"2026-06-02T15:33:12.556+08:00","dg-note-properties":{"title":"Hash算法与数据库实现","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Learn/Hash算法与数据库实现/","title":"Hash算法与数据库实现","tags":["flashcards"],"noteIcon":"","created":"2026-04-25T11:00:28.000+08:00","updated":"2026-06-04T10:59:30.332+08:00","dg-note-properties":{"title":"Hash算法与数据库实现","tags":["flashcards"]}}
 ---
 
 # Hash函数
@@ -516,7 +516,7 @@ value12
 # 基于文件的Hash数据库
 ## 数据结构
 ### 索引文件 (`.idx`)
-由三部分组成：==1;;空闲链表指针==、==1;;Hash 表（桶）== 和 ==1;;索引记录==。所有指针（文件偏移量）均存储为==1;;4==字节的==1;;`int`==类型
+由三部分组成：==1;;链表指针==、==1;;Hash 表（桶）==、==1;;索引记录==。所有指针（文件偏移量）均存储为==1;;4==字节的==1;;`int`==类型
 #### 索引记录结构
 > [!note]- 由四部分组成：==1;;链表指针==、==1;;键==、==1;;数据偏移量==、==1;;数据记录长度==
 > - **链表指针**：指向**下一条索引记录**的**文件偏移量**（4字节）
@@ -544,21 +544,18 @@ value12
 ```php
 class HashTable
 {
-    public const int     DB_BUCKET_SIZE      = 2 ** 10; // Hash表的桶大小 (1024*4字节)(每个指针4字节)「💡2^N，利于位运算」
+    public const int     DB_BUCKET_SIZE      = 2 ** 10; // Hash表的桶大小(1024 个, 💡2^N，利于位运算)
     public const int     DB_POINTER_SIZE     = 4;       // 指针大小(4 字节)
     public const int     DB_KEY_SIZE         = 128;     // 键大小(128 字节)
     public const int     DB_DATA_OFFSET_SIZE = 4;       // 数据偏移量(4 字节)
     public const int     DB_DATA_LENGTH_SIZE = 4;       // 数据长度(4 字节)
     public const int     INIT                = 5381;    // 初始化 Hash 值
-
     public const int DB_INDEX_SIZE = self::DB_POINTER_SIZE + self::DB_KEY_SIZE +
-                                     self::DB_DATA_OFFSET_SIZE + self::DB_DATA_LENGTH_SIZE;
-
-    public const bool DB_SUCCESS = true;
-
-    private mixed $idxFp;
-    private mixed $datFp;
-    private bool  $closed = false;
+                                     self::DB_DATA_OFFSET_SIZE + self::DB_DATA_LENGTH_SIZE; // 索引记录
+    public const bool DB_SUCCESS = true; // 数据库成功标识
+    private mixed $idxFp; // 索引文件句柄
+    private mixed $datFp; // 数据文件句柄
+    private bool  $closed = false; // 关闭标识
 
     /**
      * 获取Hash值方法（Times33 算法 + 映射）
@@ -594,7 +591,7 @@ class HashTable
         }
         // 初始化索引文件
         if ($init) {
-			/* fseek 移动到逻辑末尾，fwrite 写入最后一个字节0，强制 OS 填充中间的“逻辑零”，这种机制为级联反应：
+			/* 级联反应：
 				操作系统为了维护文件的一致性，必须确保从文件开头到该点之间是有内容的。
 				由于你并没有显式写入中间的数据，操作系统会通过元数据操作（Metadata Update）瞬间将中间部分标记为全 0（即 \0）。
             */
@@ -634,10 +631,10 @@ class HashTable
         $block .= pack('L', $datOffset);
         $block .= pack('L', strlen($data));
 
-        // 3. 获取链表头节点偏移量 ($headPos)「unpack的结果默认数组索引从1开始」
+        // 3. 获取链表头节点偏移量 ($headPos)
         // 移动文件指针到Hash链表的偏移量
         fseek($this->idxFp, $hashOffset);
-        $headPos = unpack('L', fread($this->idxFp, 4))[1];
+        $headPos = unpack('L', fread($this->idxFp, 4))[1]; // 💡unpack的结果默认数组索引从1开始
 
         // 4. 遍历链表查找冲突/确定尾部
         $curr = $headPos;
@@ -812,21 +809,18 @@ array(5) {
 ```php
 class HashTable
 {
-    public const int     DB_BUCKET_SIZE      = 2 ** 10; // Hash表的桶大小 (1024*4字节)(每个指针4字节)「💡2^N，利于位运算」
+    public const int     DB_BUCKET_SIZE      = 2 ** 10; // Hash表的桶大小(1024 个, 💡2^N，利于位运算)
     public const int     DB_POINTER_SIZE     = 4;       // 指针大小(4 字节)
     public const int     DB_KEY_SIZE         = 128;     // 键大小(128 字节)
     public const int     DB_DATA_OFFSET_SIZE = 4;       // 数据偏移量(4 字节)
     public const int     DB_DATA_LENGTH_SIZE = 4;       // 数据长度(4 字节)
     public const int     INIT                = 5381;    // 初始化 Hash 值
-
     public const int DB_INDEX_SIZE = self::DB_POINTER_SIZE + self::DB_KEY_SIZE +
-                                     self::DB_DATA_OFFSET_SIZE + self::DB_DATA_LENGTH_SIZE;
-
-    public const bool DB_SUCCESS = true;
-
+                                     self::DB_DATA_OFFSET_SIZE + self::DB_DATA_LENGTH_SIZE; // 索引记录
+    public const bool DB_SUCCESS = true; // 数据库成功标识
     private mixed $idxFp; // 索引文件句柄
     private mixed $datFp; // 数据文件句柄
-    private bool  $closed = false; // 是否关闭
+    private bool  $closed = false; // 关闭标识
 
     /**
      * 获取Hash值方法（Times33 算法 + 映射）
@@ -1637,7 +1631,7 @@ add_to_hash:
     return &p->val;
 }
 ```
-<!--SR:!2026-06-04,45,251-->
+<!--SR:!2026-06-27,23,231-->
 <?e?>
 #### C源码「hash 重建、扩容」
 <?l?>

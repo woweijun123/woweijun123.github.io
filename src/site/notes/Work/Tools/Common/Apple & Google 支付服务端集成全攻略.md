@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Common/Apple & Google 支付服务端集成全攻略/","title":"Apple & Google 支付服务端集成全攻略","tags":["flashcards","#ApplePay","#GooglePay","#Hyperf"],"noteIcon":"","created":"2026-05-07T11:48:40.225+08:00","updated":"2026-05-21T11:11:59.680+08:00","dg-note-properties":{"title":"Apple & Google 支付服务端集成全攻略","tags":["flashcards","#ApplePay","#GooglePay","#Hyperf"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Common/Apple & Google 支付服务端集成全攻略/","title":"Apple & Google 支付服务端集成全攻略","tags":["flashcards","#ApplePay","#GooglePay","#Hyperf"],"noteIcon":"","created":"2026-05-07T11:48:40.225+08:00","updated":"2026-06-04T11:25:22.372+08:00","dg-note-properties":{"title":"Apple & Google 支付服务端集成全攻略","tags":["flashcards","#ApplePay","#GooglePay","#Hyperf"],"reference linking":null}}
 ---
 
 ## 🛠️ 核心对接流程图
@@ -30,7 +30,7 @@ sequenceDiagram
 - **Issuer ID**: 发行商 UUID。
 - **Key ID**: 10 位字符串（如 `ABC1234567`）。
 - **Private Key**: `.p8` 文件（仅下载一次，建议存放在 `storage/certs/`）。
-- **Bundle ID**: 必须严格匹配（如 `com.xwl.PeiWan`）。
+- **Bundle ID**: 必须严格匹配（如 `com.xxx.xxx`）。
 #### ⚠️ 核心注意项
 - **UUID 格式**: `appAccountToken` 必须是标准 UUID。如果返回 `700004` 错误，说明格式非法。
 - **环境切换**: 
@@ -52,7 +52,7 @@ sequenceDiagram
 # =====================================================
 APPLE_PAY_ISSUER_ID=57014232-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 APPLE_PAY_KEY_ID=ABC1234567
-APPLE_PAY_BUNDLE_ID=com.xwl.PeiWan
+APPLE_PAY_BUNDLE_ID=com.xxx.xxx
 APPLE_PAY_PRIVATE_KEY_PATH=storage/apple/SubscriptionKey_53RN8TU72V.p8
 APPLE_PAY_APP_ID=6739400000
 APPLE_PAY_CA=storage/apple/AppleRootCA-G3.cer

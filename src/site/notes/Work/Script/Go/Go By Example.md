@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-05-05T23:17:01.000+08:00","updated":"2026-06-03T10:12:49.191+08:00","dg-note-properties":{"title":"Go By Example","tags":["flashcards"],"links":"[Go by Example 中文版](https://gobyexample-cn.github.io/)"}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-05-05T23:17:01.000+08:00","updated":"2026-06-04T10:26:21.684+08:00","dg-note-properties":{"title":"Go By Example","tags":["flashcards"],"links":"[Go by Example 中文版](https://gobyexample-cn.github.io/)"}}
 ---
 
 # Hello World
@@ -578,7 +578,7 @@ func main() {
 9.a1 的类型: [2][3]int
 9.b1 的类型: [3][2]int
 ```
-<!--SR:!2026-06-04,100,308-->
+<!--SR:!2027-04-08,308,308-->
 <?e?>
 # 切片
 <?e?>

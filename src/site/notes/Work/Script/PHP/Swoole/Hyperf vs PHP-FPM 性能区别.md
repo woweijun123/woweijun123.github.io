@@ -1,13 +1,21 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Hyperf vs PHP-FPM 性能区别/","title":"Hyperf vs PHP-FPM 性能区别","tags":["flashcards"],"noteIcon":"","created":"2025-04-09T09:49:25.563+08:00","updated":"2026-05-21T11:11:59.496+08:00","dg-note-properties":{"title":"Hyperf vs PHP-FPM 性能区别","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Hyperf vs PHP-FPM 性能区别/","title":"Hyperf vs PHP-FPM 性能区别","tags":["flashcards"],"noteIcon":"","created":"2025-04-09T09:49:25.563+08:00","updated":"2026-06-04T17:40:18.110+08:00","dg-note-properties":{"title":"Hyperf vs PHP-FPM 性能区别","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 栈大小
 ## 协程栈
 ### 来源与验证
-- **Swoole 官方文档**（[链接](https://wiki.swoole.com/#/coroutine/coroutine?id=stack_size)）：  
-  - 默认协程栈大小为 **2MB**，但可通过 `coroutine.stack_size` 配置为 **8KB~2MB**。  
-
+- **Swoole 官方文档**（[链接](https://wiki.swoole.com/#/coroutine/coroutine?id=stack_size)）：
+  - 默认协程栈大小为 **2MB**（`SW_DEFAULT_C_STACK_SIZE = 2 * 1024 * 1024`）。  
+  - `stack_size` / `c_stack_size` 配置从 **Swoole 4.0** 协程功能引入起即支持。  
+  - 历史默认值：PHP 7.2 时代默认分配 **8KB**，PHP 7.1/7.0 默认 **256KB**。
+### PHP 版本与最小可用栈大小
+| PHP 版本      | 最小可用栈大小  | 原因                                                                                                        |
+| ----------- | -------- | --------------------------------------------------------------------------------------------------------- |
+| PHP 7.x     | ~8KB     | 无栈溢出检测                                                                                                    |
+| PHP 8.0-8.2 | ~64KB    | 无 `zend.max_allowed_stack_size` 检查                                                                        |
+| PHP 8.3+    | **~1MB** | 新增 `zend.max_allowed_stack_size` 栈溢出检测<br>⚠️**64KB** 会触发 `Maximum call stack size of 0 bytes` 错误，导致CPU占用高 |
+> 64KB 在任何版本都能设置，但实际能否运行取决于 PHP 版本。PHP 8.3+ 最小安全值为 **1MB（1048576）**。
 `hyperf` 中查询协程统计信息，默认2MB，**`hyperf3.0`中最小设置为64KB**
 ```php
 # +----------------------------------------------------------------------

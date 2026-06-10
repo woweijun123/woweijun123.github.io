@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Golang开发新手常犯的50个错误/","title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"noteIcon":"","created":"2026-04-12T20:45:10.000+08:00","updated":"2026-06-04T10:09:29.749+08:00","dg-note-properties":{"title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"reference linking":"[Go的50度灰：Golang新开发者要注意的陷阱和常见错误](https://colobu.com/2015/09/07/gotchas-and-common-mistakes-in-go-golang/)","origin linking":"[50 Shades of Go: Traps, Gotchas, and Common Mistakes for New Golang Devs](http://devs.cloudimmunity.com/gotchas-and-common-mistakes-in-go-golang/index.html)"}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Golang开发新手常犯的50个错误/","title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"noteIcon":"","created":"2026-04-12T20:45:10.000+08:00","updated":"2026-06-10T10:02:33.412+08:00","dg-note-properties":{"title":"Golang开发新手常犯的50个错误","tags":["flashcards"],"reference linking":"[Go的50度灰：Golang新开发者要注意的陷阱和常见错误](https://colobu.com/2015/09/07/gotchas-and-common-mistakes-in-go-golang/)","origin linking":"[50 Shades of Go: Traps, Gotchas, and Common Mistakes for New Golang Devs](http://devs.cloudimmunity.com/gotchas-and-common-mistakes-in-go-golang/index.html)"}}
 ---
 
 本文总结了Go语言初学者常遇到的陷阱与误区，包括变量声明、类型断言、并发编程等多个方面，帮助开发者规避错误，提升编程效率。
@@ -115,7 +115,7 @@ func main() {
 	fmt.Printf("info: %+v\n", data) // info: {result:13}
 }
 ```
-<!--SR:!2026-06-05,39,250-->
+<!--SR:!2026-09-11,98,250-->
 <?e?>
 ### 7、意外的变量幽灵
 <?l?>
@@ -192,7 +192,7 @@ var s []int // s 是 nil
 s = append(s, 1) // ✅success：append 会自动分配内存
 fmt.Println(s) // 输出: [1]
 ```
-<!--SR:!2026-06-08,41,250-->
+<!--SR:!2026-09-19,102,250-->
 <?e?>
 ### 10、map不能用cap函数「make分配内存时可指定`capicity`」
 <?l?>
@@ -364,7 +364,7 @@ runes := []rune(s)
 runes[0] = '您'
 fmt.Println(string(runes)) // 输出: 您好世界
 ```
-<!--SR:!2026-06-06,12,236-->
+<!--SR:!2026-07-05,29,236-->
 <?e?>
 ### 17、字符串和字节切片之间的转换
 <?l?>
@@ -491,7 +491,7 @@ fmt.Println(utf8.ValidString(s2)) // false
 // 3. 长度陷阱：len() 返回的是字节数，而非字符（码点）数
 fmt.Println(len(s2)) // 3 字节
 ```
-<!--SR:!2026-06-05,2,150-->
+<!--SR:!2026-06-14,5,150-->
 <?e?>
 ### 20、 字符串长度
 `len(str)` 返回的是字符串的**字节数**，获取字符串的rune数是使用 `unicode/utf8.RuneCountInString()` 函数，但注意一些字符也可能是由多个rune组成，如 `é` 是两个rune组成。
@@ -717,7 +717,7 @@ fmt.Printf("A XOR B:  %08b\n", a^b) // 10000000
 // 逻辑：如果 B 的某位是 1，则将 A 对应的位强制清零
 fmt.Printf("A &^ B:   %08b\n", a&^b) // 10000000
 ```
-<!--SR:!2026-06-07,41,250-->
+<!--SR:!2026-09-20,103,250-->
 <?e?>
 ### 29、位运算优先级与主流语言的显著差异
 <?l?>
@@ -1332,7 +1332,7 @@ enc.SetEscapeHTML(false) // ✅ 关键：关闭自动转义
 enc.Encode(data)
 fmt.Print("NoEscape Encoder: ", b2.String()) // NoEscape Encoder: "a < b & c > d"
 ```
-<!--SR:!2026-06-10,6,213-->
+<!--SR:!2026-06-24,14,213-->
 <?e?>
 ### 5、将 JSON 数字解析为 Interface 时的 float64 陷阱
 - 方案1：浮点数中转
@@ -1413,7 +1413,7 @@ if err := json.Unmarshal(res.Status, &s); err == nil {
 * **默认机制**：`interface{}` + `Number` = `float64`。
 * **精度风险**：大整数进入 `float64` 会丢失精度，必须用 `UseNumber` 或 `json.RawMessage`。
 * **代码健壮性**：生产环境建议配合 `v, ok := result["key"].(float64)` 进行安全断言。
-<!--SR:!2026-06-06,5,153-->
+<!--SR:!2026-06-14,8,153-->
 <?e?>
 ### 6、JSON 字符串中的非 UTF-8 字符与十六进制转义限制
 Go 的 `encoding/json` 包严格遵循 JSON 规范，要求所有字符串必须是有效的 **UTF-8** 编码。这意味着你不能像在 C 或 Python 中那样直接在 JSON 字符串中使用十六进制转义序列（如 `\xNN`），否则会导致解析失败。

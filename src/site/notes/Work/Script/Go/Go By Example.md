@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-05-05T23:17:01.000+08:00","updated":"2026-06-04T10:26:21.684+08:00","dg-note-properties":{"title":"Go By Example","tags":["flashcards"],"links":"[Go by Example 中文版](https://gobyexample-cn.github.io/)"}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-05-05T23:17:01.000+08:00","updated":"2026-06-09T10:33:53.508+08:00","dg-note-properties":{"title":"Go By Example","tags":["flashcards"],"links":"[Go by Example 中文版](https://gobyexample-cn.github.io/)"}}
 ---
 
 # Hello World
@@ -1014,7 +1014,7 @@ func main() {
 ```
 # 递归
 匿名函数定义递归时的注意事项?<?:?>必须先声明变量名，再进行赋值
-<!--SR:!2026-06-08,103,309-->
+<!--SR:!2027-04-23,318,309-->
 ```go
 package main
 
@@ -1415,7 +1415,7 @@ func main() {
 5.匿名结构体  张三
 6.可修改公有字段: cd
 ```
-<!--SR:!2026-06-09,104,309-->
+<!--SR:!2027-04-26,321,309-->
 <?e?>
 # 方法
 <?e?>
@@ -1718,7 +1718,7 @@ func main() {
 5.组合接口调用: z3
 6.动态类型: float64, 动态值: 3.14
 ```
-<!--SR:!2026-06-09,18,250-->
+<!--SR:!2026-07-24,45,250-->
 <?e?>
 # Embedding
 <?e?>
@@ -3304,7 +3304,7 @@ rule 3: 2
 避坑指南 [112]
 3. 关闭文件 (由 defer 调用)
 ```
-<!--SR:!2026-06-08,34,252-->
+<!--SR:!2026-06-26,17,232-->
 <?e?>
 # Recover
 ```go

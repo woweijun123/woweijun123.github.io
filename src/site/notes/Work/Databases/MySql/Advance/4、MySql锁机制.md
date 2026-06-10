@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-04-06T11:36:57.000+08:00","updated":"2026-06-01T10:49:23.747+08:00","dg-note-properties":{"title":"4、MySql锁机制","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-04-06T11:36:57.000+08:00","updated":"2026-06-05T11:31:08.511+08:00","dg-note-properties":{"title":"4、MySql锁机制","tags":["flashcards"]}}
 ---
 
 # 定义
@@ -70,7 +70,7 @@
 - **唯一职责**：它存在的唯一目的，就是为了告诉别人：“这表里有人在干活，别想把整张表搬走（加表锁）”。
 #### 自增锁 (AUTO-INC Lock)
 - 专门针对 `AUTO_INCREMENT` 列。在插入数据时获取，保证 ID 递增。
-### 行级锁 (Row-level Lock) —— InnoDB 核心
+### 行级锁 (Row-level Lock)
 #### 记录锁 (Record Lock)
 - 锁定具体的单行索引记录。
 #### 间隙锁 (Gap Lock)
@@ -113,7 +113,7 @@
 | **插入意向锁 (I-I)**        | **冲突**    | 兼容           | **冲突**        | 兼容          |
 ## 补充说明：隐式锁 (Implicit Lock)
 InnoDB 在 `INSERT` 时，通常不显式加锁，而是通过一种“延迟加锁”机制。如果一个事务插入记录后，另一个事务尝试读取或修改该记录，隐式锁会转换成显示锁。
-<!--SR:!2026-06-05,74,271-->
+<!--SR:!2026-07-12,37,251-->
 <?e?>
 # 全局锁 (Global Lock)
 - **FTWRL (`Flush tables with read lock`)**：锁定整个数据库实例，使整个库处于只读状态。

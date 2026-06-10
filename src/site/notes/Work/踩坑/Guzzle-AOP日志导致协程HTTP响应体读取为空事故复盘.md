@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/踩坑/Guzzle-AOP日志导致协程HTTP响应体读取为空事故复盘/","title":"Guzzle-AOP日志导致协程HTTP响应体读取为空事故复盘","tags":["踩坑","hyperf","guzzle"],"noteIcon":"","created":"2026-06-01T18:31:02.182+08:00","updated":"2026-06-02T15:34:35.616+08:00","dg-note-properties":{"title":"Guzzle-AOP日志导致协程HTTP响应体读取为空事故复盘","tags":["踩坑","hyperf","guzzle"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/踩坑/Guzzle-AOP日志导致协程HTTP响应体读取为空事故复盘/","title":"Guzzle-AOP日志导致协程HTTP响应体读取为空事故复盘","tags":["踩坑","hyperf","guzzle"],"noteIcon":"","created":"2026-06-01T18:31:02.182+08:00","updated":"2026-06-05T10:40:53.217+08:00","dg-note-properties":{"title":"Guzzle-AOP日志导致协程HTTP响应体读取为空事故复盘","tags":["踩坑","hyperf","guzzle"],"reference linking":null}}
 ---
 
 # 结论

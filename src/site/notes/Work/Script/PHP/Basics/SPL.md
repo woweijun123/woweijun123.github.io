@@ -1,11 +1,11 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/SPL/","title":"SPL","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:26:14.000+08:00","updated":"2026-05-27T10:03:06.244+08:00","dg-note-properties":{"title":"SPL","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/SPL/","title":"SPL","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:26:14.000+08:00","updated":"2026-06-18T11:24:04.831+08:00","dg-note-properties":{"title":"SPL","tags":["flashcards"],"reference linking":null}}
 ---
 
 普通队列、优先级队列的类名分别是什么？
 <?l?>
 `new SplQueue()`、`new SplPriorityQueue()`
-<!--SR:!2026-06-18,22,250-->
+<!--SR:!2026-08-12,55,250-->
 <?e?>
 # 普通队列
 [PHP: SPL - Manual](https://www.php.net/manual/zh/book.spl.php)

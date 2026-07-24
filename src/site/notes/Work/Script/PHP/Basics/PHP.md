@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-04-04T23:19:08.000+08:00","updated":"2026-06-02T11:17:44.298+08:00","dg-note-properties":{"title":"PHP","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-04-04T23:19:08.000+08:00","updated":"2026-07-15T21:47:49.527+08:00","dg-note-properties":{"title":"PHP","tags":["flashcards"]}}
 ---
 
 # 基本语法 [¶](https://www.php.net/manual/zh/language.basic-syntax.php#language.basic-syntax)
@@ -2114,7 +2114,7 @@ array (
 */
 ```
 ### array_rand
-从数组中随机取出一个或多个单元 
+从数组中随机取出一个或多个**随机键**
 ```php
 var_export(array_rand(range(1, 5), 3)); // 返回包含3个随机键的数组
 /*
@@ -2157,7 +2157,7 @@ PHP 对待对象的方式等同于引用或句柄，即每个变量都持有对�
 子类可以继承父类的属性和方法，避免重复编写代码，提高代码复用性和可扩展性。
 ### 多态
 多态的定义<?:?>同一个行为，对于不同的对象，会产生不同的结果。
-<!--SR:!2026-06-25,38,250-->
+<!--SR:!2026-09-28,95,250-->
 >站在C++角度，这不是多态，这只是不同类对象的不同表现而已。
 >C++里的多态指运行时对象的具体化，指同一类对象调用相同的方法而返回不同的结果。
 #### C++多态
@@ -5332,17 +5332,72 @@ echo $nextMonth->format("Y-m-d H:i:s"), PHP_EOL;
 ## 加密
 [[Work/Script/PHP/Basics/Encrypt\|Encrypt]]
 # 文件和目录函数
-## 文件
-- r：**只读**。在文件的开头开始。
-- r+：**读/写**。在文件的开头开始。
-- b：表示以**二进制模式**打开文件。
-- w：**只写**。打开并清空文件的内容；如果文件不存在，则创建新文件。
-- w+：**读/写**。打开并清空文件的内容；如果文件不存在，则创建新文件。
-- a：**追加**。打开并向文件末尾进行写操作，如果文件不存在，则创建新文件。
-- a+：**读/追加**。通过向文件末尾写内容，来保持文件内容。
-- x：**只写**。创建新文件。如果文件已存在，则返回 FALSE 和一个错误。
-- x+：**读/写**。创建新文件。如果文件已存在，则返回 FALSE 和一个错误。
-### 文件系统函数
+## fopen 能打开哪些类型
+| 类型 / 前缀 | 示例 | 典型用途 | 可读 | 可写 | 可 seek | Guzzle 常见场景 |
+|-------------|------|----------|------|------|---------|----------------|
+| **file://**（默认） | `fopen('/tmp/a.txt', 'r')` | 本地磁盘文件 | ✅ | ✅ | ✅ | 自定义 `sink` 写到文件 |
+| **php://memory** | `fopen('php://memory', 'r+')` | 纯内存缓冲区 | ✅ | ✅ | ✅ | 小 body、测试 |
+| **php://temp** | `fopen('php://temp', 'w+')` | 内存不够时落盘 | ✅ | ✅ | ✅ | **HTTP 响应 body 默认 sink** |
+| **php://input** | `fopen('php://input', 'r')` | 读原始 POST body | ✅ | ❌ | ❌ | Guzzle 会复制到 temp |
+| **php://output** | `fopen('php://output', 'w')` | 写到标准输出 | ❌ | ✅ | ❌ | 很少用于 HTTP 客户端 |
+| **php://stderr** | `fopen('php://stderr', 'w')` | 写到 stderr | ❌ | ✅ | ❌ | 日志/调试 |
+| **php://filter** | `fopen('php://filter/read=...', 'r')` | 读写时加过滤器 | 视情况 | 视情况 | 视情况 | 流式转换 |
+| **http://** | `fopen('http://example.com', 'r')` | HTTP 读 | ✅ | 部分 | ❌ | 少用，多用 curl/Guzzle |
+| **https://** | `fopen('https://example.com', 'r')` | HTTPS 读 | ✅ | 部分 | ❌ | 同上 |
+| **data://** | `fopen('data://text/plain,hello', 'r')` | 内联数据 URI | ✅ | ❌ | ✅ | 测试、小字符串 |
+| **compress.zlib://** | `fopen('compress.zlib:///path/file.gz', 'r')` | gzip 压缩流 | ✅ | ✅ | 视情况 | 压缩文件读写 |
+| **compress.bzip2://** | `fopen('compress.bzip2:///path/file.bz2', 'r')` | bzip2 压缩流 | ✅ | ✅ | 视情况 | 压缩文件读写 |
+| **phar://** | `fopen('phar:///path/app.phar/internal.php', 'r')` | PHAR 包内文件 | ✅ | 视情况 | ✅ | 读 phar 内资源 |
+| **glob://** | `fopen('glob:///tmp/*.log', 'r')` | 匹配多个文件 | ✅ | ❌ | ❌ | 批量读日志 |
+| **zip://**（需扩展） | `fopen('zip:///path/a.zip#file.txt', 'r')` | ZIP 内文件 | ✅ | 部分 | 视情况 | 读 zip 内文件 |
+| **ssh2://**（需扩展） | `fopen('ssh2.shell://user@host/path', 'r')` | SSH 远程文件 | ✅ | ✅ | 视情况 | 远程文件 |
+查本机支持的 wrapper：
+```php
+print_r(stream_get_wrappers());
+```
+## fopen mode
+### A 文本模式
+| mode | 含义 | 读 | 写 | 文件不存在 | 指针起点 |
+|------|------|----|----|------------|----------|
+| `r` | 只读 | ✅ | ❌ | 报错 | 开头 |
+| `r+` | 读写 | ✅ | ✅ | 报错 | 开头 |
+| `w` | 只写（清空） | ❌ | ✅ | 创建 | 开头 |
+| `w+` | 读写（清空） | ✅ | ✅ | 创建 | 开头 |
+| `a` | 追加写 | ❌ | ✅ | 创建 | **末尾** |
+| `a+` | 追加+读 | ✅ | ✅ | 创建 | **末尾** |
+| `x` | 独占创建写 | ❌ | ✅ | 已存在则失败 | 开头 |
+| `c` | 创建但不截断 | ❌ | ✅ | 创建 | 开头 |
+### B 二进制模式（b 后缀）
+在任意 mode 后加 **`b`** = binary，读写语义与 A 表相同，差别只在**是否做换行转换**：
+
+| 对比          | 文本模式               | 二进制模式 `b`                       |
+| ----------- | ------------------ | ------------------------------- |
+| 示例          | `r` / `w+`         | `rb` / `w+b`（或 `wb+`）           |
+| Windows     | `\r\n` ↔ `\n` 自动转换 | **不转换**，原样读写                    |
+| Linux/macOS | 与 `b` 基本无差别        | 与不带 `b` 行为一致                    |
+| Guzzle 常用   | —                  | **`wb+`**（`php://temp` 响应 body） |
+
+| mode          | 对应文本 mode | 读   | 写   | 文件不存在  | 指针起点   | 备注                         |
+| ------------- | --------- | --- | --- | ------ | ------ | -------------------------- |
+| `rb`          | `r`       | ✅   | ❌   | 报错     | 开头     | 二进制只读                      |
+| `r+b` / `rb+` | `r+`      | ✅   | ✅   | 报错     | 开头     | 二进制读写                      |
+| `wb`          | `w`       | ❌   | ✅   | 创建     | 开头     | 二进制只写                      |
+| `w+b` / `wb+` | `w+`      | ✅   | ✅   | 创建     | 开头     | **Guzzle `php://temp` 常用** |
+| `ab`          | `a`       | ❌   | ✅   | 创建     | **末尾** | 二进制追加                      |
+| `a+b` / `ab+` | `a+`      | ✅   | ✅   | 创建     | **末尾** | 二进制追加+读                    |
+| `xb`          | `x`       | ❌   | ✅   | 已存在则失败 | 开头     | 二进制独占创建                    |
+| `cb`          | `c`       | ❌   | ✅   | 创建     | 开头     | 二进制创建不截断                   |
+### A ↔ B 速查
+| 文本 | 二进制等价 | Guzzle 里见过吗 |
+|------|------------|-----------------|
+| `r` | `rb` | 少见 |
+| `r+` | `r+b` | `Utils::streamFor()` → `php://temp` **`r+`** |
+| `w` | `wb` | 少见 |
+| `w+` | `w+b` | **curl sink** → `php://temp` **`w+`** |
+| `a` | `ab` | 少见 |
+| `a+` | `a+b` | 少见 |
+`b` 只影响**换行是否转换**，不改变「能不能读写、指针在哪、文件不存在怎么办」。
+## 文件系统函数
 - [basename](https://www.php.net/manual/zh/function.basename.php) — 返回路径中的文件名部分
 - [chgrp](https://www.php.net/manual/zh/function.chgrp.php) — 改变文件所属的组
 - [chmod](https://www.php.net/manual/zh/function.chmod.php) — 改变文件模式

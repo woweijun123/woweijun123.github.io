@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Array/","title":"Array","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T11:34:34.000+08:00","updated":"2026-04-29T16:36:12.355+08:00","dg-note-properties":{"title":"Array","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Array/","title":"Array","tags":["flashcards"],"noteIcon":"","created":"2024-09-30T11:34:34.000+08:00","updated":"2026-06-23T15:19:01.014+08:00","dg-note-properties":{"title":"Array","tags":["flashcards"],"reference linking":null}}
 ---
 
 # array_pad
@@ -98,13 +98,13 @@ array (
   2 => 'e',
 )
  */
-var_export(array_slice($input, -2, 1)); // length 为正，则序列中将具有这么多的单元「包含」
+var_export(array_slice($input, -2, 1)); // length 为正，则截取指定数量的单元「包含」
 /*
 array (
   0 => 'd',
 )
  */
-var_export(array_slice($input, 0, 3)); // length 为正，则序列中将具有这么多的单元「包含」
+var_export(array_slice($input, 0, 3)); // length 为正，则截取指定数量的单元「包含」
 /*
 array (
   0 => 'a',

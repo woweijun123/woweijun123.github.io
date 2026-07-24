@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-04-06T11:36:57.000+08:00","updated":"2026-06-05T11:31:08.511+08:00","dg-note-properties":{"title":"4、MySql锁机制","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Databases/MySql/Advance/4、MySql锁机制/","title":"4、MySql锁机制","tags":["flashcards"],"noteIcon":"","created":"2026-04-06T11:36:57.000+08:00","updated":"2026-07-22T09:52:31.710+08:00","dg-note-properties":{"title":"4、MySql锁机制","tags":["flashcards"]}}
 ---
 
 # 定义
@@ -113,7 +113,7 @@
 | **插入意向锁 (I-I)**        | **冲突**    | 兼容           | **冲突**        | 兼容          |
 ## 补充说明：隐式锁 (Implicit Lock)
 InnoDB 在 `INSERT` 时，通常不显式加锁，而是通过一种“延迟加锁”机制。如果一个事务插入记录后，另一个事务尝试读取或修改该记录，隐式锁会转换成显示锁。
-<!--SR:!2026-07-12,37,251-->
+<!--SR:!2026-10-14,93,251-->
 <?e?>
 # 全局锁 (Global Lock)
 - **FTWRL (`Flush tables with read lock`)**：锁定整个数据库实例，使整个库处于只读状态。
@@ -169,20 +169,12 @@ MyISAM 不支持事务，使用的是 **表级锁（Table-level Locking）**，�
 ### 简而言之
 读锁: **阻写,不阻读**
 写锁: **读和写都阻**
-<!--SR:!2026-06-16,82,270-->
-<?e?>
-
+<!--SR:!2027-01-23,221,270-->
 <?e?>
 ## 表锁分析
-<?l?>
-### 查看加锁的表
-```mysql
-show open tables
-```
-### 释放表锁
-```mysql
-unlock tables;
-```
+### 查看加锁的表 ==1;;`show open tables`==
+### 释放表锁 ==1;;`unlock tables;`==
+
 ![](https://weichengjun2.dpdns.org/i/2023/09/20/650ab5f1aebef.png)
 ### 分析表锁定
 可以通过检查`table_locks_waited`和`table_locks_immediate`状态变量来分析系统上的表锁定:
@@ -201,11 +193,11 @@ show status like 'table%';
 ```
 #### 核心监控指标
 通过 `SHOW STATUS LIKE 'table%';` 监控表锁争用情况：
-* **`Table_locks_immediate`**：**成功次数**。表示能够立即获得表锁的次数。
-* **`Table_locks_waited`**：**竞争次数**。表示因锁争用而被迫等待的次数。
-> **运维准则**：若 `Table_locks_waited` 值较高，说明存在严重的表级锁竞争，通常建议将引擎由 MyISAM 转换为 InnoDB。
+* **`Table_locks_immediate`**：表示能够==1;;立即获得表锁==的次数。
+* **`Table_locks_waited`**：表示因==1;;锁争用而被迫等待==的次数。
+> **运维准则**：若 `Table_locks_waited` 值较高，说明存在严重的==1;;表级锁==竞争，通常建议将引擎由 MyISAM 转换为 InnoDB。
 #### 调度机制：写优先 (Write First)
-MyISAM 的调度机制默认认为**写操作比读操作更重要**：
+MyISAM 默认是==1;;写优先==调度：
 1. **优先级排队**：即使读请求先到达锁等待队列，**后到的写请求**也会被**插入**到读请求**之前**。
 2. **读锁饥饿**：在一个写密集的系统中，大量的更新操作会使读请求由于排队靠后而产生“永远阻塞”的现象。
 3. **读写互斥**：
@@ -215,10 +207,10 @@ MyISAM 的调度机制默认认为**写操作比读操作更重要**：
 * **不适合写为主**：由于写操作会独占整张表并具有高优先级，频繁的 DML 会导致系统整体并发能力骤降。
 * **适用场景**：仅适用于以只读为主（SELECT）且写操作极少的业务，或对数据一致性要求较低的日志系统。
 #### 优化建议
-* **调节优先级**：若业务必须以读为主，可设置 `low_priority_updates = 1`，将写操作的优先级降到读操作之后。
+* **调节优先级**：若业务必须以读为主，可设置 ==1;;`low_priority_updates = 1`== 或单条写 SQL 中使用 ==1;;`LOW_PRIORITY`==，将写优先级降到读操作之后。
 * **单条控制**：在特定的 `INSERT/UPDATE` 后添加 `LOW_PRIORITY` 关键字。
-* **强制整理**：定期使用 `OPTIMIZE TABLE` 整理碎片，提高锁的释放效率。
-<!--SR:!2026-07-14,53,230-->
+* **强制整理**：定期使用 ==1;;`OPTIMIZE TABLE`== 整理碎片，提高锁的释放效率。
+<!--SR:!2026-08-11,28,210-->
 <?e?>
 # 行锁(偏写)
 ## 特点：InnoDB 引擎特有
@@ -423,52 +415,55 @@ SHOW VARIABLES LIKE 'innodb_deadlock_detect';
 | **5** | `ROLLBACK;`                              |                                          |                                          | **死锁预警**：B 和 C 同时获得 S 锁，又同时想升级为 X 锁去执行插入。<br>**结果：** 触发死锁检测，回滚**权重更低**的 Session 2 |
 #### 总结
 死锁保留机制就是 **“定向清除最弱竞争者，腾出通道给幸存者”** 。
-<!--SR:!2026-06-11,78,270-->
+<!--SR:!2027-01-08,211,270-->
 <?e?>
 ### 死锁监控
 #### 默认状态：内存瞬时记录
 * **行为**：当发生死锁时，MySQL 会自动回滚成本最低的事务，并向客户端返回错误码 `1213`。
 * **存储**：死锁信息仅存储在内存中，且只保留==1;;最近一次==记录。
-* **查看命令**：
-```mysql
-# 查询锁信息
-SHOW ENGINE INNODB STATUS;
-# 输出如下
-LATEST DETECTED DEADLOCK
-------------------------
-... 
-Transaction 1: ... holds lock on table1
-Transaction 2: ... holds lock on table2
-... deadlock detected
-```
+> [!question]- 查询锁信息的命令
+> ```mysql
+> # 查询锁信息
+> SHOW ENGINE INNODB STATUS;
+> # 输出如下
+> LATEST DETECTED DEADLOCK
+> ------------------------
+> ...
+> Transaction 1: ... holds lock on table1
+> Transaction 2: ... holds lock on table2
+> ... deadlock detected
+> ```
 > **注意**：若发生新的死锁，旧信息会被覆盖；数据库重启后该信息也会丢失。
 #### 持久化配置：开启日志打印
 为了留存历史证据排查间歇性死锁，需将信息同步至物理磁盘。
-* **开启命令**：
-```mysql
--- 实时开启（重启失效）
-SET GLOBAL innodb_print_all_deadlocks = ON;
-```
-* **验证状态**：
-```mysql
-SHOW VARIABLES LIKE 'innodb_print_all_deadlocks';
-```
+> [!question]- 开启日志打印的命令
+> ```mysql
+> -- 实时开启（重启失效）
+> SET GLOBAL innodb_print_all_deadlocks = ON;
+> ```
+
+> [!question]- 验证状态
+> ```mysql
+> SHOW VARIABLES LIKE 'innodb_print_all_deadlocks';
+> ```
 * **结果**：开启后，所有死锁轨迹将自动记录到 MySQL 的 **错误日志** (`.error.log`) 中。
 #### 运维排查路径
 当收到死锁报错时，按以下步骤定位源头：
 1. **确定日志路径**：
-```mysql
-SHOW VARIABLES LIKE 'log_error';
-```
+> [!question]- 确定日志路径命令
+> ```mysql
+> SHOW VARIABLES LIKE 'log_error';
+> ```
 2. **查看物理日志**（以 Linux 为例）：
-```shell
-tail -f /var/log/mysql/error.log
-```
+> [!question]- 查看物理日志命令
+> ```shell
+> tail -f /var/log/mysql/error.log
+> ```
 3. **日志核心解析指标**：
 	* **`HOLDS THE LOCK(S)`**：当前事务已占有的锁。
 	* **`WAITING FOR THIS LOCK TO BE GRANTED`**：正在申请并导致阻塞的锁。
 	* **`WE ROLL BACK TRANSACTION`**：最终被系统判定牺牲（回滚）的事务。
-<!--SR:!2026-06-21,60,250-->
+<!--SR:!2026-08-06,15,210-->
 <?e?>
 ### 死锁案例
 #### 案例1：间隙锁 (Gap Lock) 导致的插入意向锁冲突「IODKU」
@@ -488,7 +483,7 @@ tail -f /var/log/mysql/error.log
 | 7      | -                                                                                               | **[B 尝试写入]**：B 准备执行插入，申请 **插入意向锁**。但因为 A 持有 `(3, 9)` 的 Gap Lock，B 进入等待。                         |
 | **结果** | **Deadlock**：A 等待 B，B 等待 A，MySQL 触发死锁检测并回滚。                                                     |                                                                                                 |
 ##### 核心逻辑总结
-1. **S 锁是万恶之源**：当 IODKU 遇到唯一键冲突时，会先申请 **S Next-Key Lock**。因为 S 锁与 S 锁兼容，多个事务可以同时持有，导致随后申请 X 锁进行更新时出现互相等待。
+1. **S 锁是万恶之源**：当 **IODKU** 遇到唯一键冲突时，会先申请 **S Next-Key Lock**。因为 S 锁与 S 锁兼容，多个事务可以同时持有，导致随后申请 X 锁进行更新时出现互相等待。
 2. **插入意向锁的定位**：它是一种特殊的间隙锁。它**不阻止**其他事务的插入意向锁，只会被已存在的 **Gap Lock** 或 **Next-Key Lock** 阻塞。
 3. **冲突演变**：
 	* **已有记录**：S 锁冲突  共同持有  申请 X 锁  **死锁**。
@@ -522,12 +517,12 @@ tail -f /var/log/mysql/error.log
 | **T2** |                                          | `INSERT INTO lock_test(id) VALUES(10);` |                                          | B 被阻塞，并申请 **S 锁**                         |
 | **T3** |                                          |                                          | `INSERT INTO lock_test(id) VALUES(10);` | C 被阻塞，并申请 **S 锁**                         |
 | **T4** | `ROLLBACK;`                              |                                          |                                          | **死锁预警**：B 和 C 同时获得 S 锁，又同时想升级为 X 锁去执行插入。 |
-> **笔记要点**：回滚（Rollback）操作并不总是安全的，在高并发唯一键竞争下，回滚可能导致其他等待事务瞬间触发死锁。
+> **笔记要点**：回滚（Rollback）操作并不总是安全的，在高并发**唯一键**竞争下，**回滚**可能导致其他等待事务瞬间触发**死锁**。
 ##### 1. 深度拆解：为什么 B 和 C 会申请 S 锁？
 在普通的 `INSERT` 中，事务确实只申请**插入意向锁**。但当存在**唯一性约束**时，逻辑会发生变化：
 * **第一阶段（T2/T3）**：B 和 C 尝试插入 `id=10`。它们首先去检查索引，发现 `id=10` 已经被 A 占用了。
 * **第二阶段（关键转换）**：为了确认 A 是否真的会提交这个 `id=10`（如果 A 提交，B/C 必须报错；如果 A 回滚，B/C 可以插入），B 和 C 不能只挂起。根据 InnoDB 规则，此时 B 和 C 会对该行（或该位置）申请一个 **S 锁（共享锁）**。
-* **原因**：S 锁允许读取，但禁止他人修改。这是一种“监视”状态。
+* **原因**：S 锁允许读取，但禁止他人修改。这是一种**监视**状态。
 ##### 2. 为什么 T4 会触发死锁？
 当 A 执行 `ROLLBACK` 时，A 持有的 X 锁释放。此时：
 1. **S 锁生效**：由于 S 锁与 S 锁是相互兼容的，**B 和 C 同时获得了 id=10 这个位置的 S 锁**。
@@ -711,7 +706,7 @@ Lock wait timeout exceeded; try restarting transaction
 <!--SR:!2026-08-26,86,291-->
 <?e?>
 ## RC隔离级别
- RC（Read Committed）与 RR（Repeatable Read）在不同实战场景下的锁行为对比。
+ **RC**（Read Committed）与 **RR**（Repeatable Read）在不同实战场景下的**锁行为对比**。
 - **数据**：`id=1`, `id=3`, `id=9`
 - **索引**：`id` 为唯一索引，`text` 为普通索引。
 ### 案例1：删除不存在的范围（间隙锁差异）
@@ -726,7 +721,7 @@ Lock wait timeout exceeded; try restarting transaction
 **结论**：RC 级别通过消除非必要的间隙锁，显著提升了这种“落空删除”场景下的并发插入性能。
 ### 案例2：半一致性读 (Semi-Consistent Read)
 #### 什么是半一致性读？
-在 MySQL InnoDB 中，半一致性读是一种针对 `UPDATE` 语句的优化手段。当一个 `UPDATE` 语句在 RC 级别下运行，且它搜索到的行已经被其他事务锁定时，InnoDB 会返回该行**最新的提交版本**给 MySQL Server 层，由 Server 层判断该行是否符合 `UPDATE` 的 `WHERE` 条件。
+在 MySQL InnoDB 中，半一致性读是一种**针对 `UPDATE` 语句**的优化手段。当一个 `UPDATE` 语句在 **RC 级别**下运行，且它**搜索到的行**已经**被其他事务锁定**时，InnoDB 会返回该行**最新的提交版本**给 MySQL Server 层，由 Server 层判断该行是否符合 `UPDATE` 的 `WHERE` 条件。
 
 | **步骤** | **Session A (事务 A)**                            | **Session B (Session B)**                           | **RR 级别表现**                 | **RC 级别表现**                                     |
 | ------ | ----------------------------------------------- | --------------------------------------------------- | --------------------------- | ----------------------------------------------- |
@@ -735,7 +730,7 @@ Lock wait timeout exceeded; try restarting transaction
 | **3**  | -                                               | `UPDATE lock_test SET text = 'X' WHERE status = 0;` | **阻塞**。必须等 A 释放锁才能读到最新行。    | **立即返回 (0 rows)**。通过快照读发现 `status=0` 不符条件，直接跳过。 |
 **结论**：RC 下的“半一致性读”让 `UPDATE` 更加智能，避免了在明知不符合条件时的无效锁等待。
 ### 案例3：唯一性检查与外键（RC 依然加锁的例外）
-**注意**：尽管 RC 减少了间隙锁，但在**约束检查**（如唯一键检查、外键检查）时，为了防止幻读破坏完整性，RC 依然会加锁。
+**注意**：尽管 RC 减少了间隙锁，但在**约束检查**（如**唯一键**检查、**外键**检查）时，为了防止幻读破坏完整性，RC 依然会加锁。
 **场景**：A 删除 `id=3` 但未提交。B 尝试插入 `id=3`。
 
 | **步骤** | **Session A (事务 A)**                  | **Session B (Session B)**                     | **RR 级别表现**     | **RC 级别表现**       |
@@ -873,27 +868,25 @@ $$锁定总范围 = (prev, next)$$
 - **范围操作：** 范围写（`UPDATE/DELETE`）与范围读（`FOR UPDATE`）是**并发杀手**。它们通常会一路锁到天黑（$+\infty$ / Supremum），在长事务中极易引发大面积锁等待。
 - **唯一索引优势：** 在开发中，尽量通过**主键或唯一索引**进行等值更新。这是唯一能让锁降级为“记录锁”的方式，是提升系统并发能力的性能救星。
 - **索引防退化：** 若 SQL 没走索引，InnoDB 会被迫执行全表扫描，此时**全表记录及间隙**都会被加上锁。这等同于“锁表”，在生产环境下必须绝对禁止。
-<!--SR:!2026-06-15,81,271-->
-<?e?>
+<!--SR:!2026-07-27,42,251-->
 <?e?>
 ## 插入意向锁
-<?l?>
 ### 核心定义：什么是插入意向锁？
-**插入意向锁（Insert Intention Lock）** 是一种特殊的**间隙锁（Gap Lock）**。当一个事务准备在某个索引间隙（Gap）中插入一条新记录时，它会先在这个间隙上加一个**意向信号**。
-* **本质**：它不是为了锁定数据，而是为了**声明插入意图**。
-* **特性**：多个事务可以在同一个间隙内同时插入不同的数据，彼此之间**不互斥**。
+**插入意向锁（Insert Intention Lock）** 是一种特殊的 ==1;;Gap Lock== 锁。当一个事务准备在某个索引间隙（Gap）中插入一条新记录时，它会先在这个间隙上加一个==1;;意向==信号。
+* **本质**：它不是为了锁定数据，而是为了声明==1;;插入==意图。
+* **特性**：多个事务可以在同一个间隙内同时插入不同的数据，彼此之间不==1;;互斥==。
 ### 工作原理：双阶段锁定
 当你执行一个 `INSERT` 语句时，InnoDB 处理锁的逻辑如下：
 #### 第一阶段：间隙检查（Gap Check）
-InnoDB 首先检查你要插入的位置，是否被其他事务所持有的 **间隙锁（Gap Lock）** 或 **Next-Key Lock** 覆盖。
-- **如果没有冲突**：事务直接获取插入意向锁（这步极快，通常无感）。
+InnoDB 首先检查你要插入的位置，是否被其他事务所持有的 ==1;;Gap Lock==锁 或 ==1;;Next-Key Lock== 覆盖。
+- **如果没有冲突**：事务**直接**获取**插入意向锁**（这步极快，通常无感）。
 - **如果有冲突**：事务进入等待状态。此时在系统监控中表现为 `lock_mode X locks gap before rec insert intention waiting`。
 #### 第二阶段：记录锁转化（Lock Conversion）
-一旦间隙检查通过，插入意向锁的使命就完成了。在数据真正写入后，该锁会立即“升级”或“转化为”**记录锁（Record Lock）**，锁住新插入的那一行，防止其他事务对这行进行修改。
+一旦间隙检查通过，插入意向锁的使命就完成了。在数据真正写入后，该锁会立即**升级**为==1;;Record Lock==，锁住新插入的那一行，防止其他事务对这行进行修改。
 ### 锁定机制与兼容性
 - **与自身兼容**：多个事务可以在同一个间隙（比如 3 到 6 之间）同时持有插入意向锁。只要 A 插入 4，B 插入 5，它们可以并行执行，无需等待。
-- **被间隙锁阻塞**：如果一个事务已经持有了某个间隙的 **Gap Lock** 或 **Next-Key Lock**（如你之前例子中的事务 A），那么其他事务想在该间隙获取“插入意向锁”时就会被阻塞。
-- **互斥性**：插入意向锁会等待间隙锁释放，但它本身并不会阻止其他事务获取该间隙的间隙锁（即它不具备排他性，除非已经成功转换为记录锁）。
+- **被间隙锁阻塞**：如果一个事务已经持有了某个间隙的 **Gap Lock** 或 **Next-Key Lock**，那么其他事务想在该间隙获取==1;;插入意向==锁时就会被阻塞。
+- **互斥性**：插入意向锁会**等待间隙锁**释放，但它本身并不会阻止其他事务获取该间隙的间隙锁（即它不具备排他性，除非已经成功转换为记录锁）。
 ### 维度对比：插入意向锁 vs 排他锁 vs 间隙锁
 | 维度       | 插入意向锁 (I-I)       | 记录排他锁 (X)              | 间隙锁 (Gap)      |
 | -------- | ----------------- | ---------------------- | -------------- |
@@ -910,15 +903,13 @@ InnoDB 首先检查你要插入的位置，是否被其他事务所持有的 **�
 插入意向锁可以被形象地理解为 **“排队入场前的信号”**：
 1. 它**服从**于间隙锁：如果有人在做范围扫描（加了间隙锁），它会乖乖在门口等着。
 2. 它**包容**同类：如果没有人扫描，它允许无数个同类在同一个大房间（间隙）里各自找空位坐下。
-<!--SR:!2026-06-19,83,271-->
-<?e?>
+<!--SR:!2027-02-02,225,271-->
 <?e?>
 ## 行锁升级表锁
 ### 核心底层原理
 InnoDB 的行锁（Row Lock）本质上是**索引记录锁**。
 * **理想状态**：通过索引定位目标行，仅锁定该行记录（及相关间隙）。
-* **崩溃状态**：若 `UPDATE/DELETE` 的 `WHERE` 条件无法利用索引，InnoDB 必须通过**聚簇索引进行全表扫描**来寻找目标。此时，为了保证并发事务的一致性，系统不得不锁定**扫描过的所有行记录**，表现为“表级锁”。
-<?l?>
+* **崩溃状态**：若 `UPDATE/DELETE` 的 `WHERE` 条件无法利用索引，InnoDB 必须通过==1;;聚簇==索引进行==1;;全表==扫描来寻找目标。此时，为了保证并发事务的一致性，系统不得不锁定**扫描过的所有行记录**，表现为“表级锁”。
 ### 案例1：无索引字段触发全表锁定
 | **顺序** | **Session 1 (事务 A)**                                    | **Session 2 (事务 B)**                          | **结果说明**                                                                       |
 | ------ | ------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -936,6 +927,7 @@ InnoDB 的行锁（Row Lock）本质上是**索引记录锁**。
 ##### 隐式转换失效口诀：**“左函数，索引废；右转换，可走位”**
 - **索引失效**：`WHERE 字符串字段 = 数字` (字段被隐式调用了转换函数)
 - **索引有效**：`WHERE 数字字段 = '字符串'` (常量被转换，字段本身没动)
+[[Work/Databases/MySql/Advance/2、索引优化分析#口诀\|2、索引优化分析#口诀]]
 ### 案例3：范围查询导致全表扫描
 **场景**：使用 `!=`、`NOT IN` 或 `OR` 导致优化器放弃索引。
 **核心原理**：如果 MySQL 优化器预估全表扫描比走索引更快（通常是结果集超过全表 20%~30%），它会放弃行锁，直接执行全表扫描并锁定整表。
@@ -961,30 +953,28 @@ InnoDB 的行锁（Row Lock）本质上是**索引记录锁**。
 | **诊断** | `SHOW ENGINE INNODB STATUS;`                        | 搜 `TRANSACTIONS` 栏的 `row lock(s)` 数量  |
 | **监控** | `SELECT * FROM performance_schema.data_lock_waits;` | 查找 `blocking_pid` 定位阻塞源头 (MySQL 8.0+) |
 | **运行** | `SELECT * FROM information_schema.INNODB_TRX;`      | 检查是否有长时间未提交的“僵尸事务”                    |
-<!--SR:!2026-06-12,85,270-->
-<?e?>
+<!--SR:!2027-01-28,230,270-->
 <?e?>
 ## 行锁结论
-<?l?>
 ### 核心结论：高并发的实现
-| **场景/操作**                                | **机制类型** | **锁类型** | **核心冲突/互斥性**         | **关键依赖与备注**                     |
-| ---------------------------------------- | -------- | ------- | -------------------- | ------------------------------- |
-| **普通读取** (`SELECT`)                      | **MVCC** | **无锁**  | **无阻塞**（读写不冲突）。      | 始终读取**历史快照**，保障高并发。             |
-| **共享锁 (S Lock)** (`FOR SHARE`)           | **行锁**   | **S 锁** | **阻写，阻加排他锁**         | S 锁与 S 锁兼容，但必须基于 **索引**。        |
-| **排他锁 (X Lock)** (`UPDATE`/`FOR UPDATE`) | **行锁**   | **X 锁** | **阻一切锁 (S 锁和 X 锁)**。 | X 锁排斥所有加锁操作，但**不阻塞**普通 MVCC 读取。 |
-| **索引缺失**                                 | **锁升级**  | **表锁**  | **严重降低并发**，整个表被锁定。   | 行锁的前提是**查询条件命中了索引**。            |
+| **场景/操作**                                | **机制类型**         | **锁类型**    | **核心冲突/互斥性**        | **关键依赖与备注**                        |
+| ---------------------------------------- | ---------------- | ---------- | ------------------- | ---------------------------------- |
+| **普通读取** (`SELECT`)                      | ==1;;快照(MVCC)==读 | ==1;;无== 锁 | ==1;;无==阻塞（读写不冲突）   | 始终读取==1;;历史==快照，保障高并发              |
+| **共享锁 (S Lock)** (`FOR SHARE`)           | **行锁**           | ==1;;S== 锁 | 阻==1;;X==锁          | S 锁与 S 锁兼容，但必须基于 ==1;;索引==         |
+| **排他锁 (X Lock)** (`UPDATE`/`FOR UPDATE`) | **行锁**           | ==1;;X== 锁 | 阻==1;;S==和==1;;X==锁 | X 锁排斥所有加锁操作，但不==1;;阻塞==普通 MVCC 读取。 |
+| **索引缺失**                                 | **锁升级**          | ==1;;表== 锁 | **严重降低并发**，整个表被锁定。  | 行锁的前提是查询条件命中了==1;;索引==             |
 ### 注意事项（索引与 MVCC 协作）
 [[Work/Databases/MySql/Basics/Mysql Basics#多版本并发控制(MVCC)\|Mysql Basics#多版本并发控制(MVCC)]]
 1.  **锁的默认行为**
-    * `SELECT` 语句默认**不加锁**，除非你明确使用 `FOR SHARE`（共享锁）或 `FOR UPDATE`（排他锁）。
-    * `INSERT`、`UPDATE`、`DELETE` (CUD 操作) 默认会**加排他锁**。
+    * `SELECT` 语句默认==1;;无==锁，除非你明确使用 `FOR SHARE`（共享锁）或 `FOR UPDATE`（排他锁）。
+    * `INSERT`、`UPDATE`、`DELETE` (CUD 操作) 默认会加==1;;排他==锁。
 2.  **行锁的生效条件（关键）：**
-    * **有索引**：InnoDB 使用 **行锁** (Locking Row)，实现高并发。
-    * **无索引**：InnoDB 锁粒度**退化为表锁**，并发性急剧下降。
+    * **有索引**：InnoDB 使用 ==1;;行==锁，实现高并发。
+    * **无索引**：InnoDB 锁粒度退化为==1;;表==锁，并发性急剧下降。
 3.  **读操作的默认行为（MVCC 协作）：**
-    * 普通的 `SELECT` 默认是 **快照读 (MVCC)**，它**不加锁**，因此**不会被任何行锁阻塞**，也不会阻塞其他事务。
-    * 只有使用 `FOR SHARE`（S 锁）或 `FOR UPDATE`（X 锁）时，才会请求并施加行锁（**当前读**）。
-<!--SR:!2026-06-24,87,270-->
+    * 普通的 `SELECT` 默认是 ==1;;快照==读 (MVCC)，它==1;;无==锁，因此不会被任何行锁==1;;阻塞==，也不会阻塞其他事务。
+    * 只有使用 `FOR SHARE`（S 锁）或 `FOR UPDATE`（X 锁）时，才会请求并施加==1;;行==锁（==1;;当前==读）。
+<!--SR:!2026-07-29,28,270-->
 <?e?>
 ## 行锁分析
 通过什么命令检查状态变量来分析系统上的行锁的争夺情况？
@@ -1010,31 +1000,32 @@ Innodb_row_lock_time_avg # 💡每次等待所花平均时间;
 Innodb_row_lock_time_max # 系统启动到现在最长等待时间;
 Innodb_row_lock_waits # 💡系统启动后到现在总共等待的次数;
 ```
-<!--SR:!2026-07-01,33,170-->
+<!--SR:!2026-09-21,82,190-->
 <?e?>
 # 锁的实时分布
-<?l?>
 当数据库出现卡顿时，可以通过系统视图实时监控并“追凶”，找到导致阻塞的根源。
 ## 查看锁等待源头
-```mysql
-SELECT waiting_pid, waiting_query, blocking_pid, blocking_query FROM sys.innodb_lock_waits;
-```
+> [!question]- 查看锁等待源头
+> ```mysql
+> SELECT waiting_pid, waiting_query, blocking_pid, blocking_query FROM sys.innodb_lock_waits;
+> ```
 ## 查看当前锁占用
-```mysql
-# 查看当前锁占用
-SELECT engine_transaction_id AS tid, object_name AS table_name, index_name, lock_type, lock_mode, lock_data FROM performance_schema.data_locks;
-
-# 查看谁阻塞了谁
-SELECT  
-    r.engine_transaction_id AS waiting_tid,  
-    r.object_name AS table_name,  
-    b.engine_transaction_id AS blocking_tid,  
-    r.lock_mode AS waiting_lock,  
-    b.lock_mode AS blocking_lock  
-FROM performance_schema.data_lock_waits w  
-         JOIN performance_schema.data_locks r ON w.requesting_engine_lock_id = r.engine_lock_id  
-         JOIN performance_schema.data_locks b ON w.blocking_engine_lock_id = b.engine_lock_id;
-```
+> [!question]- 查看当前锁占用
+> ```mysql
+> # 查看当前锁占用
+> SELECT engine_transaction_id AS tid, object_name AS table_name, index_name, lock_type, lock_mode, lock_data FROM performance_schema.data_locks;
+> 
+> # 查看谁阻塞了谁
+> SELECT  
+>     r.engine_transaction_id AS waiting_tid,  
+>     r.object_name AS table_name,  
+>     b.engine_transaction_id AS blocking_tid,  
+>     r.lock_mode AS waiting_lock,  
+>     b.lock_mode AS blocking_lock  
+> FROM performance_schema.data_lock_waits w  
+>          JOIN performance_schema.data_locks r ON w.requesting_engine_lock_id = r.engine_lock_id  
+>          JOIN performance_schema.data_locks b ON w.blocking_engine_lock_id = b.engine_lock_id;
+> ```
 ### 字段信息
 | **序号** | **字段名称**                    | **中文注释**  | **详细说明**                                                            |
 | ------ | --------------------------- | --------- | ------------------------------------------------------------------- |
@@ -1058,22 +1049,23 @@ FROM performance_schema.data_lock_waits w
 | **7**  | **`S, REC_NOT_GAP`**      | **共享记录锁**             | 读锁模式下的纯记录锁。                                             |
 >在 RR 级别，你会看到 `LOCK_MODE` 出现 `X,GAP` 或 `X` (Next-key)；而在 RC 级别，你会发现大部分时候只有简单的 `X,REC_NOT_GAP`（纯记录锁）。
 ### 强制释放锁
-```mysql
-KILL [阻塞者的 进程 ID];
-```
+> [!question]- 强制释放锁
+> ```mysql
+> KILL [阻塞者的 进程 ID];
+> ```
 <!--SR:!2026-06-26,86,271-->
 <?e?>
 # 数据库优化建议
-### 1. 索引与锁的精准控制
+## 1. 索引与锁的精准控制
 * **严防索引失效**：确保所有写操作（`UPDATE/DELETE`）必须精准命中索引。**禁止在字段上做运算**，且 **VARCHAR 类型必须加单引号**（防止隐式转换导致全表扫描，行锁变表锁）。
 * **缩小锁范围**：设计索引时尽量覆盖常用查询条件，避免大范围扫描。
-### 2. 规避间隙锁（Gap Lock）风险
+## 2. 规避间隙锁（Gap Lock）风险
 * **减少范围检索**：尽量使用主键或唯一索引进行等值查询。
 * **避免空值查询**：更新前先确认记录存在，减少因命中“间隙”而导致的无辜插入受阻。
-### 3. 事务行为优化
+## 3. 事务行为优化
 * **快进快出**：严格控制事务大小，将耗时长的非数据库操作（如调用 API、复杂计算）移出事务块。
 * **资源有序访问**：在多个事务中，尽量以**相同的顺序**访问涉及的多张表，从而降低死锁概率。
-### 4. 架构与策略调整
+## 4. 架构与策略调整
 * **合理降低隔离级别**：若业务允许（如不追求极致的幻读防护），将隔离级别设置为 `READ COMMITTED (RC)`，可规避绝大部分间隙锁带来的性能损耗。
 # 补充概念：页锁 (Page Lock)
 * **定义**：锁定粒度介于**表锁**（锁定整个表）和**行锁**（锁定单行）之间的一种锁，通常以 **16KB** 的数据页为锁定单位。

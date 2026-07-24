@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Learn/Hash算法与数据库实现/","title":"Hash算法与数据库实现","tags":["flashcards"],"noteIcon":"","created":"2026-04-25T11:00:28.000+08:00","updated":"2026-06-10T10:17:51.966+08:00","dg-note-properties":{"title":"Hash算法与数据库实现","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Learn/Hash算法与数据库实现/","title":"Hash算法与数据库实现","tags":["flashcards"],"noteIcon":"","created":"2026-04-25T11:00:28.000+08:00","updated":"2026-07-23T10:17:15.994+08:00","dg-note-properties":{"title":"Hash算法与数据库实现","tags":["flashcards"]}}
 ---
 
 # Hash函数
@@ -19,7 +19,7 @@
 - **数学表示**：<?:?>$a \bmod n = r$
 <!--SR:!2026-11-01,165,270-->
 - **通用公式**：<?:?>$r = a - (n \times \lfloor a / n \rfloor)$ 其中 $\lfloor x \rfloor$ 是向下取整函数。
-<!--SR:!2026-07-02,64,234-->
+<!--SR:!2026-11-29,150,234-->
 	- **a (Dividend)**: 运算起点，代数基础变量。
 	- **n (Modulus)**: 拉丁语 *Modulus* (标准)，表示周期的步长。
 	- **q (Quotient)**: 拉丁语 *Quotiens* (次数)，表示包含多少个 $n$。
@@ -33,7 +33,7 @@
 | **截断取整** (Truncated) | C, Java, Php, Go, JS | 使用 `(int)(a/n)` 这种==1;;向零取整==的方式。          | $-1$                             | 与==1;;被除数==一致 |
 | **地板取整** (Floored)   | Python, Ruby         | 使用$\lfloor a / n \rfloor$这种==1;;向下取整==的方式。 | $2$（因为 $-7 = 3 \times (-3) + 2$） | 与==1;;除数==一致  |
 为什么 Python 中 $-7 \bmod 3 = 2$？<?:?> 因为 Python 向下取整，$-7 / 3 \approx -2.33 \rightarrow -3$。公式计算：$-7 - (3 \times -3) = 2$。
-<!--SR:!2026-06-29,73,273-->
+<!--SR:!2027-01-13,198,273-->
 <?e?>
 ### 3. 核心算法性质
 在处理大数运算（如加密算法）时，以下性质至关重要：
@@ -48,8 +48,7 @@
 <!--SR:!2026-11-06,150,250-->
 # Hash算法
 ## 概念
-Hash 算法（散列函数）将关键字 $k$ 映射到 Hash 表中的一个存储地址 $h(k)$。关键字 $k$ 可以是==1;;整数==或==1;;字符串==。
-<!--SR:!2026-07-15,86,270-->
+Hash 算法（散列函数）将关键字 $k$ 映射到 Hash 表中的一个存储地址 $h(k)$。关键字 $k$ 可以是**整数**或**字符串**。
 <?e?>
 ### Hash 冲突 (Collision)
 不同的关键字 $k_1 \ne k_2$ 经过 Hash 算法计算后得到相同的地址 ==1;;$h(k_1) = h(k_2)$==。
@@ -511,7 +510,7 @@ echo $ht->find('key12');
 value1
 value12
 ```
-<!--SR:!2026-06-12,58,254-->
+<!--SR:!2026-11-05,146,254-->
 <?e?>
 # 基于文件的Hash数据库
 ## 数据结构
@@ -1100,7 +1099,7 @@ array(5) {
 > 	- **内存离散的死穴**：Java `HashMap` 数组里存的是对象的**引用**。扩容时，虽然 `Node[]` 数组搬迁很快，但要重新**计算**每一个 `Node` 的 **下标`(n - 1) & hash`** 并**更新引用**。由于 `Node` 对象**散落在堆各处**，CPU 无法预取，会导致大量的 **Cache Miss**。
 > 	- **红黑树的沉重代价**：如果桶内已经转化成了红黑树，扩容时需要执行 `split` 操作（**拆分树**）。这涉及到大量的对象拆解、重新染色（Red-Black Coloring）和平衡旋转，这些都是昂贵的计算任务。
 > 	- **GC 交互**：Java 的全量扩容会产生大量临时引用的变化，这会给垃圾回收器（GC）带来瞬间的压力，尤其是在并发标记阶段。
-<!--SR:!2026-07-09,30,233-->
+<!--SR:!2026-09-17,70,233-->
 <?e?>
 
 ## PHP8：兼顾顺序与速度
@@ -1221,7 +1220,7 @@ struct _zend_array {
 - 索引是连续的整数（0, 1, 2...）。
 - 此时 `nTableMask` 会被设置为特殊值，==1;;`*arHash`（索引区）==不再被分配内存。
 - PHP 直接使用 `arPacked` 指针。由于 `zval` 只有 16 字节，比起 32 字节的 `Bucket` 节省了一半空间，且由于没有 `*arHash` 的查找过程，速度接近原生的 C 数组。
-<!--SR:!2026-06-15,14,193-->
+<!--SR:!2026-09-02,51,193-->
 <?e?>
 #### Hash 数组 (Index Table)「索引区」
 `*arData` 之前的==1;;负==向偏移 ==1;;整型==数组，存放 ==1;;8== 个 ==1;;`int32_t`==(占用 ==1;;$8 \times 4 = 32$== 字节)。通过`uint32_t *arHash`指针来操作数组。
@@ -1252,8 +1251,8 @@ struct _zval_struct {
         uint32_t type_info;             /* 类型信息总和 (可一次性读写 4 字节) */
         struct {
             ZEND_ENDIAN_LOHI_3(         /* 适配大小端序的宏 */
-                uint8_t    type,        /* 变量的当前类型 (如 IS_STRING, IS_LONG) */
-                uint8_t    type_flags,  /* 类型标记 (如：是否可引用计数, 是否常驻内存) */
+                uint8_t    type,        /* 💡变量的当前类型 (如 IS_STRING, IS_LONG) */
+                uint8_t    type_flags,  /* 💡类型标记 (如：是否可引用计数, 是否常驻内存) */
                 union {
                     uint16_t  extra;    /* 额外信息，未进一步细化 */
                 } u)
@@ -1272,6 +1271,55 @@ struct _zval_struct {
         uint32_t     extra;                /* 额外空间 */
     } u2;                               /* 辅助信息块 2 (4 字节) */
 };
+```
+##### zval 16 字节骨架（速记）
+> **口诀**：`zval = 值(8) + 身份牌(4) + 多功能槽(4)`
+```
+偏移 0–7   [ value: zend_value 8B ]
+偏移 8–11  [ u1: type(1) | type_flags(1) | extra(2) ]
+偏移 12–15 [ u2: next / fe_pos / lineno ... 四选一 ]
+```
+- **读类型入口**：==1;;`u1.v.type`==（宏 `Z_TYPE` / `Z_TYPE_P`）；`type_info` 是整块 4B 的批量读写视图。
+
+| 块      | 记什么 | 一句话                               |
+| ------ | --- | --------------------------------- |
+| **u1** | 身份  | `type` = 是什么；`type_flags` = 怎么管内存 |
+| **u2** | 场景  | 同一 4B，按上下文复用；Hash 冲突时才是 `next`    |
+**u2 三分组**：
+- **Hash 场景**：`next`（冲突链下标）
+- **执行引擎场景**：`cache_slot`、`opline_num`、`num_args`、`fe_pos`、`fe_iter_idx`、`guard`
+- **编译/常量场景**：`lineno`、`constant_flags`、`extra`
+
+| PHP 层面           | `u1.v.type`            | `value` 字段 | 存储            |
+| ---------------- | ---------------------- | ---------- | ------------- |
+| `null`           | `IS_NULL`              | （忽略）       | **内联**，无堆     |
+| `false` / `true` | `IS_FALSE` / `IS_TRUE` | （忽略）       | **内联**，无堆     |
+| `int`            | `IS_LONG`              | `lval`     | **内联**        |
+| `float`          | `IS_DOUBLE`            | `dval`     | **内联**        |
+| `string`         | `IS_STRING`            | `str`      | 指针 + refcount |
+| `array`          | `IS_ARRAY`             | `arr`      | 指针 + refcount |
+| `object`         | `IS_OBJECT`            | `obj`      | 指针 + refcount |
+| `&$var`          | `IS_REFERENCE`         | `ref`      | 指针            |
+| `unset` 空洞       | `IS_UNDEF`             | —          | HashTable 内部  |
+| 间接槽              | `IS_INDIRECT`          | `zv`       | HashTable 内部  |
+> 引擎内部类型（`IS_PTR`、`IS_CONSTANT_AST` 等）日常可跳过。
+**记忆二分法**：
+> 1. `IS_LONG` / `IS_DOUBLE` / `IS_NULL` / `IS_FALSE` / `IS_TRUE` → 直接读 `value`；
+> 2. 其余 → 先读 `type_flags` 再看指针。
+
+| 标记                    | 含义            | 典型类型                    |
+| --------------------- | ------------- | ----------------------- |
+| `IS_TYPE_REFCOUNTED`  | 销毁前查 refcount | string / array / object |
+| `IS_TYPE_COLLECTABLE` | 可被 GC 循环回收    | 含 object 的图             |
+```mermaid
+flowchart LR
+    step1["Z_TYPE 读 u1.v.type"]
+    step2{"内联类型?"}
+    step3["直接读 value.lval/dval"]
+    step4["读 value.ptr 跳转堆对象"]
+    step1 --> step2
+    step2 -->|是| step3
+    step2 -->|否| step4
 ```
 ##### `zend_value`：数据的实际载体 (8 字节)
 这是一个 `union`，意味着它在内存中只占用 8 字节。根据变量类型的不同，这 8 字节会被解析为不同的含义（直接存==1;;值==或==1;;指针==）。
@@ -1325,7 +1373,17 @@ typedef union _zend_value {
 | **内存分配**            | 仅 `zval` 空间                | `zval` + 堆内存空间            |
 | **引用计数**            | 不涉及                        | 涉及 (管理内存释放)               |
 | **寻址次数**            | 0 次 (直接读取)                 | 1 次 (通过指针跳转)              |
-<!--SR:!2026-06-17,23,233-->
+zval 固定多少字节？三块分别是什么？<?:?>==1;;16== 字节：`value`(8) + `u1`(4) + `u2`(4)。
+<!--SR:!2026-08-10,54,233-->
+<?e?>
+变量类型存在 zval 的哪个字段？<?:?>==1;;`u1.v.type`==（宏 `Z_TYPE` / `Z_TYPE_P`）。
+<!--SR:!2026-08-10,54,233-->
+<?e?>
+`IS_LONG` 和 `IS_STRING` 的 `value` 分别怎么用？<?:?>`IS_LONG` → `value.lval` 直接存整数；`IS_STRING` → `value.str` 存指向 `zend_string` 的指针，并配合 `IS_TYPE_REFCOUNTED`。
+<!--SR:!2026-08-10,54,233-->
+<?e?>
+Hash 冲突时 `u2` 存什么、为什么不放 `Bucket *next`？<?:?>存冲突链中下一个元素的==1;;数组下标==（`u2.next`），用下标串联可省 8 字节指针，且 `u2` 在非 Hash 场景可复用为 `fe_pos` 等。
+<!--SR:!2026-08-10,54,233-->
 <?e?>
 ### PHP 8.5.3 HashTable 存取全生命周期剖析
 假设定义一个容量为 8 的数组，并执行：`$a = ["id" => 123, "name" => "Gemini"];`
@@ -1333,7 +1391,7 @@ typedef union _zend_value {
 PHP 不会为索引和数据分别申请内存，而是通过一次 `malloc` 分配一块完整的物理空间。
 * **Index Table (索引映射区)**：位于前半部分。存放 8 个 `uint32_t`（用于映射哈希冲突），占用 $8 \times 4 = 32$ 字节。
 * **Data Array (Bucket 数组)**：位于后半部分。存放 8 个 `Bucket` 结构体，每个 32 字节，占用 $8 \times 32 = 256$ 字节。
-* **指针归位**：核心指针 `*arData` 会偏移到第 **33** 字节处，即指向第一个 Bucket 的起始地址。
+* **指针归位**：核心指针 `*arData` 会偏移到第 ==1;;33== 字节处，即指向第一个 Bucket 的起始地址。
 #### 数据扭转过程：标量 vs 复杂类型
 ##### 场景 1：存储标量类型 `$a["id"] = 123;`
 1. **哈希映射**：计算 `"id"` 的哈希值(`DJBX33A` 算法处理) $h$，通过掩码运算 `nIndex = h | ht->nTableMask` 映射到索引区的 `-2` 位置。
@@ -1342,7 +1400,7 @@ PHP 不会为索引和数据分别申请内存，而是通过一次 `malloc` 分
 4. **数据落盘**：定位到 `*arData[0]`。
 	* **Bucket 填充**：存入原始哈希值 $h$ 和键名 `"id"` 的指针。
 	* **zval 填充**：将 `123` 直接写入 `zval.value.lval`。
-	* **状态标记**：`u1.type` 设为 `IS_LONG`。
+	* **状态标记**：`u1.v.type` 设为 `IS_LONG`。
 5. **专业特征**：**原地存储**。数据流终止于 `*arData` 块内部，无外部寻址，效率极高。
 ##### 场景 2：存储复杂类型 `$a["name"] = "Gemini";`
 1. **外部准备**：Zend 内存管理器先在堆（Heap）上申请一块内存，创建 `zend_string` 结构存储 `"Gemini"`，并初始化 `gc.refcount = 1`。
@@ -1350,7 +1408,7 @@ PHP 不会为索引和数据分别申请内存，而是通过一次 `malloc` 分
 3. **建立映射**：在 `*arData[-1]` 处存入下标 1。
 4. **数据落盘**：定位到 `*arData[1]`。
 	* **zval 填充**：`zval.value.ptr` 存入堆内存中 `zend_string` 的 **8 字节内存地址**。
-	* **状态标记**：`u1.type` 设为 `IS_STRING`，并开启 `IS_TYPE_REFCOUNTED` 标记。
+	* **状态标记**：`u1.v.type` 设为 `IS_STRING`，并开启 `IS_TYPE_REFCOUNTED` 标记。
 5. **专业特征**：**间接寻址**。`HashTable` 仅作为索引网格，通过指针控制堆区的真实数据。
 ##### 场景 3：读取 `$a["name"]`
 当代码尝试读取变量时，CPU 经历以下精密步骤：
@@ -1361,7 +1419,7 @@ PHP 不会为索引和数据分别申请内存，而是通过一次 `malloc` 分
 	* 由于 `Bucket` 大小固定为 32 字节，CPU 只需通过位移指令即可瞬间定位。
 4. **数据解析**：
 	* 进入 `Bucket[1]` 访问 `zval`。
-	* 检查 `u1.type` 确认是字符串。
+	* 检查 `u1.v.type` 确认是字符串。
 	* 读取 `value.ptr` 拿到 8 字节地址，跳转至堆内存取出 `"Gemini"`。
 #### 核心设计总结：为什么这样最快？
 * **4 字节索引 vs 8 字节指针**：Index Table 存储下标（==1;;4== 字节）而非物理指针（==1;;8== 字节），在海量数据下节省了 50% 的索引空间。
@@ -1377,8 +1435,8 @@ PHP 不会为索引和数据分别申请内存，而是通过一次 `malloc` 分
 #### arData 与 arHash：PHP 数组容量极限与索引重建的底层真相
 `arData` 是按插入顺序线性排列的“物理仓库”，而 `arHash` 只是记录这些物理位置映射关系的“逻辑索引”，冲突通过在 `arData` 元素内部建立链表来解决。
 ##### 核心推论：
-由于容量受限于物理仓库 `arData` 的大小，**当 `arData` 满载时**，即便 `arHash`还有空余槽位，也必须**触发扩容**和**同步 Rehash**。
-<!--SR:!2026-06-20,57,251-->
+由于容量受限于物理仓库 `arData` 的大小，**当 `arData` 满载时**，即便 `arHash`还有空余槽位，也必须触发==1;;扩容==和同步 ==1;;重建hash==。
+<!--SR:!2026-11-11,142,251-->
 <?e?>
 #### C源码 hash 增、改「数字」
 <?l?>
@@ -1520,10 +1578,19 @@ convert_to_hash:
     return &p->val;
 }
 ```
-<!--SR:!2026-06-22,59,251-->
+<!--SR:!2026-11-17,148,251-->
 <?e?>
 #### C源码 hash 增、改「字符串」
-<?l?>
+`_zend_hash_str_add_or_update_i()` 用于通过原始 `char *` 字符串添加或更新 HashTable 元素。它会在插入字符串 key 时，将原始字符串包装成 ==1;;zend_string==。
+关键流程：
+- 如果 HashTable 是 ==1;;未初始化==，会先调用 `zend_hash_real_init_mixed()` 初始化为混合模式。
+- 如果 HashTable 是 ==1;;Packed==模式，插入字符串 key 前必须调用 `zend_hash_packed_to_hash()` 转为 Hash 模式。
+- 当不是 `HASH_ADD_NEW` 时，会先通过 `zend_hash_str_find_bucket()` 查找已有 Bucket。
+- 如果 key 已存在且是更新模式，会先对旧值执行 `ht->pDestructor(data)`，再覆盖新值。
+- 新增 Bucket 时，会通过 `zend_string_init(str, len, persistent)` 创建字符串 key。
+- `p->h = ZSTR_H(key) = h` 会同时把哈希值写入 Bucket 和 `zend_string 缓存`。
+- `nIndex = h | ht->nTableMask` 用于定位 ==1;;索引段==槽位。
+- 冲突链通过 `Z_NEXT(p->val)` 保存旧链头，再让 `HT_HASH(ht, nIndex)` 指向新 Bucket。
 ```c
 /* 静态内联函数：通过原始字符串（非 zend_string）添加或更新哈希表元素 */
 static zend_always_inline zval *_zend_hash_str_add_or_update_i(HashTable *ht, const char *str, size_t len, zend_ulong h, zval *pData, uint32_t flag)
@@ -1631,7 +1698,7 @@ add_to_hash:
     return &p->val;
 }
 ```
-<!--SR:!2026-06-27,23,231-->
+<!--SR:!2026-08-05,13,191-->
 <?e?>
 #### C源码「hash 重建、扩容」
 <?l?>
@@ -1825,7 +1892,7 @@ ZEND_API void ZEND_FASTCALL zend_hash_rehash(HashTable *ht)
     }
 }
 ```
-<!--SR:!2026-06-11,51,251-->
+<!--SR:!2026-10-17,128,251-->
 <?e?>
 ### PHP 8.3 HashTable 核心机制：从全量拷贝到同步索引重建的深度溯源
 #### 场景设定
@@ -1928,7 +1995,7 @@ PHP 的设计是非常 **“务实主义”** 的：
     - 如果冲突，Node 会通过 `next` 指针连成==1;;单向链表==。
     - 如果链表长度超过 ==1;;8== 且数组长度大于 ==1;;64== 时，会把 `Node` 替换为 `TreeNode`，结构变为==1;;红黑树==，最低查找时间复杂度从 $O(n)$ 降低到 ==1;;$O(\log n)$==。
 - **扩容抖动：** 相比 PHP 和 Go，Java 在触发扩容时通常是==1;;一次性==迁移，这在处理超大规模 Map 时可能会产生明显的性能==1;;毛刺==。
-<!--SR:!2026-06-17,53,233-->
+<!--SR:!2026-09-10,58,213-->
 <?e?>
 ## Go：紧凑的桶设计
 **底层结构**：hmap 结构体 + bmap (桶) 数组

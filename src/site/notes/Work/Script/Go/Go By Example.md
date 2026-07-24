@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-05-05T23:17:01.000+08:00","updated":"2026-06-09T10:33:53.508+08:00","dg-note-properties":{"title":"Go By Example","tags":["flashcards"],"links":"[Go by Example 中文版](https://gobyexample-cn.github.io/)"}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-07-21T10:47:55.095+08:00","updated":"2026-07-24T11:56:52.233+08:00","dg-note-properties":{"title":"Go By Example","tags":["flashcards"],"links":"[Go by Example 中文版](https://gobyexample-cn.github.io/)"}}
 ---
 
 # Hello World
@@ -130,13 +130,14 @@ func main() {
 	fmt.Println(f)
 }
 ```
+<?e?>
 # 常量
 常量中的数据类型只可以是? <?:?> 布尔型、数字型（整数型、浮点型和复数）和字符串型。
-<!--SR:!2026-06-23,39,268-->
+<!--SR:!2026-10-06,105,268-->
 常量不能用什么语法声明? <?:?> :=
 <!--SR:!2026-08-15,85,268-->
 常量可以用函数计算表达式的值，但要求是？<?:?> 函数必须是`len(), cap(), unsafe.Sizeof()`这样的内置函数，否则编译不过
-<!--SR:!2026-07-02,106,288-->
+<!--SR:!2027-05-03,305,288-->
 <?e?>
 常量的枚举写法？
 iota 特殊常量的写法、特性、隐式重复？
@@ -231,7 +232,6 @@ func main() {
 <!--SR:!2026-10-18,181,288-->
 <?e?>
 # For 循环
-<?e?>
 类 While 模式?
 经典三段式?
 无限循环与 break?
@@ -321,6 +321,7 @@ EXIT: // 3. 集中出口
 <!--SR:!2026-12-22,222,288-->
 <?e?>
 # If/Else 分支
+💡Go **不支持三目运算**符（`condition ? a : b`）
 ```go
 package main
 
@@ -357,8 +358,8 @@ func main() {
 2.Result:8 is divisible by 4
 3.Result: 9 has 1 digit
 ```
-# Switch 分支结构
 <?e?>
+# Switch 分支结构
 1. 基础 switch?
 2. 一个 case 匹配多个值?
 3. 无表达式 switch (类似于 if-else 链)?
@@ -465,7 +466,6 @@ func main() {
 <!--SR:!2026-12-13,216,288-->
 <?e?>
 # 数组
-<?e?>
 1. 声明数组?
 2. 设置与获取?
 3. 获取长度?
@@ -581,7 +581,6 @@ func main() {
 <!--SR:!2027-04-08,308,308-->
 <?e?>
 # 切片
-<?e?>
 1. 使用 make 申明?
 2. 字面量声明?
 3. 赋值与获取?
@@ -789,9 +788,10 @@ func main() {
 5.IsPresent: false
 6.LiteralDecl: map[bar:2 foo:1]
 ```
+<?e?>
 # Range 遍历
 range遍历字符串返回的是什么?<?:?>迭代的是 Unicode 码点 (Rune) 而非字节
-<!--SR:!2026-06-16,13,229-->
+<!--SR:!2026-09-24,70,229-->
 ```go
 package main
 
@@ -908,8 +908,8 @@ func main() {
 2. 4
 3. 3
 ```
-# 变参函数
 <?e?>
+# 变参函数
 申明时 ... 分别在php和go函数的哪边？调用时 ... 分别在php和go的哪边？
 <?l?>
 左边，php左、go右
@@ -950,7 +950,7 @@ func main() {
 1.InputParams:[1 2 3] 2.ResultSum: 6
 1.InputParams:[1 2 3 4] 2.ResultSum: 10
 ```
-<!--SR:!2026-06-14,106,290-->
+<!--SR:!2026-08-07,53,270-->
 <?e?>
 # 闭包
 ```go
@@ -1012,6 +1012,7 @@ func main() {
 3.ClosureAsVariable: 4
 3.ClosureAsVariable: 5
 ```
+<?e?>
 # 递归
 匿名函数定义递归时的注意事项?<?:?>必须先声明变量名，再进行赋值
 <!--SR:!2027-04-23,318,309-->
@@ -1059,6 +1060,7 @@ func main() {
 1.Factorial(7): 5040
 2.Fibonacci(7): 13
 ```
+<?e?>
 # 指针
 打印 `&i` 会输出什么样的结果? <?:?> 会输出类似 `0xc000012088` **十六进制**的**内存地址**
 <!--SR:!2027-03-28,316,308-->
@@ -1213,10 +1215,9 @@ func main() {
 7.4**ptr3 = 3000
 8.20
 ```
-<!--SR:!2026-07-17,44,269-->
+<!--SR:!2026-08-07,21,249-->
 <?e?>
 # 字符串和rune类型
-<?e?>
 1. 打印原始字符串?
 2. 字符串切片（按字节切取）?
 3. len(s) 返回的是什么长度?
@@ -1299,7 +1300,7 @@ func examineRune(r rune) {
 1.String: สวัสดี
 2.ByteSlice: ส
 3.ByteLen: 18
-4.HexBytes: e0 b8 aa e0 b8 a7 e0 b8 b1 e0 b8 aa e0 b8 94 e0 b8 b5 
+4.HexBytes: e0 b8 aa e0 b8 a7 e0 b8 b1 e0 b8 aa e0 b8 94 e0 b8 b5
 5.RuneCount: 6
 6.RangeIter:
 6.U+0E2A 'ส' starts at 0
@@ -1322,7 +1323,6 @@ func examineRune(r rune) {
 <!--SR:!2026-09-03,129,249-->
 <?e?>
 # 结构体
-<?e?>
 1. 按顺序初始化?
 2. 按字段名初始化?
 3. 零值初始化?
@@ -1418,7 +1418,6 @@ func main() {
 <!--SR:!2027-04-26,321,309-->
 <?e?>
 # 方法
-<?e?>
 1. 公私有方法区别?
 2. 非结构体类型的方法?
 3. 什么类型不能添加方法?
@@ -1572,7 +1571,6 @@ func main() {
 <?e?>
 # 接口
 实现了接口的全部方法，就**自动实现**了 geometry 接口
-<?e?>
 1. 多态应用
 2. 空接口
 3. 类型断言: 直接断言? 安全断言?
@@ -1718,10 +1716,52 @@ func main() {
 5.组合接口调用: z3
 6.动态类型: float64, 动态值: 3.14
 ```
-<!--SR:!2026-07-24,45,250-->
+<!--SR:!2026-11-14,113,250-->
+<?e?>
+# 静态类型与方法调用
+Go 的**方法调用**、**字段访问**、**运算符** 在==1;;编译期==按变量的==1;;静态==类型解析**决定**，不看接口变量运行时实际装的是什么。
+## 三个概念
+| 概念       | 含义            | 谁决定        |
+| :------- | :------------ | :--------- |
+| **静态类型** | 变量声明时的类型      | ==1;;编译==期 |
+| **动态类型** | 接口变量运行时存的具体类型 | 运行期        |
+| **动态值**  | 运行时存的具体值      | 运行期        |
+```go
+var m any = 123
+// 静态类型：any；动态类型：int；动态值：123
+m = reflect.Value{} // 只改动态类型/值，m 的静态类型仍是 any
+```
+## 方法集规则
+编译器只认==1;;静态==类型的方法集；赋值进 `any` **不会改变**变量能调用哪些方法。
+
+| 变量 | 静态类型 | 能否 `.Type()` |
+| :-- | :-- | :-- |
+| `m` | `any` | ❌ |
+| `mv` | `reflect.Value` | ✅ |
+## 类型断言
+类型断言把 `any` 转成具体类型的新变量，新变量拥有自己的静态类型：`mv, ok := m.(reflect.Value)`。
+## 类比
+```go
+var x any = 123
+x + 1        // ❌ any 不支持 +
+v := x.(int)
+v + 1        // ✅
+```
+## 三种写法
+1. **断言到新变量**（从 `any` 来推荐）：`mv := m.(reflect.Value); mv.Type()`
+2. **内联断言**（调试一行）：`m.(reflect.Value).Type()`，重复断言
+3. **直接声明具体类型**（最佳）：`var method reflect.Value`；缓存层返回 `reflect.Value`，`call` 内无需反复断言
+## 常见报错
+```text
+m.Type undefined (type any has no field or method Type)
+```
+这是==1;;编译==期错误，不是 panic；运行时断言失败才会 panic：`interface conversion: interface {} is int, not reflect.Value`。
+## 与反射的关系
+`sync.Map.Load` 返回 `(any, bool)`，边界处断言一次即可：`method, ok := raw.(reflect.Value)`；更好：`map[string]reflect.Value` 或 typed cache wrapper。
+> **一句话**：Go 编译器只认**声明类型**；要从 `any` 调用具体方法，先==1;;类型断言==，或一开始就用具体类型声明。
+<!--SR:!2026-07-26,12,230-->
 <?e?>
 # Embedding
-<?e?>
 1. 字段提升 (Field Promotion)
 2. 方法提升 (Method Promotion)
 3. 接口实现
@@ -1783,31 +1823,33 @@ func main() {
 2.PromotedMethod: base with num=1
 3.InterfaceUsage: base with num=1
 ```
-<!--SR:!2026-07-13,42,250-->
+<!--SR:!2026-10-26,105,250-->
 <?e?>
 # 泛型
-<?e?>
-1. 泛型中：函数、结构体、方法
-2. 实例化泛型结构体?
-3. 联合约束应用?
-4. 自定义接口约束应用? 类型约束中符号`~`的含义?
-5. 复杂约束调用?
-<?l?>
-## Go 指针赋值 vs 属性修改
-泛型方法的**指针地址替换**操作`lst.tail = &element[T]{val: v}`类似[[Work/Frontend/JS/JS basic#浅拷贝、深拷贝\|JS basic#浅拷贝、深拷贝]]的直接赋值`copy.b = [3]`
-### 1. 属性修改 (Field Assignment)
-- **代码**: `p.next = n`
-- **逻辑**: 修改指针所指向的结构体**内部成员**。
-- **JS类比**: `obj.next = newObj` (修改对象属性)
-- **影响**: 所有指向该结构体的指针都能看到此变化。
-### 2. 引用替换 (Pointer Reassignment)
-- **代码**: `p = n`
-- **逻辑**: 改变指针变量本身存储的**地址**。
-- **JS类比**: `p = newObj` (重新赋值)
-- **影响**: 仅改变当前指针的指向，不影响原对象。
-### 3. 链表 Push 经典套路
-1. `tail.next = n`: 把新节点链在旧尾巴后面。
-2. `tail = n`: 把尾巴标签移到新节点上。
+Go 1.18+ 通过**类型参数** `[T]` 实现编译期多态；约束用 `interface` 定义，`|` 表示联合，`~` 表示底层类型匹配。
+## 速查
+| 场景      | 写法                       | 要点                                           |
+| :------ | :----------------------- | :------------------------------------------- |
+| 泛型函数    | `func F[T any](x T)`     | 调用时可类型推导                                     |
+| 泛型结构体   | `type S[T any] struct{}` | 实例化须显式 ==1;;S[int]{}==                       |
+| 泛型方法    | `func (s *S[T]) M()`     | 接收者须带 `[T]`                                  |
+| map 键约束 | `K comparable`           | 键须 ==1;;comparable==（支持 == / !=）             |
+| 联合约束    | `` `~int \| ~float64` `` | ==1;;\|== 连接允许的类型                            |
+| 底层类型    | `~int`                   | 使用 ~ 前缀表示支持该类型的==1;;衍生==类型（如 type MyInt int） |
+| 复合约束    | 嵌入 `Number` + `String()` | 同时满足==1;;类型集与方法集==                           |
+## 类型约束
+- **any**：任意类型（`interface{}` 别名）
+- **接口约束**：除类型集外还可要求方法，如 `String() string`
+- **易混**：`Person` 满足 `Stringer` 但不满足 `Number`；`MyFloat` 满足 `NumericStringer`
+## 指针与链表 Push
+`List.Push` 两步缺一不可（类比 [[Work/Frontend/JS/JS basic#浅拷贝、深拷贝\|JS basic#浅拷贝、深拷贝]]）：
+- `tail.next = n` 接链，`tail = n` 移尾指针。
+- 仅单节点时 `head` 与 `tail` 指向同一节点；多节点时 `tail` 指向尾节点，改 `tail.next` 只延长链。
+
+| 操作   | 代码              | 含义               | JS 类比               |
+| :--- | :-------------- | :--------------- | :------------------ |
+| 属性修改 | `tail.next = n` | 改节点==1;;内部==字段   | `obj.next = newObj` |
+| 引用替换 | `tail = n`      | 改指针变量存的==1;;地址== | `p = newObj`        |
 ```go
 package main
 
@@ -1938,7 +1980,6 @@ func main() {
 	var val MyFloat = 123.456
 	fmt.Println("5.复杂约束调用:", PrintNumericValue(val))
 }
-
 ```
 输出
 ```
@@ -1949,10 +1990,9 @@ func main() {
 4.自定义接口约束应用: Alice (25 years old)
 5.复杂约束调用: Value: 123.46, Doubled: 246.91
 ```
-<!--SR:!2026-06-26,36,230-->
+<!--SR:!2026-08-18,36,210-->
 <?e?>
 # 错误处理
-<?e?>
 错误处理
 这些代码是怎么写的?
 <?l?>
@@ -2068,8 +2108,6 @@ func main() {
 }
 
 ```
-<!--SR:!2026-08-01,78,268-->
-<?e?>
 输出
 ```
 1.1 捕获常规错误: 不能为0
@@ -2082,6 +2120,8 @@ func main() {
 4.Item not found
 5.Custom error - Code: 404, Msg: Not Found
 ```
+<!--SR:!2026-08-01,78,268-->
+<?e?>
 # 协程
 ```go
 package main
@@ -2157,6 +2197,7 @@ func main() {
 ping
 go2:  pong
 ```
+<?e?>
 # 通道缓冲
 无缓冲通道的发送操作是 (?)  必须等到 (?) 才能完成发送? <?:?> 同步的; 有接收者准备好接收时
 <!--SR:!2026-08-04,131,290-->
@@ -2255,11 +2296,11 @@ func worker(c chan bool) {
 func main() {
 	// 1. 创建通道
 	c := make(chan bool)
-	
+
 	// 2. 启动协程
 	// 使用 go 关键字异步执行 worker
 	go worker(c)
-	
+
 	// 3. 阻塞等待
 	// 程序执行到这一行会停下来，直到 worker 往通道 c 里发数据
 	// 如果没有这一行，main 会直接结束，worker 可能还没跑完就被强制终止了
@@ -2298,7 +2339,7 @@ func main() {
 	// 1. 在 main 中创建的是双向通道
 	pings := make(chan string, 1)
 	pongs := make(chan string, 1)
-	
+
 	// 2. 类型转换
 	// 当双向通道作为参数传递给接收单向通道的函数时，Go 会自动将其转换为受限的单向通道
 	go ping(pings, "traverse")
@@ -2314,7 +2355,7 @@ from to pong: traverse
 ```
 # 通道选择器
 若多个 case 同时就绪，执行顺序是怎样的?<?:?>随机挑选一个执行
-<!--SR:!2026-06-20,105,310-->
+<!--SR:!2027-05-14,326,310-->
 ```go
 package main
 
@@ -2523,7 +2564,7 @@ received all jobs
 ```
 # 通道遍历
 更底层的写法<?:?>`if msg, bl := <-queue2; bl {...}`
-<!--SR:!2026-06-22,109,311-->
+<!--SR:!2027-05-27,339,311-->
 ```go
 package main
 
@@ -2736,12 +2777,11 @@ worker 1 finished job 1
 worker 3 finished job 5
 worker 2 finished job 4
 ```
-# WaitGroup
-方法传参 WaitGroup 必须是(?)类型 <?:?> 指针 (`*sync.WaitGroup`)，以确保操作的是同一个计数器
 <!--SR:!2026-07-20,119,291-->
 <?e?>
+# WaitGroup
+方法传参 WaitGroup 必须是指针 (`*sync.WaitGroup`)类型，以确保操作的是同一个计数器
 go 1.22前的问题
-<?l?>
  `i := i` 避免在每个协程闭包中重复利用相同的 i 值 更多细节可以参考 the FAQ(https://go.dev/doc/faq#closures_and_goroutines)
 ```go
 package main
@@ -2801,7 +2841,9 @@ Worker 4 done
 Worker 1 done
 All workers finished
 ```
+<?e?>
 # 速率限制
+<?l?>
 ```go
 package main
 
@@ -2869,9 +2911,9 @@ request 3 2026-01-22 11:48:26.000419 +0800 CST m=+1.000592001
 request 4 2026-01-22 11:48:26.20147 +0800 CST m=+1.201640668
 request 5 2026-01-22 11:48:26.401497 +0800 CST m=+1.401665960
 ```
-# 原子计数器
-<!--SR:!2026-06-27,60,271-->
+<!--SR:!2026-12-08,162,271-->
 <?e?>
+# 原子计数器
 原子计数器关键代码
 <?l?>
 ```go
@@ -2914,10 +2956,9 @@ func main() {
 ```
 ops: 50000
 ```
-<!--SR:!2026-06-25,86,251-->
+<!--SR:!2027-01-27,216,251-->
 <?e?>
 # 互斥锁
-<?e?>
 互斥锁的关键代码?
 <?l?>
 ```go
@@ -2970,7 +3011,7 @@ func main() {
 ```
 map[a:20000 b:10000]
 ```
-<!--SR:!2026-06-28,40,252-->
+<!--SR:!2026-10-08,101,252-->
 <?e?>
 # 状态协程
 ```go
@@ -3171,8 +3212,8 @@ func main() {
 ```
 panic: a problem
 ```
-# Defer
 <?e?>
+# Defer
 Defer 三大规则?
 循环defer的坑?
 <?l?>
@@ -3294,8 +3335,8 @@ rule 1:
 2
 1
 0
-rule 2: 0 
-rule 3: 2 
+rule 2: 0
+rule 3: 2
 
 --- 避坑指南 ---
 避坑指南 [112]
@@ -3304,7 +3345,7 @@ rule 3: 2
 避坑指南 [112]
 3. 关闭文件 (由 defer 调用)
 ```
-<!--SR:!2026-06-26,17,232-->
+<!--SR:!2026-08-05,40,232-->
 <?e?>
 # Recover
 ```go
@@ -3423,8 +3464,8 @@ Char: 101
 hello wo
 rld
 ```
-# 字符串格式化
 <?e?>
+# 字符串格式化
 1. 宽度为 6 的整数，右对齐
 2. 宽度为 6，小数点后 2 位的浮点数
 3. 左对齐的宽度为 6，小数点后 2 位的浮点数
@@ -3543,9 +3584,9 @@ width5: |foo   |b     |
 sprintf: a string
 io: an error
 ```
-# 文本模板
-<!--SR:!2026-06-18,36,252-->
+<!--SR:!2026-08-18,43,232-->
 <?e?>
+# 文本模板
 1. 使用 Must 方法简化错误处理，重新解析模板?
 2. 使用结构体作为数据源?
 3. 使用 map 作为数据源?
@@ -3610,11 +3651,11 @@ Value: 5
 Value: [Go Rust C++ C#]
 Name: Jane Doe
 Name: Mickey Mouse
-yes 
-no 
+yes
+no
 Range: Go Rust C++ C#
 ```
-<!--SR:!2026-06-16,22,212-->
+<!--SR:!2026-08-17,27,192-->
 <?e?>
 ## 代码自动生成
 ```go
@@ -3681,7 +3722,6 @@ os.WriteFile("generated_struct.go", formattedCode, 0644)
 ```
 <?e?>
 # 正则表达式
-<?e?>
 1. 快速匹配判断
 2. 解析正则对象，并匹配字符串
 3. 查找首个匹配字符串
@@ -3691,12 +3731,14 @@ os.WriteFile("generated_struct.go", formattedCode, 0644)
 7. 查找所有字符串匹配项
 8. 查找所有字符串匹配项的前 2 个匹配项
 9. 查找所有匹配及其分组的索引
-10. 匹配 []byte 类型数据
+10. 匹配 `[]byte` 类型数据
 11. 强制解析正则
 12. 替换所有匹配为固定字符串
 13. 使用函数转换匹配项并替换
 14. 下划线转驼峰
-15. 驼峰转下划线<?l?>```go
+15. 驼峰转下划线
+<?l?>
+```go
 package main
 
 import (
@@ -3815,10 +3857,6 @@ func main() {
 <!--SR:!2026-11-12,185,272-->
 <?e?>
 # JSON
-<?e?>
-1. Struct 序列化为 JSON 对象
-2. JSON 对象 反序列化为 Struct
-<?l?>
 ```go
 package main
 
@@ -3920,10 +3958,8 @@ func main() {
 13.AccessField: apple
 14.EncoderOutput: {"apple":5,"lettuce":7}
 ```
-<!--SR:!2026-07-03,111,292-->
 <?e?>
 # XML
-<?e?>
 1. 序列化 XML (带缩进格式)
 2. 序列化并添加 XML 标准头部声明
 3. 反序列化：将 XML 字节流转回结构体
@@ -3986,7 +4022,7 @@ func main() {
 	// 4. 序列化嵌套结构
 	out, _ = xml.MarshalIndent(nesting, " ", "  ")
 	fmt.Println("4.Nested:\n"+string(out), "\n")
-	
+
 	/* 5. 💡反序列化时字段转换失败的原因?
 		1. 💡字段未导出：结构体字段首字母必须大写，否则 `json` 包通过反射无法访问和写入。
 		2. Tag 标签不匹配：JSON 中的 Key 与结构体字段名或 `json:"..."` 标签定义的名称不一致。
@@ -4004,7 +4040,7 @@ func main() {
    <name>Coffee</name>
    <origin>Ethiopia</origin>
    <origin>Brazil</origin>
- </plant> 
+ </plant>
 
 2.WithHeader:
 <?xml version="1.0" encoding="UTF-8"?>
@@ -4012,9 +4048,9 @@ func main() {
    <name>Coffee</name>
    <origin>Ethiopia</origin>
    <origin>Brazil</origin>
- </plant> 
+ </plant>
 
-3.Unmarshal: Plant id=27, name=Coffee, origin=[Ethiopia Brazil] 
+3.Unmarshal: Plant id=27, name=Coffee, origin=[Ethiopia Brazil]
 
 4.Nested:
  <nesting>
@@ -4032,12 +4068,11 @@ func main() {
        </plant>
      </child>
    </parent>
- </nesting> 
+ </nesting>
 ```
-<!--SR:!2026-06-10,33,212-->
+<!--SR:!2026-09-10,71,212-->
 <?e?>
 # 时间
-<?e?>
 1. 获取当前本地时间
 2. 构造一个特定的时间点 (年, 月, 日, 时, 分, 秒, 纳秒, 时区)
 3. 提取时间分量
@@ -4119,7 +4154,6 @@ func main() {
 <!--SR:!2026-09-18,146,252-->
 <?e?>
 # 时间戳
-<?e?>
 1. 获取当前时间对象
 2. 获取 Unix 时间戳（自 1970-01-01 以来的秒数）
 3. 获取纳秒级时间戳
@@ -4172,14 +4206,9 @@ func main() {
 <!--SR:!2026-07-30,123,292-->
 <?e?>
 # 时间的格式化和解析
-<?e?>
 1. 使用预定义的 RFC3339 标准格式输出
 2. 解析字符串为时间对象
-3. 自定义格式化：只输出 12 小时制的时间
-4. 自定义格式化：全日期时间（含星期、月份、日、时、分、秒、年）
-5. 自定义格式化：精确到微秒及偏移量
-6. 错误处理演示：解析格式不匹配时会返回错误
-7. 获取时间对象的各个字段
+3. 获取时间对象的各个字段
 <?l?>
 ```go
 t := time.Now()
@@ -4233,10 +4262,9 @@ fmt.Printf(
 8.ParseError: parsing time "8:41PM" as "Mon Jan _2 15:04:05 2006": cannot parse "8:41PM" as "Mon"
 9.Custome 2025-12-10 13:09:24
 ```
-<!--SR:!2026-05-25,20,232-->
+<!--SR:!2026-09-04,65,252-->
 <?e?>
 # 随机数
-<?e?>
 1. 生成 0-99 之间的随机整数（使用默认种子，多次运行结果相同）
 2. 生成 0.0 到 1.0 之间的随机浮点数
 3. 生成指定范围的浮点数，例如 `[5.0, 10.0)`
@@ -4289,7 +4317,6 @@ func main() {
 <!--SR:!2026-08-01,113,252-->
 <?e?>
 # 数字解析
-<?e?>
 1. 将字符串解析为 64 位浮点数
 2. 解析整数
 3. 解析十六进制字符串
@@ -4341,10 +4368,9 @@ func main() {
 5.Atoi: 135
 6.Error: strconv.Atoi: parsing "wat": invalid syntax
 ```
-<!--SR:!2026-05-29,84,272-->
+<!--SR:!2026-08-09,41,252-->
 <?e?>
 # URL 解析
-<?e?>
 1. 解析 URL 字符串为 url.URL 对象
 2. 获取协议方案 (Scheme)
 3. 获取用户信息 (User)，包含用户名和密码
@@ -4415,15 +4441,9 @@ func main() {
 6.2QueryMap: map[k:[v]]
 6.3QueryValue: v
 ```
-<!--SR:!2026-05-17,37,232-->
+<!--SR:!2026-09-27,86,232-->
 <?e?>
 # SHA256 散列
-<?e?>
-1. 创建一个新的 sha256 算法句柄 (hash.Hash 接口)
-2. 写入数据：将字符串转换为字节切片并传入
-3. 计算最终哈希值
-4. 格式化输出：使用 %x 将字节切片打印为十六进制字符串
-<?l?>
 ```go
 package main
 
@@ -4454,7 +4474,6 @@ func main() {
 ```
 SHA256: 1af1dfa857bf1d8814fe1af8983c18080019922e557f15a8a0d3db739d77aacb
 ```
-<!--SR:!2026-07-24,123,292-->
 <?e?>
 # Base64 编码
 ```go
@@ -4497,8 +4516,8 @@ func main() {
 3.URLEncode: YWJjMTIzIT8kKiYoKSctPUB-Ky8=
 4.URLDecode: abc123!?$*&()'-=@~+/
 ```
-# 读文件
 <?e?>
+# 读文件
 1. 一次性读取：直接将整个文件内容读入内存
 2. 打开文件：获取文件句柄以进行更多控制
 3. 基础读取：从文件起始位置读取 5 个字节
@@ -4608,10 +4627,9 @@ func main() {
 7.2 Peek(5): hello
 7.2 OS指针位置: 0
 ```
-<!--SR:!2026-06-21,81,232-->
+<!--SR:!2026-08-11,42,212-->
 <?e?>
 # 写文件
-<?e?>
 1. 快速写入文件：直接将字节切片写入指定路径
 2. 创建文件：获取一个可写的句柄
 3. 写入字节切片 (Byte Slice)
@@ -4691,7 +4709,6 @@ func main() {
 <!--SR:!2026-11-07,182,271-->
 <?e?>
 # 行过滤器
-<?e?>
 1. 创建文件输入扫描器
 2. 循环逐行读取输入
 3. 检查扫描过程中是否发生错误
@@ -4741,7 +4758,6 @@ DDDD
 <!--SR:!2026-09-26,151,251-->
 <?e?>
 # 文件路径
-<?e?>
 1. 路径拼接与清理
 2. 路径成分提取「目录名、文件名」
 3. 相对路径检查
@@ -4842,10 +4858,9 @@ Is '/dir/file' absolute? true
   是否目录: false
   系统底层数据: &{16777231 33188 1 61802447 501 20 0 [0 0 0 0] {1767991750 990384404} {1767941624 91188997} {1767941624 91188997} {1767869716 625129705} 19 8 4096 0 0 0 [0 0]}
 ```
-<!--SR:!2026-05-20,26,231-->
+<!--SR:!2026-08-31,61,231-->
 <?e?>
 # 目录
-<?e?>
 1. 基础目录操作
 2. 构建复杂的层级结构
 3. 读取单层目录
@@ -4983,10 +4998,9 @@ func visit2(path string, info os.DirEntry, err error) error {
 访问路径: subdir/parent/file3            | 是否目录: false
 5.2 耗时: 70.75µs
 ```
-<!--SR:!2026-06-28,54,231-->
+<!--SR:!2026-10-30,123,231-->
 <?e?>
 # 临时文件和目录
-<?e?>
 1. 创建临时文件
 2. 创建临时目录
 3. 在临时目录内操作
@@ -5046,14 +5060,9 @@ func main() {
 临时目录路径: /var/folders/27/r0n6fv0103b790l89g7wlsr40000gn/T/sampledir_2178860841
 在临时目录内创建了文件: /var/folders/27/r0n6fv0103b790l89g7wlsr40000gn/T/sampledir_2178860841/workspace_file.txt
 ```
-<!--SR:!2026-06-26,59,211-->
+<!--SR:!2026-07-29,30,191-->
 <?e?>
 # 单元测试和基准测试
-<?e?>
-1. 基础单元测试 (Basic Unit Test)
-2. 表格驱动测试 (Table-Driven Tests)
-3. 基准测试 (Benchmark)
-<?l?>
 ```go
 package main
 
@@ -5133,15 +5142,11 @@ func BenchmarkIntMin(b *testing.B) {
 --- PASS: TestIntMinTableDriven (0.00s)
 PASS
 ```
-<!--SR:!2026-05-11,11,211-->
 <?e?>
 # 命令行参数
-<?e?>
-1. 获取原始参数切片
-2. 获取用户输入的纯参数
-3. 安全地访问特定位置的参数
-4. 遍历参数的推荐写法
-<?l?>
+1. 获取原始参数切片：os.==1;;Args==；`os.Args[0]` 始终是==1;;程序自身路径/名称==
+2. 获取用户输入的纯参数：==1;;os.Args[1:]== 剥离程序名
+3. 安全地访问特定位置的参数：索引访问前须 ==1;;检查 len(os.Args)==，否则 ==1;;panic==
 ```go
 package main
 
@@ -5182,17 +5187,19 @@ func main() {
 ```
 输出
 ```
-程序路径: /Users/weichengjun/Library/Caches/JetBrains/GoLand2025.2/tmp/GoLand/___go_build_command_go
-参数总数: 0
-参数内容: []
-提示: 提供的参数不足 3 个
+程序路径: t1
+参数总数: 3
+参数内容: [1 2 3]
+索引为 [3] 的参数是: 3
 
 遍历所有参数:
+  参数 [0]: 1
+  参数 [1]: 2
+  参数 [2]: 3
 ```
-<!--SR:!2026-05-22,79,271-->
+<!--SR:!2027-01-31,214,271-->
 <?e?>
 # 命令行标志
-<?e?>
 1. 定义标志 (Defining Flags)
 2. 解析标志 (Parsing)
 3. 使用数据 (Accessing Data)
@@ -5257,10 +5264,9 @@ func main() {
 尾部参数数量: 2
 尾部参数内容: [hello world]
 ```
-<!--SR:!2026-05-23,12,211-->
+<!--SR:!2026-07-26,26,211-->
 <?e?>
 # 命令行子命令
-<?e?>
 1. 定义子命令及其独立的 FlagSet
 2. 参数长度校验
 3. 根据第一个参数分发逻辑
@@ -5322,14 +5328,9 @@ func main() {
 用户名称: aa
 剩余参数: []
 ```
-<!--SR:!2026-06-23,95,271-->
+<!--SR:!2026-08-17,48,251-->
 <?e?>
 # 环境变量
-<?e?>
-1. 写入环境变量
-2. 读取环境变量
-3. 遍历所有环境变量
-<?l?>
 ```go
 package main
 
@@ -5379,10 +5380,8 @@ func main() {
    -> APP_PORT : 8080
    -> APP_STAGE : production
 ```
-<!--SR:!2026-06-15,41,231-->
 <?e?>
 # HTTP 客户端
-<?e?>
 1. 发起 HTTP GET 请求
 2. 关键：延迟关闭响应体 (Memory Safety)
 3. 读取元数据
@@ -5446,10 +5445,9 @@ Line 3:   <head>
 Line 4:     <meta charset="utf-8">
 Line 5:     <title>Go by Example</title>
 ```
-<!--SR:!2026-05-19,28,251-->
+<!--SR:!2026-08-12,30,231-->
 <?e?>
 # HTTP 服务端
-<?e?>
 1. 注册路由映射
 2. 启动 HTTP 监听服务
 <?l?>
@@ -5502,78 +5500,171 @@ func main() {
 ```
 HTTP 服务已启动，正在监听 :8090...
 ```
-<!--SR:!2026-05-21,29,251-->
+<!--SR:!2026-10-09,101,271-->
 <?e?>
 # Context
-<?e?>
-1. 获取请求关联的 Context
-2. 模拟业务逻辑中的元数据传递
-3. 核心：监听取消信号
-<?l?>
+1. 获取请求关联的 ==1;;Context==
+2. 模拟业务逻辑中的 ==1;;元数据传递==
+3. 核心：监听 ==1;;取消信号==
+`req.Context()` 会返回与当前 HTTP 请求关联的 Context；当客户端**断开连接**或**请求超时**，该 ctx 会自动触发 ==1;;Done 信号==。
+`context.WithValue()` 不会修改原 Context，而是返回一个 ==1;;新的 Context 副本==。
+业务逻辑中应通过 `select` 同时等待正常完成和 ==1;;ctx.Done()==；收到取消信号后应立即停止后续计算或数据库查询，用于 ==1;;释放资源==。
+## 常见 Context 构造方式
+`context.Context` 是一个接口；下面列出的是创建根 Context 或派生 Context 的函数，不是不同的 Context 接口类型。
+
+| 写法                                      | 类型         | 作用与使用场景                                           |
+| :-------------------------------------- | :--------- | :------------------------------------------------ |
+| `context.Background()`                  | 根 Context  | 返回一个==1;;不会自动取消==的空 Context；适合 `main`、测试和程序最外层入口。 |
+| `context.TODO()`                        | 根 Context  | 暂时不知道该使用哪个 Context 时的==1;;占位符==；业务代码中应尽快替换。       |
+| `context.WithCancel(parent)`            | 派生 Context | 返回 `ctx` 和 `cancel`，由调用方==1;;主动取消==，适合手动停止任务。     |
+| `context.WithTimeout(parent, d)`        | 派生 Context | 在指定时长后自动取消，用于设置==1;;超时==。                         |
+| `context.WithDeadline(parent, t)`       | 派生 Context | 在指定时间点自动取消，用于共享同一个==1;;截止时间==。                    |
+| `context.WithValue(parent, key, value)` | 派生 Context | 用于传递请求范围内的==1;;元数据==，例如 Trace ID；不应存放业务参数或可选配置。   |
+
+`Background()` 和 `TODO()` 没有父 Context；
+`WithCancel`、`WithTimeout`、`WithDeadline`、`WithValue` 都应基于已有的父 Context 创建，形成一棵取消信号可以向下传播的 Context 树。
+
+下面的示例依次演示六种常见 Context 的创建和使用方式：
 ```go
+// 声明可执行程序的入口包。
 package main
 
-import (
-	"context"
-	"fmt"
-	"net/http"
-	"time"
-)
+// 导入上下文包，用于创建和管理 Context。
+import "context"
 
-func helloHandler(w http.ResponseWriter, req *http.Request) {
-	// 1. 获取请求关联的 Context
-	// 当客户端断开连接或请求超时，该 ctx 会自动触发 Done 信号
-	ctx := req.Context()
+// 导入 fmt，用于打印示例结果。
+import "fmt"
 
-	fmt.Println("--- 处理器启动 ---")
-	defer fmt.Println("--- 处理器退出 ---")
+// 导入 time，用于设置超时和截止时间。
+import "time"
 
-	// 2. 模拟业务逻辑中的元数据传递
-	// 💡注意：Context 应该是不可变的，WithValue 会返回一个新的 Context 副本
-	userCtx := context.WithValue(ctx, "userID", 9527)
+// 定义自定义 key 类型，避免 WithValue 的 key 与其他包发生冲突。
+type userIDKey struct{}
 
-	// 3. 核心：监听取消信号
-	select {
-	case <-time.After(5 * time.Second):
-		// 场景 A：模拟耗时 5 秒的操作成功完成
-		fmt.Printf("处理成功，用户ID: %v\n", userCtx.Value("userID"))
-		fmt.Fprintln(w, "Hello, your request was processed.")
-
-	case <-ctx.Done():
-		// 场景 B：在 5 秒内客户端主动断开（如点掉浏览器 X）
-		// 此时应立即停止后续计算或数据库查询，释放资源
-		err := ctx.Err()
-		fmt.Printf("请求取消: %v\n", err)
-
-		// 此时写入 w 已经没有意义，但记录日志非常关键
-	}
-}
-
+// 定义程序入口。
 func main() {
-	http.HandleFunc("/hello", helloHandler)
+	// +----------------------------------------------------------------------
+	// | 1. Background 与 TODO：根 Context
+	// +----------------------------------------------------------------------
+	// 创建一个不会自动取消的根 Context。
+	backgroundCtx := context.Background()
+	// 创建一个暂时无法确定用途的根 Context 占位符。
+	todoCtx := context.TODO()
+	// 输出两个根 Context 当前都没有错误。
+	fmt.Println("Background:", backgroundCtx.Err(), "TODO:", todoCtx.Err())
 
-	fmt.Println("服务监听于 :8090... (尝试访问并在 5s 内按 Ctrl+C 或关闭浏览器)")
-	if err := http.ListenAndServe(":8090", nil); err != nil {
-		fmt.Printf("启动失败: %v\n", err)
-	}
+	// +----------------------------------------------------------------------
+	// | 2. WithCancel：手动取消
+	// +----------------------------------------------------------------------
+	// 基于根 Context 创建可以手动取消的派生 Context。
+	cancelCtx, cancel := context.WithCancel(backgroundCtx)
+	// 主动发出取消信号。
+	cancel()
+	// 读取手动取消后的错误状态。
+	fmt.Println("WithCancel:", cancelCtx.Err())
+
+	// +----------------------------------------------------------------------
+	// | 3. WithTimeout：超时取消
+	// +----------------------------------------------------------------------
+	// 创建一个十毫秒后自动取消的超时 Context。
+	timeoutCtx, timeoutCancel := context.WithTimeout(backgroundCtx, 10*time.Millisecond)
+	// 释放超时 Context 使用的定时器资源。
+	defer timeoutCancel()
+	// 等待超时 Context 发出 Done 信号。
+	<-timeoutCtx.Done()
+	// 输出超时取消的错误原因。
+	fmt.Println("WithTimeout:", timeoutCtx.Err())
+
+	// +----------------------------------------------------------------------
+	// | 4. WithDeadline：截止时间取消
+	// +----------------------------------------------------------------------
+	// 创建一个在指定时间点自动取消的截止时间 Context。
+	deadline := time.Now().Add(10 * time.Millisecond)
+	// 根据截止时间创建派生 Context。
+	deadlineCtx, deadlineCancel := context.WithDeadline(backgroundCtx, deadline)
+	// 释放截止时间 Context 使用的定时器资源。
+	defer deadlineCancel()
+	// 等待截止时间 Context 发出 Done 信号。
+	<-deadlineCtx.Done()
+	// 输出截止时间取消的错误原因。
+	fmt.Println("WithDeadline:", deadlineCtx.Err())
+
+	// +----------------------------------------------------------------------
+	// | 5. WithValue：传递请求元数据
+	// +----------------------------------------------------------------------
+	// 创建携带用户 ID 元数据的派生 Context。
+	valueCtx := context.WithValue(backgroundCtx, userIDKey{}, 9527)
+	// 从 Context 中读取用户 ID 元数据。
+	userID, ok := valueCtx.Value(userIDKey{}).(int)
+	// 输出读取到的用户 ID 和类型断言结果。
+	fmt.Println("WithValue:", userID, ok)
 }
 ```
-输出
-```
-服务监听于 :8080... (尝试访问并在 5s 内按 Ctrl+C 或关闭浏览器)
---- 处理器启动 ---
-处理成功，用户ID: 9527
---- 处理器退出 ---
-```
-<!--SR:!2026-06-13,102,291-->
+
+> [!question]- 示例代码
+> ```go
+> package main
+>
+> import (
+> 	"context"
+> 	"fmt"
+> 	"net/http"
+> 	"time"
+> )
+>
+> func helloHandler(w http.ResponseWriter, req *http.Request) {
+> 	// 1. 获取请求关联的 Context
+> 	// 当客户端断开连接或请求超时，该 ctx 会自动触发 Done 信号
+> 	ctx := req.Context()
+>
+> 	fmt.Println("--- 处理器启动 ---")
+> 	defer fmt.Println("--- 处理器退出 ---")
+>
+> 	// 2. 模拟业务逻辑中的元数据传递
+> 	// 💡注意：Context 应该是不可变的，WithValue 会返回一个新的 Context 副本
+> 	userCtx := context.WithValue(ctx, "userID", 9527)
+>
+> 	// 3. 核心：监听取消信号
+> 	select {
+> 	case <-time.After(5 * time.Second):
+> 		// 场景 A：模拟耗时 5 秒的操作成功完成
+> 		fmt.Printf("处理成功，用户ID: %v\n", userCtx.Value("userID"))
+> 		fmt.Fprintln(w, "Hello, your request was processed.")
+>
+> 	case <-ctx.Done():
+> 		// 场景 B：在 5 秒内客户端主动断开（如点掉浏览器 X）
+> 		// 此时应立即停止后续计算或数据库查询，释放资源
+> 		err := ctx.Err()
+> 		fmt.Printf("请求取消: %v\n", err)
+>
+> 		// 此时写入 w 已经没有意义，但记录日志非常关键
+> 	}
+> }
+>
+> func main() {
+> 	http.HandleFunc("/hello", helloHandler)
+>
+> 	fmt.Println("服务监听于 :8090... (尝试访问并在 5s 内按 Ctrl+C 或关闭浏览器)")
+> 	if err := http.ListenAndServe(":8090", nil); err != nil {
+> 		fmt.Printf("启动失败: %v\n", err)
+> 	}
+> }
+> ```
+> 输出
+> ```
+> 服务监听于 :8080... (尝试访问并在 5s 内按 Ctrl+C 或关闭浏览器)
+> --- 处理器启动 ---
+> 处理成功，用户ID: 9527
+> --- 处理器退出 ---
+> ```
+<!--SR:!2026-07-30,19,271-->
 <?e?>
 # 生成进程
-<?e?>
-1. 基础用法：获取命令输出 (Blocking)
-2. 进阶用法：使用管道进行实时交互 (Piping)
-3. Shell 复合命令「Output 读取」
-4. Shell 复合命令「StdoutPipe 读取」
-5. Shell 复合命令「bytes.Buffer 读取」
+1. 基础用法：获取命令输出 (output)
+2. 进阶用法：使用管道进行实时交互 (StdinPipe、StdoutPipe)
+3. 复杂 Shell 命令 (Bash -c)「Output」
+4. 复杂 Shell 命令 (Bash -c)「StdoutPipe」
+5. 复杂 Shell 命令 (Bash -c)「bytes.Buffer」
 <?l?>
 ```go
 package main
@@ -5700,64 +5791,52 @@ total 768
 -rw-r--r--  1 weichengjun  staff   2.4K  1 21 15:44 array.go
 -rw-r--r--  1 weichengjun  staff   908B  1  8 10:38 atomic.go
 ```
-<!--SR:!2026-05-10,5,151-->
+<!--SR:!2026-08-01,9,131-->
 <?e?>
 # 执行进程
-<?e?>
 1. 查找二进制文件的完整路径
-2. 准备参数
+2. 准备参数「第一个参数应为==1;;程序名本身==」
 3. 准备环境变量
-4. 调用 syscall.Exec
-5. 错误处理
-<?l?>
-```go
-package main
+4. 调用 ==1;;syscall.Exec== 执行命令
+> [!question]- 示例代码
+> ```go
+> // 1. 查找二进制文件的完整路径
+> // syscall.Exec 需要文件的绝对路径（如 /bin/ls）
+> binary, err := exec.LookPath("ls")
+> if err != nil {
+> 	panic(err)
+> }
+>
+> // 2. 准备参数
+> // 按照惯例，第一个参数应为程序名本身
+> args := []string{"ls", "-a", "-l", "-h"}
+>
+> // 3. 准备环境变量
+> // 通常直接透传当前进程的环境变量
+> env := os.Environ()
+>
+> // 4. 调用 syscall.Exec
+> // 重点：一旦此行执行成功，当前的 Go 程序生命周期就结束了
+> // 系统会重用当前进程的 PID，但将其代码、数据、堆栈全部替换为 ls 的
+> execErr := syscall.Exec(binary, args, env)
+>
+> // 5. 错误处理
+> // 如果 syscall.Exec 返回了错误，说明替换失败，代码才会继续向下运行
+> if execErr != nil {
+> 	panic(execErr)
+> }
+> // 这里永远不会被执行
+> ```
+> 输出
+> ```
+> total 768
+> drwxr-xr-x  95 weichengjun  staff   3.0K  1 22 17:03 .
+> drwxr-xr-x   9 weichengjun  staff   288B  1 19 18:21 ..
+> ```
 
-import (
-    "os"
-    "os/exec"
-    "syscall"
-)
-
-func main() {
-    // 1. 查找二进制文件的完整路径
-    // syscall.Exec 需要文件的绝对路径（如 /bin/ls）
-    binary, err := exec.LookPath("ls")
-    if err != nil {
-        panic(err)
-    }
-
-    // 2. 准备参数
-    // 按照惯例，第一个参数应为程序名本身
-    args := []string{"ls", "-a", "-l", "-h"}
-
-    // 3. 准备环境变量
-    // 通常直接透传当前进程的环境变量
-    env := os.Environ()
-
-    // 4. 调用 syscall.Exec
-    // 重点：一旦此行执行成功，当前的 Go 程序生命周期就结束了
-    // 系统会重用当前进程的 PID，但将其代码、数据、堆栈全部替换为 ls 的
-    execErr := syscall.Exec(binary, args, env)
-
-    // 5. 错误处理
-    // 如果 syscall.Exec 返回了错误，说明替换失败，代码才会继续向下运行
-    if execErr != nil {
-        panic(execErr)
-    }
-    // 这里永远不会被执行
-}
-```
-输出
-```
-total 768
-drwxr-xr-x  95 weichengjun  staff   3.0K  1 22 17:03 .
-drwxr-xr-x   9 weichengjun  staff   288B  1 19 18:21 ..
-```
-<!--SR:!2026-06-07,33,251-->
+<!--SR:!2026-09-22,83,251-->
 <?e?>
 # 信号
-<?e?>
 1. 初始化信号接收通道
 2. 注册感兴趣的系统信号
 3. 定义退出通知通道
@@ -5817,9 +5896,9 @@ func main() {
 正在执行清理工作...
 程序已优雅退出
 ```
-# 退出
-<!--SR:!2026-07-07,95,251-->
+<!--SR:!2027-03-02,238,251-->
 <?e?>
+# 退出
 1. 立即终止进程
 2. defer 还会执行吗？
 <?l?>
@@ -5895,8 +5974,8 @@ exclude github.com/old/module v1.0.0 // 排除特定版本
 ### go.sum 文件
 `go.sum` 文件记录依赖模块的加密哈希值，用于验证模块内容的完整性：
 ```go
-github.com / bytedance / sonic v1.9.1 h1:ei0tVql02GmiYGRCTUcI6g...  
-github.com / bytedance / sonic v1.9.1 / go.mod h1:iZcSUejdk5C4OW...  
+github.com / bytedance / sonic v1.9.1 h1:ei0tVql02GmiYGRCTUcI6g...
+github.com / bytedance / sonic v1.9.1 / go.mod h1:iZcSUejdk5C4OW...
 ```
 ## 基本命令详解
 ### 模块初始化
@@ -6106,44 +6185,36 @@ go list -m all | grep text
 ## 基础
 <?e?>
 通过反射获取结构体方法，必须保持接收者==1;;类型==一致，否则不能获取结构体的所有方法
-> [!note]- 反射的三大定律？
-> 1. 从`interface{}`到**反射对象**：TypeOf(i) 获取类型, ValueOf(i) 获取值。
-> 	- 当我们将一个变量传递给 `reflect.TypeOf()` 或 `reflect.ValueOf()` 时，该变量会先被隐式转换为 `interface{}`。反射包会解析这个接口，并提取出它的**动态类型**和**动态值**。
-> 		- **`reflect.Type`**：代表变量的**类型**（如 `int`、`struct`）。
-> 		- **`reflect.Value`**：代表变量的**动态值**。
-> 2. **修改**反射对象：必须是“**可寻址**”的 (通过指针 + Elem)。
-> 	- 若要修改反射对象，其值必须是“**可设置的**”（Settable）。
-> 		- 如果你传递的是**值**（副本），反射对象是**不可设置**的，因为修改副本没有意义。
-> 		- 如果你传递的是**指针**，并且通过 **`Elem()` 方法**获取指针指向的内容，反射对象才是**可设置**的。
-> 3. 从**反射对象**到`interface{}`：v.Interface() 将反射对象**重新装箱**。
-> 	- 通过调用 `reflect.Value` 的 `Interface()` 方法，我们可以将反射出来的对象打包回接口类型，随后可以通过**类型断言**将其还原为**原始类型**。
-<!--SR:!2026-06-08,54,273-->
-
+### 反射的三大定律
+1. 从`interface{}`到**反射对象**：reflect.==1;;TypeOf(i)== 取类型，reflect.==1;;ValueOf(i)== 取值；传参隐式转为 ==1;;interface{}==，得 `reflect.Type`（类型）与 `reflect.Value`（动态值）。
+2. **修改**反射对象：值须 ==1;;可设置(Settable)==；传 ==1;;值（副本）== 不可 Set，须传 ==1;;指针== 并用 ==1;;Elem()== 解引用。
+3. 从**反射对象**到 `interface{}`：v.==1;;Interface()== ==1;;重新装箱== 为接口，再经 ==1;;类型断言== 还原为原始类型。
 ### 可见性与导出规则
 #### 1. 核心原则：可见性隔离
-   Go反射严格遵循语言的**封装性**。只有首字母 **大写（Exported）** 的**方法**和**字段**，才能通过反射进行**获取**、**调用**、**修改**。
+   Go反射严格遵循语言的**封装性**。只有首字母 **大写** 的**方法**和**字段**，才能通过反射进行**获取**、**调用**、**修改**。
 #### 2. MethodByName 的行为
    - **大写方法**：正常返回 `reflect.Value`，可执行 `.Call()`。
    - **小写方法**：返回一个**无效的零值**（Zero Value），即 `IsValid() == false`。
 #### 3. Panic 触发链
    - 当 `MethodByName` 找不到小写方法时，会返回无效 Value。
    - 若不经校验直接调用 `.Call()`，反射引擎会触发 Panic：`reflect: call of reflect.Value.Call on zero Value`。
-#### 4. 字段访问限制 (Settability)
-   - 虽然可以通过 `FieldByName` 拿到小写字段（只读），但无法执行 `Set()`。
-   - **底层逻辑**：小写字段的反射标志位会被设为“不可设置（ReadOnly）”，强行修改会触发 Panic。
+#### 4. 字段访问限制
+   - 虽然可以通过 `FieldByName` 拿到小写字段（**只读**），但无法执行 `Set()`。
+   - **底层逻辑**：小写字段的反射标志位会被设为**不可设置**，强行修改会触发 **Panic**。
 #### 5. 最佳实践：防御式编程
    在动态调用前，必须执行合法性检查，防止因可见性问题导致程序崩溃：
 ```go
 method := of.MethodByName("test")
 if !method.IsValid() {
    // 处理方法不可见或不存在的逻辑
-   return 
+   return
 }
 ```
 #### 6. 设计哲学：安全性
    反射被设计为一种“观察者”，而不是“破坏者”。它**禁止**访问**私有成员**是为了保护包的内部逻辑不被外部恶意或无意地篡改，确保系统的稳定性。
 > [!TIP]
 > **记忆口诀**：反射不是万能匙，首字母大写是前提；调用之前看 Valid，安全稳定第一位。
+<!--SR:!2026-07-27,27,253-->
 <?e?>
 ### 基础结构
 ```go
@@ -6184,12 +6255,12 @@ func (s *MyService) HandlePtr(p *Player) {
 }
 ```
 #### 专家提示 (Expert Tips):
-1. 性能：反射比直接调用慢 ==1;;10-100== 倍。它是将“编译时检查”推迟到“运行时计算”。
+1. 性能：反射比直接调用慢 ==1;;1-100== 倍。它是将“编译时检查”推迟到“运行时计算”。
 2. 缓存：在高性能 ORM 或 JSON 库中，通常会用 ==1;;sync.Map== 缓存 Type 的 ==1;;Field==索引 和 ==1;;Tag==解析结果。
 3. 谨慎：反射可以==1;;读取==私有字段(PkgPath != "")，但绝对无法通过反射 SetString ==1;;修改==它们（除非使用 unsafe）。
 4. 类型安全：反射绕过了==1;;编译器==检查。如果 SetString 到了一个 int 字段，程序会直接 ==1;;Panic==。
 5. 对齐：Method.Call 对参数极其严格。传入 Value 还是 Pointer 必须与 ==1;;Method.Type().In(i)== 严格匹配。
-<!--SR:!2026-06-21,62,273-->
+<!--SR:!2026-07-31,31,253-->
 <?e?>
 ### 元数据探索
 **一句话总结**：`Type` 是你用来**看**的元数据，`Value` 是你用来**做**动作的执行者。
@@ -6212,8 +6283,8 @@ func (s *MyService) HandlePtr(p *Player) {
 * **需要修改或读取数据**：必须使用 `reflect.ValueOf`，它是进行数据映射（如 ORM、JSON 解析）的必经之路。
 <?l?>
 #### TypeOf
->**💡注意**：当 u 是`&User{}`**(指针)** 时 不能调用 `NumField()`
-> 因为：reflect.TypeOf(u) 返回的是 `*User`**(指针)** 类型，而不是 User **结构体**类型。**指针类型没有字段**，所以调用 NumField() 会 **panic**。
+>**💡注意**：u 是`&User{}`**(指针)** 时 不能调用 `NumField()`
+> 只有 `Kind == Struct` 的 `reflect.Type` 才能调用`NumField()`；**指针**类型的 `Kind` 是 `Ptr`，所以会 **panic**。
 ```go
 u := User{"Gemini", 18}
 t := reflect.TypeOf(u)
@@ -6277,120 +6348,111 @@ for j := 0; j < vo.NumField(); j++ {
    4. Type: int        | 静态类型
 */
 ```
-<!--SR:!2026-06-24,64,273-->
+<!--SR:!2026-12-21,174,273-->
 <?e?>
 ### 动态值操作与可设置性
-💡重点：CanSet() 的前提是 `ValueOf(&x).Elem()`
-<?l?>
-```go
-fmt.Println("\n2. [值操作与寻址]")
-x := 3.4
-v := reflect.ValueOf(x)
-fmt.Printf("直接传值: CanSet = %v (因为是副本)\n", v.CanSet())
-// Elem() 相当于 *ptr，它跨越指针直接定位到原始内存的地址
-vPtr := reflect.ValueOf(&x).Elem()
-fmt.Printf("指针+Elem: CanSet = %v\n", vPtr.CanSet())
-if vPtr.CanSet() {
-	vPtr.SetFloat(3.1415)
-	fmt.Printf("修改结果: x = %v\n", x)
-}
-/*
-   1. [值操作与寻址]
-   直接传值: CanSet = false (因为是副本)
-   指针+Elem: CanSet = true
-   修改结果: x = 3.1415
-*/
-```
-<!--SR:!2026-06-30,68,273-->
+💡重点：CanSet() 的前提是 ==1;;ValueOf(&x).Elem()==
+> [!question]- 示例代码
+> ```go
+> fmt.Println("\n2. [值操作与寻址]")
+> x := 3.4
+> v := reflect.ValueOf(x)
+> fmt.Printf("直接传值: CanSet = %v (因为是副本)\n", v.CanSet())
+> // Elem() 相当于 *ptr，它跨越指针直接定位到原始内存的地址
+> vPtr := reflect.ValueOf(&x).Elem()
+> fmt.Printf("指针+Elem: CanSet = %v\n", vPtr.CanSet())
+> if vPtr.CanSet() {
+> 	vPtr.SetFloat(3.1415)
+> 	fmt.Printf("修改结果: x = %v\n", x)
+> }
+> /*
+>    1. [值操作与寻址]
+>    直接传值: CanSet = false (因为是副本)
+>    指针+Elem: CanSet = true
+>    修改结果: x = 3.1415
+> */
+> ```
+<!--SR:!2027-01-02,186,273-->
 <?e?>
 ### 方法动态调用
-💡重点：Call 接收并返回 `[]reflect.Value` 切片
-💡注意：调用方法的**首字母必须为大写**，否则panic
-<?l?>
-#### 基本用法
-```go
-fmt.Println("\n3. [动态调用]")
-uv := reflect.ValueOf(u)
+- `reflect.Value.Method()` 是==1;;绑定==态：拿到的是绑定了具体**实例的方法值**，调用时==1;;不需要==传接收者。
+- `reflect.Type.Method().Func` 是==1;;非绑定==态：拿到的是**底层函数**，调用时==1;;第一个参数必须==传接收者，参数不匹配导致==1;;panic==。
+- `Value.Method(i)` 的参数数量是==1;;N==，`Type.Method(i).Func` 的参数数量是==1;;N + 1==。
+- 固定实例缓存/一般业务调用优先用==1;;绑定==态；框架、DI、底层复用优先用==1;;非绑定==态。
 
-// A. 无参调用 (按索引)
-res1 := uv.Method(0).Call(nil)
-fmt.Printf("无参调用 (Method 0): %v\n", res1[0].Interface())
+> [!question]- 示例代码
+> ```go
+> fmt.Println("\n3. [动态调用]")
+> uv := reflect.ValueOf(u)
+>
+> // A. 无参调用 (按索引)
+> res1 := uv.Method(0).Call(nil)
+> fmt.Printf("无参调用 (Method 0): %v\n", res1[0].Interface())
+>
+> // B. 带参调用 (按名称)
+> method := uv.MethodByName("SayHello")
+> args := []reflect.Value{
+> 	reflect.ValueOf("Gopher"),
+> 	reflect.ValueOf(3),
+> }
+> res2 := method.Call(args)
+> fmt.Printf("带参调用 (SayHello): %v\n", res2[0].String())
+> /*
+>    3. [动态调用]
+>    无参调用 (Method 0): 我的名字叫 Gemini
+>    带参调用 (SayHello): 你好 Gopher，我是 Gemini，说了 3 遍
+> */
+> ```
 
-// B. 带参调用 (按名称)
-method := uv.MethodByName("SayHello")
-args := []reflect.Value{
-	reflect.ValueOf("Gopher"),
-	reflect.ValueOf(3),
-}
-res2 := method.Call(args)
-fmt.Printf("带参调用 (SayHello): %v\n", res2[0].String())
-/*
-   3. [动态调用]
-   无参调用 (Method 0): 我的名字叫 Gemini
-   带参调用 (SayHello): 你好 Gopher，我是 Gemini，说了 3 遍
-*/
-```
-#### 方法调用 Method vs. Func
-##### 1. 核心对比：绑定逻辑与调用差异
-调用结构体方法存在**两种**本质不同的路径：**绑定态 (Method Value)** 与 **非绑定态 (Function Value)**。
-###### 方式 A：`reflect.Value.Method()` (绑定态)
-获取的是已绑定具体实例的“方法值”。调用时**无需**传入接收者（Receiver）。
-```go
-// 语义：instance.MethodName
-v := reflect.ValueOf(instance)
-mValue := v.MethodByName("Store") // 此时 mValue 已“锁死”在 instance 上
+> [!question]- 方法调用 Method vs. Func
+> ```go
+> // 语义：instance.MethodName
+> v := reflect.ValueOf(instance)
+> mValue := v.MethodByName("Store") // 此时 mValue 已“锁死”在 instance 上
+>
+> // 调用：直接传参
+> mValue.Call([]reflect.Value{arg1, arg2})
+>
+> // 语义：Type.MethodName(instance, ...)
+> t := reflect.TypeOf(instance)
+> mFunc := t.Method(0).Func // 此时 mFunc 只是一个通用函数指针
+>
+> // 调用：首个参数必须是接收者实例
+> mFunc.Call([]reflect.Value{reflect.ValueOf(instance), arg1, arg2})
+> ```
 
-// 调用：直接传参
-mValue.Call([]reflect.Value{arg1, arg2}) 
-```
-###### 方式 B：`reflect.Type.Method().Func` (非绑定态)
-获取的是未绑定的底层函数。调用时**必须**将实例作为**第一个参数**传入。
-```go
-// 语义：Type.MethodName(instance, ...)
-t := reflect.TypeOf(instance)
-mFunc := t.Method(0).Func // 此时 mFunc 只是一个通用函数指针
-
-// 调用：首个参数必须是接收者实例
-mFunc.Call([]reflect.Value{reflect.ValueOf(instance), arg1, arg2})
-```
-##### 2. 技术参数对照表
-| 维度       | `Value.Method(i)` | `Type.Method(i).Func` |
-| :------- | :---------------- | :-------------------- |
-| **底层类型** | Method Value      | Function Value        |
-| **参数数量** | $N$ (仅业务参数)       | $N + 1$ (接收者 + 业务参数)  |
-| **绑定时机** | 获取时立即绑定           | 调用时动态传入               |
-| **内存开销** | 每次获取都会闭包捕获（较多）    | 共享底层函数定义（较少）          |
-| **执行速度** | **快** (直接寻址)      | **慢** (多一层转换)         |
-##### 3. 代码实战示例
-```go
-type Calc struct{ ID int }
-
-func (c *Calc) Add(a, b int) int { return a + b }
-func main() {
-	c := &Calc{ID: 1}
-
-	// --- 方式 A: 适合固定实例的缓存 ---
-	// 逻辑：将方法与 c 永久绑定，存入 Map 后随时取用
-	vMethod := reflect.ValueOf(c).MethodByName("Add")
-	res1 := vMethod.Call([]reflect.Value{reflect.ValueOf(10), reflect.ValueOf(20)})
-	fmt.Println(res1[0].Interface()) // 30
-
-	// --- 方式 B: 适合泛型框架/DI 容器 ---
-	// 逻辑：缓存函数定义，调用时再决定作用于哪个 Calc 实例
-	tMethod := reflect.TypeOf(c).Method(0).Func
-	res2 := tMethod.Call([]reflect.Value{
-		reflect.ValueOf(c), // 显式注入实例
-		reflect.ValueOf(10),
-		reflect.ValueOf(20),
-	})
-	fmt.Println(res2[0].Interface()) // 30
-}
-```
-##### 4. 架构级记忆要点 💡
-* **90% 场景选方式 A**：处理一个具体的对象（如 Gin 的 Controller 注入），用 `Value.Method()`。更符合直觉，且参数列表与原生函数签名对齐。
-* **10% 场景选方式 B**：写 ORM 或性能要求极高的底层库，且需要**同一个方法定义**作用于**成千上万**个**不同**的实例，此时缓存 `Type.Method().Func` 更有利于内存复用。
-* **Panic 预警**：使用方式 B 时，如果第一个参数的类型与方法接收者不匹配（例如期望 `*Calc` 却传了 `Calc`），程序会直接崩溃。
-<!--SR:!2026-07-09,73,273-->
+> [!question]- 代码实战
+> ```go
+> type Calc struct{ Num int }
+>
+> func (c *Calc) Add(a, b int) int { return c.Num + a + b }
+> func main() {
+> 	c1 := &Calc{Num: 1}
+> 	c2 := &Calc{Num: 2}
+>
+> 	// --- 方式 A: 适合固定实例的缓存 ---
+> 	// 逻辑：将方法与 c1 永久绑定，存入 Map 后随时取用
+> 	vMethod := reflect.ValueOf(c1).MethodByName("Add")
+> 	retA := vMethod.Call([]reflect.Value{reflect.ValueOf(1), reflect.ValueOf(1)})
+> 	fmt.Println(retA[0].Interface()) // 3
+>
+> 	// --- 方式 B: 适合泛型框架/DI 容器 ---
+> 	// 逻辑：缓存函数定义，调用时再决定作用于哪个 Calc 实例，💡调用时第一个参数必须显式传入 receiver
+> 	tMethod := reflect.TypeOf(c1).Method(0).Func
+>
+> 	// 注入实例c1
+> 	retB1 := tMethod.Call([]reflect.Value{reflect.ValueOf(c1), reflect.ValueOf(1), reflect.ValueOf(1)})
+> 	fmt.Println(retB1[0].Interface()) // 3
+>
+> 	// 注入实例c2
+> 	retB2 := tMethod.Call([]reflect.Value{reflect.ValueOf(c2), reflect.ValueOf(1), reflect.ValueOf(1)})
+> 	fmt.Println(retB2[0].Interface()) // 4
+> }
+> ```
+#### 架构级记忆要点
+- 90% 场景选==1;;方式 A==：处理一个具体对象时更直觉，参数列表也更贴近原生函数签名。
+- 10% 场景选==1;;方式 B==：需要**同一个方法**定义作用于**大量不同实例**时，更利于内存复用。
+<!--SR:!2026-08-14,36,253-->
 <?e?>
 ### 运行时动态构造
 💡重点：可以在完全不知道类型名的情况下，根据 Type 生产实物
@@ -6447,7 +6509,7 @@ vPtr.Elem().Field(1).SetInt(1024)
 // 5. 【类型导出】还原为 interface{}。此时该对象可直接配合 json.Marshal 等标准库使用
 fmt.Printf("凭空构造体: %+v\n", vPtr.Interface())
 ```
-<!--SR:!2026-05-14,33,253-->
+<!--SR:!2026-09-01,40,233-->
 <?e?>
 #### slice
 `reflect.MakeSlice` 模拟了内建函数 `make([]T, len, cap)` 的底层行为。
@@ -6469,7 +6531,7 @@ vSlice = reflect.Append(vSlice, reflect.ValueOf(100), reflect.ValueOf(200))
 // 4.【类型导出】通过 .Interface() 消除反射包装，回归普通切片视图
 fmt.Printf("动态切片: %v\n", vSlice.Interface()) // 动态切片: [100 200]
 ```
-<!--SR:!2026-07-05,69,273-->
+<!--SR:!2026-08-09,34,253-->
 <?e?>
 #### map
 `reflect.MakeMap` 模拟了内建函数 `make(map[K]V)` 的底层行为。
@@ -6492,7 +6554,7 @@ vMap.SetMapIndex(reflect.ValueOf("Go"), reflect.ValueOf(2026))
 // 4.【类型导出】通过 .Interface() 卸载反射外壳，回归标准的 map 视图
 fmt.Printf("动态映射: %v\n", vMap.Interface()) // 动态映射: map[Go:2026]
 ```
-<!--SR:!2026-06-06,50,273-->
+<!--SR:!2026-07-31,25,253-->
 <?e?>
 #### chan
 `reflect.MakeChan` 模拟了内建函数 `make(chan T, buffer)` 的底层行为。
@@ -6518,7 +6580,7 @@ msg, _ := vChan.Recv()
 // 5.【类型导出】通过 .String() 直接提取底层字符串，或使用 .Interface() 还原类型
 fmt.Printf("动态通道接收: %s\n", msg.String()) // 动态通道接收: 反射消息
 ```
-<!--SR:!2026-06-16,57,273-->
+<!--SR:!2026-08-05,30,253-->
 <?e?>
 #### func
 💡重点：这是反射最**黑魔法**的部分，运行时“捏”出一个逻辑函数
@@ -6566,62 +6628,72 @@ fmt.Printf("%v\n", doubleFunc([]int{10, 20})) // [20 40]
 doubleFunc2 := vFunc.Interface().(func([]int) []int)
 fmt.Printf("%v\n", doubleFunc2([]int{30, 40})) // [60 80]
 ```
-<!--SR:!2026-06-29,65,273-->
+<!--SR:!2026-08-08,33,253-->
 <?e?>
 ### 防御性检查与接口
 #### 空值校验
 反映指针变量本身的“合法性”与“内容”。
-<?e?>
 ##### 1. `IsValid()` —— 判定：反射对象是否存在？
-<?l?>
-**底层逻辑**：检查 `reflect.Value` 内部是否持有了有效的类型（Type）信息。如果返回 `false`，代表这个 `Value` 是一个“空壳”，调用任何其他方法都会直接 **Panic**。
->**准则**: 调用任何方法前，先用 `IsValid()` 防 Panic。
-* **场景一：获取不存在的 Map Key**
-```go
-m := map[string]int{"a": 1}
-v := reflect.ValueOf(m).MapIndex(reflect.ValueOf("b"))
-fmt.Println(v.IsValid()) // false (键 "b" 不存在)
-```
-* **场景二：获取不存在的结构体字段**
-```go
-v := reflect.ValueOf(User{}).FieldByName("InvalidField")
-fmt.Println(v.IsValid()) // false (字段名写错了)
-```
-<!--SR:!2026-07-06,70,273-->
+**底层逻辑**：`IsValid()` 检查 `reflect.Value` 内部是否持有有效的 ==1;;类型（Type）信息==。如果返回 ==1;;false==，代表这个 `Value` 是一个 ==1;;空壳==；此时调用任何其他方法都会直接 ==1;;Panic==。
+> **准则**：调用任何方法前，先用 ==1;;IsValid()== 防 Panic。
+
+- **场景一**：`MapIndex` 找不到 key 时会返回 ==1;;无效 Value==。
+> [!question]- 获取不存在的 Map Key
+> ```go
+> m := map[string]int{"a": 1}
+> v := reflect.ValueOf(m).MapIndex(reflect.ValueOf("b"))
+> fmt.Println(v.IsValid()) // false (键 "b" 不存在)
+> ```
+
+- **场景二**：`FieldByName` 字段名写错时也会返回 ==1;;无效 Value==。
+> [!question]- 获取不存在的结构体字段
+> ```go
+> v := reflect.ValueOf(User{}).FieldByName("InvalidField")
+> fmt.Println(v.IsValid()) // false (字段名写错了)
+> ```
+<!--SR:!2027-01-12,190,273-->
 <?e?>
 ##### 2. `IsNil()` —— 判定：持有的地址是否为空？
-<?l?>
-**底层逻辑**：检查变量持有的底层内存地址（Uintptr）是否为 `0`。只适用于引用类型：**Ptr, Chan, Map, Slice, Func, Interface**。
+**底层逻辑**：检查变量持有的底层内存地址（Uintptr）是否为 ==1;;0==。只适用于 ==1;;引用类型==：**Ptr, Chan, Map, Slice, Func, Interface**。
 * **场景一：声明但未初始化的切片/映射**
-```go
-var s []int
-fmt.Println(reflect.ValueOf(s).IsNil()) // true (空切片没有底层数组)
-```
+未初始化 slice/map → IsNil() 为 ==1;;true==
+> [!question]- 示例代码
+> ```go
+> var s []int
+> fmt.Println(reflect.ValueOf(s).IsNil()) // true (空切片没有底层数组)
+> ```
 * **场景二：显式的空指针**
-```go
-var p *int = nil
-fmt.Println(reflect.ValueOf(p).IsNil()) // true
-```
-* **注意**：对 `int` 或 `struct` 调用 `IsNil` 会触发 **Panic**，因为它们不是引用类型。
-<!--SR:!2026-07-01,67,273-->
+`nil` 指针 → IsNil() 为 ==1;;true==
+> [!question]- 示例代码
+> ```go
+> var p *int = nil
+> fmt.Println(reflect.ValueOf(p).IsNil()) // true
+> ```
+* **注意**：对 `int` 或 `struct` 调用 `IsNil` 会触发 ==1;;Panic==，因为它们不是引用类型。
+
+<!--SR:!2026-12-31,183,273-->
 <?e?>
 ##### 3. `IsZero()` —— 判定：内容是否为初始零值？
-<?l?>
-**底层逻辑**：检查该变量的值是否等于其类型的默认值（如 `0`, `""`, `false`）。对于结构体，会递归检查所有字段是否均为零值。
+**底层逻辑**：检查该变量的值是否等于其类型的 ==1;;默认值（零值）==（`0`, `""`, `false`）。**结构体**会 ==1;;递归检查所有字段== 是否均为零值。
 * **场景一：基础类型的零值**
-```go
-fmt.Println(reflect.ValueOf(0).IsZero())      // true
-fmt.Println(reflect.ValueOf("").IsZero())     // true
-```
-* **场景二：结构体的零值（重点）**
-```go
-u := User{Name: "", Age: 0}
-fmt.Println(reflect.ValueOf(u).IsZero())     // true (所有字段都是默认值)
+`0`、`""` 等基础零值 → ==1;;true==
+> [!question]- 示例代码
+> ```go
+> fmt.Println(reflect.ValueOf(0).IsZero()) // true
+> fmt.Println(reflect.ValueOf("").IsZero()) // true
+> ```
+* **场景二：结构体的零值（💡重点）**
+全字段为零值 → ==1;;true==；任字段非零 → ==1;;false==
+> [!question]- 示例代码
+> ```go
+> u := User{Name: "", Age: 0}
+> fmt.Println(reflect.ValueOf(u).IsZero()) // true (所有字段都是默认值)
+>
+> u2 := User{Name: "Bot"}
+> fmt.Println(reflect.ValueOf(u2).IsZero()) // false (Name 被赋值了)
+> ```
 
-u2 := User{Name: "Bot"}
-fmt.Println(reflect.ValueOf(u2).IsZero())    // false (Name 被赋值了)
-```
-<!--SR:!2026-06-06,49,273-->
+<!--SR:!2026-11-13,135,273-->
 <?e?>
 ##### 4. 综合对比：以 `u2 := new(User)` 为例
 ```go
@@ -6645,7 +6717,7 @@ true (它是一个有效的反射对象)
 false (new 分配了地址，不是 nil)
 false (指针的零值是 nil。因为 u != nil，所以它不是指针类型的零值。)
 true (里面的 Name 和 Age 确实都是零值)
-<!--SR:!2026-06-18,57,273-->
+<!--SR:!2026-12-03,156,273-->
 <?e?>
 ##### 状态判定逻辑矩阵
 | 状态              | `reflect.ValueOf(nil)` | `var p *int = nil` | `p := new(int)` | `p := 10`    |
@@ -6654,8 +6726,8 @@ true (里面的 Name 和 Age 确实都是零值)
 | **`IsNil()`**   | ==1;;Panic==           | ==1;;true==        | ==1;;false==    | ==1;;Panic== |
 | **`IsZero()`**  | ==1;;Panic==           | ==1;;true==        | ==1;;false==    | ==1;;false== |
 ##### 架构级记忆要点 💡
-* **防御式编程**：在处理外部传入的 `interface{}` 时，标准的检查流程是：`v.IsValid()` -> `if v.Kind() == Ptr { v.IsNil() }` -> `v.IsZero()`。
-* **语义差异**：`IsNil` 关注的是**内存连通性**，而 `IsZero` 关注的是**业务状态**。
+* **防御式编程**：在处理外部传入的 `interface{}` 时，标准的检查流程是：`v.IsValid()` -> `if v.Kind() == Ptr { v.IsNil() }` -> `v.IsZero()`
+* **语义差异**：`IsNil` 关注的是==1;;内存连通性==，而 `IsZero` 关注的是==1;;业务状态==
 ##### 通用的 `IsEmpty` 函数
 它需要处理从基础类型到复杂容器（Slice, Map, Chan）的所有“空”语义。
 逻辑建模为 **“三层过滤网”：无效性检查 -> 引用零值检查 -> 容器长度检查。**
@@ -6688,39 +6760,50 @@ func IsEmpty(i interface{}) bool {
 	}
 }
 ```
-<!--SR:!2026-06-25,63,273-->
+<!--SR:!2026-08-02,32,253-->
 <?e?>
 #### 接口类型采样
-在 Go 反射的底层实现中，**接口采样**之所以必须采用“绕路”指针的方式，是由 Go 的 **Eface（空接口）** 运行机制决定的。
-##### 核心物理逻辑：类型擦除与动态提取
-在 Go 中，所有传递给 `reflect.TypeOf(i interface{})` 的参数都会经历一次==1;;隐式==转换。
-1. **直接传递接口的问题**：如果你传入一个 `fmt.Stringer` 接口变量，Go 会将其解构为 `(Type, Data)` 对。反射引擎会直接跳过==1;;接口==外壳，去提取 `Data` 对应的具体实现==1;;类型==。如果你传的是 `nil`，反射则完全拿不到任何 `Type` 信息。
-2. **指针采样的妙处**：使用`(*fmt.Stringer)(nil)`创建==1;;指针==类型。在反射中这个指针的 **Base Type（基准类型）** 就是该接口==1;;本身==。
+**一句话**：`TypeOf` 返回的是接口变量中保存的==1;;动态==类型，不是接口==1;;定义==本身；要做 `Implements` 判定，必须先拿到接口定义的 `reflect.Type`，所以要用==1;;指针绕路==采样。
+**类比**：接口变量像贴了「Stringer」标签的盒子，里面装着 `User`；
+- `TypeOf(盒子)` 答「里面是 User」；
+- 指针采样答「标签/interface 定义是 Stringer」。
+##### 为什么直接传接口不行？
+参数传入 `reflect.TypeOf(i interface{})` 时会经历一次==1;;隐式==接口转换。反射读取的是接口值里的==1;;动态==类型，不会保留原来的接口标签。
+
+| 传参方式 | `TypeOf` 结果 |
+| :-- | :-- |
+| `var s fmt.Stringer = User{}` | `User`（动态类型 / 具体实现） |
+| `var s fmt.Stringer = nil` | `nil`（无 Type 信息） |
+| `(*fmt.Stringer)(nil)` | `*fmt.Stringer` |
+| 上式再 `.Elem()` | `fmt.Stringer`（接口定义本身） |
+
+**易错补充**：即使 `var s fmt.Stringer = (*T)(nil)` 是 typed nil，`TypeOf(s)` 拿到的仍是==1;;`*T`==，不是 `fmt.Stringer`。
+##### 指针采样怎么做？
+1. **直接传接口的问题**：传入 `fmt.Stringer` 变量时，Go 将其存为 `(itab, data)`；`TypeOf` 会跳过==1;;接口==外壳，只提取 `data` 对应的具体实现类型。
+2. **指针绕路**：`(*fmt.Stringer)(nil)` 在编译期锁定 `*fmt.Stringer`，无需真实对象；`TypeOf` 得到指针 Type，`.Elem()` 剥掉指针层，得到==1;;接口==定义本身。
 ```go
-// 1.【静态类型锁定】在编译期强制声明一个类型为 *fmt.Stringer 的空指针。
-// 此时内存中并不存在 Stringer 实体，但存在一个指向该接口定义的“类型标记”。
+// 1. 静态类型锁定：编译期声明 *fmt.Stringer 空指针，无需 Stringer 实体
 ptr := (*fmt.Stringer)(nil)
 
-// 2.【类型元数据捕获】reflect.TypeOf 接收该指针。
-// 反射引擎捕获到的是 *fmt.Stringer（指针类型）的 rtype 描述符。
+// 2. 类型元数据捕获：TypeOf 拿到的是 *fmt.Stringer 的 rtype
 tPtr := reflect.TypeOf(ptr)
 
-// 3.【解引用剥离】调用 .Elem() 移除指针层级（Pointer Dereference）。
-// 这一步直接触达指针所指向的底层单元——即接口（Interface）的原始元数据定义。
-// 语义等同于：reflect.TypeOf(new(fmt.Stringer)).Elem()
+// 3. 解引用剥离：Elem() 移除指针层，触达 fmt.Stringer 接口定义
+// 等价：reflect.TypeOf(new(fmt.Stringer)).Elem()
 stringerType := tPtr.Elem()
-// 4. 【合法性判定】使用获取到的“接口说明书”作为基准，判定其他类型是否满足约束。
+
+// 4. 合法性判定：用接口 Type 作基准，判定 User 是否 Implements
 isImplement := reflect.TypeOf(User{}).Implements(stringerType)
-fmt.Printf("User 是否实现了 Stringer: %v\n", isImplement) // User 是否实现了 Stringer: false
+fmt.Printf("User 是否实现了 Stringer: %v\n", isImplement) // false
 ```
-##### 为什么 `Elem()` 是唯一触达路径？
-在 `reflect.Type` 的内部逻辑中，**`Elem()`** 是跨越“容器”与“内容”的唯一桥梁。
-- 对于**指针类型**：`Elem()` 返回其指向的 ==1;;Base Type==。
-- 对于**接口指针**：其 Base Type 恰恰就是那个 ==1;;Interface==类型本身。
-##### 架构级记忆要点 💡
-- **采样公式**：`reflect.TypeOf((*T)(nil)).Elem()` 是获取接口 `reflect.Type` 的**工业标准写法**。
-- **不可替代性**：这是判定一个动态类型是否满足某个**接口约束**（`Implements`）的**前置必要条件**。
-<!--SR:!2026-05-12,6,233-->
+##### 为什么需要 `.Elem()`？
+`Elem()` 是剥离「容器」拿「内容 Type」的通用 API：
+- 对指针类型调用 `.Elem()`，返回其指向的==1;;基础==类型。
+- 对 `*接口` 指针调用 `.Elem()`，返回的基础类型就是该==1;;接口==类型本身。
+##### 记忆要点
+- **采样公式**：`reflect.TypeOf((*T)(nil)).Elem()`，等价于 `reflect.TypeOf(new(T)).Elem()`。
+- **用途**：为 `Implements` / `AssignableTo` 提供所需的接口==1;;基准==Type，直接对接口变量 `TypeOf` 不可替代。
+<!--SR:!2026-07-25,9,213-->
 <?e?>
 #### 兼容性比对
 扫描 User 类型的 Method Set（方法集），检查是否**完全覆盖**了 Stringer 接口定义的**所有函数**
@@ -6781,23 +6864,18 @@ for i := 0; i < vSvc.NumMethod(); i++ {
    Pointer接收成功: M4-Core-Data
 */
 ```
-<!--SR:!2026-06-09,48,255-->
+<!--SR:!2026-07-30,24,235-->
 <?e?>
 ## 实现结构体方法动态回调
 <?l?>
 ### 动态回调Map
 ```go
-package main
-
-import (
-	"fmt"
-	"reflect"
-	"strings"
-)
-
 // --- 1. 数据模型定义层 ---
 // 状态结构体
-type StatusDO struct{ Status int }
+type StatusDO struct {
+	Status int
+	Msg    string
+}
 
 // 订单结构体
 type Order struct{ ID string }
@@ -6807,16 +6885,15 @@ type Extend = map[string]any
 
 // 订单事件
 type OrderAction = string // 💡类型别名语法 OrderAction 和 string 完全等价，方法集通用
-
 const (
 	OrderPlace  OrderAction = "Place"
 	OrderCancel OrderAction = "Cancel"
 )
 
-// --- 2. 业务逻辑层 ---
-// 订单操作服务
-type OrderActionService struct{}
+// 预定义方法缓存，避免高频调用时 MethodByName 的性能损耗
+var eventCache map[string]reflect.Value
 
+// --- 2. 业务逻辑层 ---
 // 请求参数结构体：使用 map 标签声明数据来源路径
 type Req struct {
 	Status *StatusDO `map:"status"` // 直接从根节点提取 status
@@ -6824,22 +6901,20 @@ type Req struct {
 	Extend *Extend   `map:"extend"` // 扩展字段
 }
 
+// 订单操作服务
+type OrderActionService struct{}
+
 // 实际业务方法：下单
 func (a *OrderActionService) Place(req *Req) *StatusDO {
-	fmt.Printf("【下单】订单ID: %s\n", req.Order.ID)
-	return &StatusDO{Status: 2}
+	return &StatusDO{Status: 2, Msg: fmt.Sprintf("【下单】订单ID: %s", req.Order.ID)}
 }
 
 // 实际业务方法：取消
 func (a *OrderActionService) Cancel(req *Req) *StatusDO {
-	fmt.Printf("【取消】原因: %s, 订单ID: %s\n", (*req.Extend)["reason"], req.Order.ID)
-	return &StatusDO{Status: 2}
+	return &StatusDO{Status: 2, Msg: fmt.Sprintf("【取消】原因: %s, 订单ID: %s", (*req.Extend)["reason"], req.Order.ID)}
 }
 
 // --- 3. 核心调度框架层 ---
-// 预定义方法缓存，避免高频调用时 MethodByName 的性能损耗
-var eventCache map[string]reflect.Value
-
 // 实现了“数据映射 -> 动态实例化 -> 方法调用”的完整链路
 func call(eventName string, req map[string]any) any {
 	// 优先从缓存获取方法反射值，取出对应方法反射值
@@ -6852,27 +6927,23 @@ func call(eventName string, req map[string]any) any {
 	if mType.NumIn() != 1 {
 		panic(fmt.Errorf("方法参数必须为一个 Request 结构体: %s", eventName))
 	}
-	// 【核心魔术】：
 	// 拿到方法首参类型 (*Cancel)
 	in := mType.In(0)
-	var e reflect.Type
+	// 初始化实体类型
+	var e = in
 	// 若是指针类型则转成实体，若不是则直接赋值
 	isPtr := in.Kind() == reflect.Ptr
 	if isPtr {
-		// .Elem() -> 剥掉指针，拿到基类型 (Cancel)
-		e = in.Elem()
-	} else {
-		e = in
+		e = in.Elem() // .Elem() -> 剥掉指针，拿到基类型 (Cancel)
 	}
 	// reflect.New(...) -> 分配内存，得到新实例的指针 (*Cancel)
-	// .Elem() -> 进入实例内部，使其字段变为“可填充”状态
-	reqValue := reflect.New(e).Elem()
+	reqValue := reflect.New(e).Elem() // .Elem() -> 进入实例内部，使其字段变为“可填充”状态
 
 	// 遍历结构体字段，根据 Tag 注入数据
 	for i := 0; i < reqValue.NumField(); i++ {
-		fieldVal := reqValue.Field(i)         // 获取字段的反射值
-		fieldType := reqValue.Type().Field(i) // 获取字段的元数据（包括 Tag）
-		path := fieldType.Tag.Get("map")      // 获取 map 标签定义的路径
+		fieldV := reqValue.Field(i)        // 获取字段的反射值
+		fieldT := reqValue.Type().Field(i) // 获取字段的元数据（包括 Tag）
+		path := fieldT.Tag.Get("map")      // 获取 map 标签定义的路径
 
 		// 路径解析：支持 "a.b.c" 格式的深层 map 提取
 		var current any = req
@@ -6882,18 +6953,18 @@ func call(eventName string, req map[string]any) any {
 			}
 		}
 
-		// 如果查找到有效数据，则注入到结构体实例中
-		if current != nil {
-			val := reflect.ValueOf(current)
-			// 核心：检查【数据源类型】是否可以赋值给【目标字段类型】
-			// fieldType.Type 是结构体定义的类型，val.Type() 是实际数据的类型
-			if val.Type().AssignableTo(fieldType.Type) {
-				fieldVal.Set(val) // 直接复用 val，不再重复调用 reflect.ValueOf
-			} else {
-				// 生产环境建议：在这里可以记录日志，说明类型不匹配
-				fmt.Printf("方法参数类型不匹配: 期望 %v, 得到 %v\n", fieldType.Type, val.Type())
-			}
+		// 如果路径解析失败，跳过当前字段
+		if current == nil {
+			continue
 		}
+		// 如果查找到有效数据，则注入到结构体实例中
+		val := reflect.ValueOf(current)
+		// 核心：检查【数据源类型】是否可以赋值给【目标字段类型】，fieldT.Type 是结构体定义的类型，val.Type() 是实际数据的类型
+		if !val.Type().AssignableTo(fieldT.Type) {
+			// 生产环境建议：在这里可以记录日志，说明类型不匹配
+			fmt.Printf("方法参数类型不匹配: 期望 %v, 得到 %v\n", fieldT.Type, val.Type())
+		}
+		fieldV.Set(val) // 直接复用 val，不再重复调用 reflect.ValueOf
 	}
 	// 若是指针类型则将填充好的 reqValue 转换回地址（指针）传入
 	if isPtr {
@@ -6930,7 +7001,7 @@ func main() {
 	result := call(OrderCancel, rawData)
 	// 最终结果转换与输出
 	if finalStatus, ok := result.(*StatusDO); ok {
-		fmt.Printf("【调用完成】返回状态码: %d\n", finalStatus.Status)
+		fmt.Printf("【调用完成】返回状态码: %d, 消息: %s\n", finalStatus.Status, finalStatus.Msg)
 	}
 }
 ```
@@ -7011,39 +7082,41 @@ func call(orderAction OrderAction, req *Req) any {
 		fmt.Printf("方法 %s 不存在", orderAction)
 	}
 	// 验证方法参数
-	methodType := method.(reflect.Value).Type()
+	methodValue := method.(reflect.Value)
+	methodType := methodValue.Type()
 	if methodType.NumIn() != 1 {
 		panic(fmt.Errorf("方法参数必须为一个 Request 结构体: %s", method))
 	}
 	// 获取方法参数类型
 	paramType := methodType.In(0)
 	// 构建请求方法参数
-	buildReq := paramType
+	tmp := paramType
 	// 构建方法参数
 	if paramType.Kind() == reflect.Ptr {
-		buildReq = paramType.Elem()
+		tmp = paramType.Elem()
 	}
-	paramValue := reflect.New(buildReq).Elem()
+	// 堆内存动态分配
+	paramValue := reflect.New(tmp).Elem()
+	// 拷贝请求参数值
+	cur := reflect.ValueOf(req).Elem()
 	// 循环请求参数结构体字段，赋值
 	for i := 0; i < paramValue.NumField(); i++ {
-		fieldVal := paramValue.Field(i)
-		fieldType := paramValue.Type().Field(i)
-		jsonTag := fieldType.Tag.Get("json")
+		paramV := paramValue.Field(i)
+		paramT := paramValue.Type().Field(i)
+		jsonTag := paramT.Tag.Get("json")
 
-		// 拷贝请求参数值
-		current := reflect.ValueOf(req).Elem()
 		// 找到req中对应的字段
-		for j := 0; j < current.NumField(); j++ {
-			currentV := current.Field(j)
-			currentT := current.Type().Field(j)
-			if jsonTag == currentT.Tag.Get("json") && currentT.Type.AssignableTo(fieldVal.Type()) {
-				fieldVal.Set(currentV)
+		for j := 0; j < cur.NumField(); j++ {
+			curV := cur.Field(j)
+			curT := cur.Type().Field(j)
+			if jsonTag == curT.Tag.Get("json") && curT.Type.AssignableTo(paramV.Type()) {
+				paramV.Set(curV)
 				break
 			}
 		}
 	}
 	// 调用方法
-	return method.(reflect.Value).Call([]reflect.Value{paramValue.Addr()})[0].Interface()
+	return methodValue.Call([]reflect.Value{paramValue.Addr()})[0].Interface()
 }
 
 func main() {
@@ -7087,318 +7160,557 @@ func main() {
 【取消】原因: 设备升级，重新下单, 订单ID: 1
 【调用完成】返回状态码: 2
 ```
-<!--SR:!2026-06-03,28,194-->
+<!--SR:!2026-07-27,7,154-->
 <?e?>
 ## GO VS PHP 反射耗时对比
-### Go
+| 语言  | 计时               | 防优化                                             | 场景                                       |
+| :-- | :--------------- | :---------------------------------------------- | :--------------------------------------- |
+| Go  | `testing.B`      | ==1;;b.Loop()== + ==1;;KeepAlive== 防 ==1;;DCE== | `FieldByName` / 字段索引在循环外；另测循环内字段查找成本     |
+| PHP | ==1;;hrtime==纳秒级 | 热循环内联赋值                                         | `ReflectionProperty` 在循环外，循环内 `setValue` |
+**常见错误：** Go 用 `for i < b.N` 且无 `KeepAlive` → Native 测到 0.26 / 0.62 ns 假快，Reflect/Native 倍数虚高（旧 ~6× 不可信）。
+> **==1;;DCE: Dead Code Elimination==(死代码消除)**：编译器优化时删除「写了但无人读取、对外不可见」的代码。benchmark 里对局部变量反复赋值、循环外又不读该变量，整段循环可能被优化成空壳；`b.Loop()` 与 `KeepAlive` 用于保留副作用。反射 `SetString` 走 runtime 不透明调用，不易被 DCE，故旧写法常测出「假快 native vs 真 reflect」的失真倍数。
+### Go vs PHP(元数据已缓存)
+#### go
 ```go
-package main
+type User struct{ Name string }
 
-import (
-	"reflect"
-	"testing"
-)
-
-type UserBench struct {
-	Name string
-}
-
-// 原生赋值
 func BenchmarkNativeSet(b *testing.B) {
-	u := UserBench{}
-	for i := 0; i < b.N; i++ {
-		u.Name = "Gemini"
-	}
+	u := &User{}
+	for b.Loop() { u.Name = "Gemini" }
+	runtime.KeepAlive(u.Name)
 }
 
-// 反射赋值
 func BenchmarkReflectSet(b *testing.B) {
-	u := UserBench{}
-	v := reflect.ValueOf(&u).Elem()
-	f := v.FieldByName("Name")
-	for i := 0; i < b.N; i++ {
-		f.SetString("Gemini")
-	}
+	u := &User{}
+	f := reflect.ValueOf(u).Elem().FieldByName("Name") // 循环外
+	for b.Loop() { f.SetString("Gemini") }
+	runtime.KeepAlive(u.Name)
+}
+
+func BenchmarkReflectSetWithFieldLookup(b *testing.B) {
+	u := &User{}
+	v := reflect.ValueOf(u).Elem()
+	for b.Loop() { v.FieldByName("Name").SetString("Gemini") }
+	runtime.KeepAlive(u.Name)
 }
 ```
-输出
-```
-goos: darwin
-goarch: arm64
-cpu: Apple M4
-BenchmarkNativeSet
-BenchmarkNativeSet-10     	1000000000	         0.2610 ns/op
-BenchmarkReflectSet
-BenchmarkReflectSet-10    	802388667	         1.580 ns/op
-```
-### PHP
+#### php
 ```php
-class User
-{
-    public $name;
-}
-
-$u     = new User();
-$count = 1000000;
-
-// 原生赋值
-$start = microtime(true);
-for ($i = 0; $i < $count; $i++) {
-    $u->name = "Gemini";
-}
-echo "Native: " . (microtime(true) - $start) . "s\n";
-
-// 反射赋值
-$start = microtime(true);
-$ref   = new ReflectionProperty('User', 'name');
-for ($i = 0; $i < $count; $i++) {
-    $ref->setValue($u, "Gemini");
-}
-echo "Reflect: " . (microtime(true) - $start) . "s\n";
+$u = new User(); $n = 1_000_000;
+$t = hrtime(true);
+for ($i = 0; $i < $n; $i++) { $u->name = 'Gemini'; }
+echo (hrtime(true) - $t) / $n, " ns/op native\n";
+$ref = new ReflectionProperty(User::class, 'name');
+$t = hrtime(true);
+for ($i = 0; $i < $n; $i++) { $ref->setValue($u, 'Gemini'); }
+echo (hrtime(true) - $t) / $n, " ns/op reflect\n";
 ```
-输出
+输出（darwin/arm64, Apple M4, Go 1.25, PHP 8.3）
 ```
-Native: 0.017929792404175s
-Reflect: 0.082978010177612s
+Go  NativeSet                 1.620 ns/op
+Go  ReflectSet                1.805 ns/op
+Go  ReflectSetWithFieldLookup 25.290 ns/op
+PHP Native                    18.21 ns/op
+PHP Reflect                   83.29 ns/op
 ```
-### 对比结果
-<?e?>
-#### 1. 绝对速率对比 (Absolute Speed)
-为了公平，我们将 PHP 的结果换算为纳秒（ns/op）。假设 PHP 的循环次数是1,000,000次：
-
-| 项目                 | Go (ns/op)      | PHP (ns/op)      | 性能倍数 (Go vs PHP) |
-| ------------------ | --------------- | ---------------- | ---------------- |
-| **原生赋值 (Native)**  | ~==1;;0.3== ns | ~==1;;18== ns | 约 ==1;;68== 倍    |
-| **反射赋值 (Reflect)** | ~==1;;1.6== ns | ~==1;;83== ns | 约 ==1;;52== 倍    |
-**核心发现：**
-Go 的**反射调用**（==1;;~1.6== ns）比 PHP 的**直接赋值**（==1;;~18== ns）还要快 ==1;;11== 倍。这意味着在 Go 中即便是被认为“慢”的反射，其执行效率也远超 PHP 的常规代码。
-<!--SR:!2026-05-26,29,235-->
-<?e?>
-#### 2. 损耗比分析 (Performance Penalty)
-反射比原生慢了多少倍：
-- **Go**: ==1;;$1.58/0.26 \approx 6$== 倍
-- **PHP**: ==1;;$0.0829/0.0179 \approx 4.6$== 倍
-虽然 Go 的绝对速度快，但从比例上看，Go 开启反射后的性能跌幅（==1;;6==倍）比 PHP（==1;;4.6==倍）更大。这是因为 Go 原生代码太快了，导致反射带来的“类型检查”和“内存寻址”开销显得异常突出。
-<!--SR:!2026-06-02,52,275-->
-<?e?>
-#### 3. 为什么 Go 在 Apple M4 上表现如此恐怖？
-##### 0.26 ns/op 是什么概念？
-Apple M4 的主频大约在 $4.4\text{ GHz}$ 左右，这意味着一个时钟周期大约是 $0.22\text{ ns}$。
-- 你的原生测试结果 `0.26 ns` 意味着：**单次赋值操作几乎只占用了一个 CPU 时钟周期**。
-- 这说明 Go 编译器将该操作优化到了极致，甚至可能利用了 CPU 的流水线并行处理（Pipeline）。
-##### 1.58 ns/op 的反射快在哪里？
-在 Go 中可能使用了 `v.Field(i).Set()` 而不是 `v.FieldByName("Name").Set()`。
-* `1.58 ns` 相当于 **7 个时钟周期**。
-* 在这么短的时间内，Go 完成了：接口解包、安全检查、内存偏移计算、值写入。这体现了 Go 运行时（Runtime）极高的效率。
-#### 4. 结论与实战建议
-* **PHP 开发者视角**：反射虽然比原生慢，但在 PHP 的量级下，这几倍的损耗在 Web 请求（毫秒级）中几乎感知不到。你可以放心在框架中使用**注解**、**依赖注入**等反射功能。
-* **Go 开发者视角**：反射确实很快，但如果你的业务是高频计算（例如每秒处理百万级消息），`1.58 ns` 相比 `0.26 ns` 依然是 **600%** 的成本增加。
-#### 5. 进阶测试建议：内存分配 (Memory Allocation)
-反射不仅消耗 CPU，有时还会引起内存分配（逃逸到堆）。建议你在运行 Go 测试时加上 `-benchmem`：
-```shell
-go test -bench=. -benchmem
-```
-如果 `B/op` 大于 0，说明反射导致了额外的内存分配，这在生产环境中会引发 GC（垃圾回收）压力，这才是 Go 反射真正的“隐形杀手”。
-<?e?>
-### 基准测试每次操作分配的字节数
-```go
-package main
-
-import (
-	"reflect"
-	"testing"
-)
-
-type User struct {
-	Name string
-}
-
-var globalS string
-
-// 原生赋值
-func BenchmarkNative(b *testing.B) {
-	u := User{}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		u.Name = "Gemini"
-		globalS = u.Name
-	}
-}
-
-// 优化后：只测试写入，索引已提前拿到 (代表 1.58ns 那个级别)
-func BenchmarkReflectByIndex(b *testing.B) {
-	u := User{}
-	v := reflect.ValueOf(&u).Elem()
-	idx := 0 // 提前确定的索引
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		v.Field(idx).SetString("Gemini")
-	}
-}
-
-// 模拟真实：每次都要通过字符串查找字段 (这是最常用的方式)
-func BenchmarkReflectByName(b *testing.B) {
-	u := User{}
-	v := reflect.ValueOf(&u).Elem()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		// FieldByName 会导致内部的字符串查找逻辑
-		v.FieldByName("Name").SetString("Gemini")
-	}
-}
-```
-#### 执行测试（关键指令）
-在终端运行以下命令，注意 `-benchmem`：
-```shell
-go test -bench=. -benchmem
-```
-#### 结果解读
-```shell
-goos: darwin
-goarch: arm64
-pkg: benchmark
-cpu: Apple M4
-BenchmarkNative-10              1000000000               0.6258 ns/op          0 B/op          0 allocs/op
-BenchmarkReflectByIndex-10      488833464                2.228 ns/op           0 B/op          0 allocs/op
-BenchmarkReflectByName-10       48556538                25.29 ns/op            0 B/op          0 allocs/op
-PASS
-ok      benchmark       3.289s
-```
-
-| **测试项**            | **耗时 (ns/op)**  | **每秒执行次数 (估算)** | **性能差距**       | **含义**                            |
-| ------------------ | --------------- | --------------- | -------------- | --------------------------------- |
-| **Native**         | ==1;;0.62== ns  | ~16 亿次          | ==1;;1==x (基准) | 最纯粹的内存写入，几乎等同于 CPU 频率的物理极限。       |
-| **ReflectByIndex** | ==1;;2.22== ns  | ~4.5 亿次         | ~==1;;3.5==x   | 缓存了索引后的反射。这是在生产环境中使用反射的**黄金标准**。  |
-| **ReflectByName**  | ==1;;25.29== ns | ~0.4 亿次         | ~==1;;40==x    | 未经优化的反射。每次都靠字符串匹配。这是大部分初级框架的性能瓶颈。 |
-##### 为什么内存分配（B/op）都是 0？
-这是最令人欣慰的数据。`0 B/op` 和 `0 allocs/op` 表示：
-- **没有堆逃逸**：Go 编译器通过“逃逸分析”，发现你的 `User` 结构体和反射对象 `v` 并没有离开 `Benchmark` 函数的作用域。
-- **内存效率**：所有的反射操作都在 **栈（Stack）** 上完成，不会触发 GC（垃圾回收）。这意味着在高并发下，这种代码不会导致系统卡顿。
-##### 为什么 `ByName` 比 `ByIndex` 慢了 11 倍？
-即便在 Apple M4 这种强大的 CPU 上，==1;;字符串==匹配 依然是沉重的负担。
-- **ByIndex (2.22 ns)**：底层只是一次简单的==1;;指针偏移==计算（Pointer Arithmetic）。CPU 知道起始地址，加上索引偏移，直接定位。
-- **ByName (25.29 ns)**：
-    1. 拿字符串 "Name" 去结构体的元数据表里对比。
-    2. 逐个==1;;遍历==字段：是 "Age" 吗？不是。是 "Name" 吗？匹配成功。
-    3. 这种遍历和字符串比较无法被 CPU 完全并行化，因此耗时陡增。
-<!--SR:!2026-06-17,62,275-->
+#### 反射三档（Native / ByIndex / ByName）
+| 对比                           | Go          | PHP         | 含义                          |
+| :--------------------------- | :---------- | :---------- | :-------------------------- |
+| 原生                           | 1.62 ns/op  | 18.21 ns/op | 直接字段写入                      |
+| 反射（元数据已缓存）                   | 1.81 ns/op  | 83.29 ns/op | 缓存索引，生产 ==1;;黄金==标准         |
+| 反射（含字段查找）                    | 25.29 ns/op | -           | 循环内 ==1;;字符串==匹配，ORM/注入真实成本 |
+| **Reflect/Native**           | **~1.1×**   | **~4.6×**   |                             |
+| **ReflectWithLookup/Native** | **~16×**    | -           |                             |
+>Go vs PHP 绝对值（~1.1× / ~4.6×）仅说明运行时差异，==1;;不能==推出「Go 反射无成本」或「Go 全面更快」。
+- **ByIndex vs ByName ~14×**：ByIndex 是 ==1;;指针==偏移；ByName 需 ==1;;遍历== 字段名比较。
+- **B/op = 0**：无堆逃逸，操作在 ==1;;栈== 上，不触发 ==1;;GC==；但 -benchmem 仍要跑，其他场景可能有 ==1;;B/op== > 0 的 GC 压力。
+**实战结论**
+- **PHP**：反射 ~==1;;4.6==×，Web 毫秒级请求通常可接受。
+- **Go**：缓存 `reflect.Value` / 字段索引后 ~==1;;1.1==×；==1;;FieldByName==在循环内 ~==1;;16==×，高频路径应预 ==1;;缓存== 或 ==1;;代码生成==。
+<!--SR:!2026-07-26,9,230-->
 <?e?>
 # 中间件
-<?l?>
 ## 拦截错误
-```go
-package main
-
-import "fmt"
-
-func main() {
-	// ✅情况 A：执行 middleA() 返回匿名函数，然后立即调用该函数
-	middleA()() // 结果：打印 "recover2: 错误了2"，成功捕获
-
-	// ❌情况 B：执行 middleB() 返回函数，然后立即调用该函数
-	middleB()() // 结果：程序崩溃 (Panic)，无法捕获
-}
-
-// --- 情况 A：通过闭包将 recover 注入到执行逻辑内部 ---
-func middleA() func() {
-	// 步骤 1: middleA 开始运行
-	// 步骤 2: 直接返回一个匿名函数（此时内部代码还未执行）
-	return func() {
-		// 步骤 3: main 调用此函数，开始执行
-		// 步骤 4: 注册 defer，它守护的是当前这个匿名函数
-		defer func() {
-			if err := recover(); err != nil {
-				fmt.Println("recoverA: ", err)
-			}
-		}()
-		// 步骤 5: 触发 panic
-		panic("错误了A")
-		// 步骤 6: panic 向上寻找最近的守护者，触发步骤 4 的 defer -> 成功捕获
-	}
-}
-
-// --- 情况 B：recover 注册在了错误的生命周期 ---
-func middleB() func() {
-	// 步骤 1: middleB 开始运行
-	// 步骤 2: 注册 defer，但它只守护 middleB 函数本身
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Println("recoverB: ", err)
-		}
-	}()
-	// 步骤 3: middleB 运行结束，返回 handlerFunc 地址
-	// 步骤 4: 执行 middleB 的 defer（此时无 panic，recover 为空）
-	return func() { panic("错误了B") }
-	// 步骤 5: main 函数拿到地址后开始执行该函数 -> 触发 panic
-	// 此时 middleB 已销毁，其 defer 无法跨越函数边界去救火
-}
-```
-输出
-```
-recoverA:  错误了A
-panic: 错误了B
-```
+- `middleA()()` 能成功捕获 panic，因为 `recover` 被注册在==1;;真正执行 panic 的匿名函数内部==。
+- `middleB()()` 会崩溃，因为 `recover` 只守护==1;;`middleB` 本身==，不能跨函数边界救火。
+> [!question]- 示例代码
+> ```go
+> package main
+>
+> import "fmt"
+>
+> func main() {
+> 	// ✅情况 A：执行 middleA() 返回匿名函数，然后立即调用该函数
+> 	middleA()() // 结果：打印 "recoverA: 错误了A"，成功捕获
+>
+> 	// ❌情况 B：执行 middleB() 返回函数，然后立即调用该函数
+> 	middleB()() // 结果：程序崩溃 (Panic)，无法捕获
+> }
+>
+> // --- 情况 A：通过闭包将 recover 注入到执行逻辑内部 ---
+> func middleA() func() {
+> 	// 步骤 1: middleA 开始运行
+> 	// 步骤 2: 直接返回一个匿名函数（此时内部代码还未执行）
+> 	return func() {
+> 		// 步骤 3: main 调用此函数，开始执行
+> 		// 步骤 4: 注册 defer，它守护的是当前这个匿名函数
+> 		defer func() {
+> 			if err := recover(); err != nil {
+> 				fmt.Println("recoverA: ", err)
+> 			}
+> 		}()
+> 		// 步骤 5: 触发 panic
+> 		panic("错误了A")
+> 		// 步骤 6: panic 向上寻找最近的守护者，触发步骤 4 的 defer -> 成功捕获
+> 	}
+> }
+>
+> // --- 情况 B：recover 注册在了错误的生命周期 ---
+> func middleB() func() {
+> 	// 步骤 1: middleB 开始运行
+> 	// 步骤 2: 注册 defer，但它只守护 middleB 函数本身
+> 	defer func() {
+> 		if err := recover(); err != nil {
+> 			fmt.Println("recoverB: ", err)
+> 		}
+> 	}()
+> 	// 步骤 3: middleB 运行结束，返回 handlerFunc 地址
+> 	// 步骤 4: 执行 middleB 的 defer（此时无 panic，recover 为空）
+> 	return func() { panic("错误了B") }
+> 	// 步骤 5: main 函数拿到地址后开始执行该函数 -> 触发 panic
+> 	// 此时 middleB 已销毁，其 defer 无法跨越函数边界去救火
+> }
+> ```
+> 输出
+> ```
+> recoverA:  错误了A
+> panic: 错误了B
+> ```
 ## 洋葱模型 onion
+- 洋葱模型的核心是==1;;`Context.Next()` 依次推进处理器链==。
+- `Recovery` 负责==1;;异常捕获==，`Logger` 负责==1;;请求/响应日志==，`Handler` 负责==1;;核心业务处理==。
+- `index: -1` 表示==1;;从第一个中间件开始执行==。
+> [!question]- 示例代码
+> ```go
+> package main
+>
+> import "fmt"
+>
+> // --- Context 结构 ---
+> type Context struct {
+> 	handlers []func(*Context) // 处理器链条（包含中间件和控制器）
+> 	index    int              // 当前执行到的索引位置
+> }
+>
+> // --- 依次执行后续的处理器，就像推倒第一块多米诺骨牌 ---
+> func (c *Context) Next() {
+> 	c.index++
+> 	for c.index < len(c.handlers) {
+> 		c.handlers[c.index](c)
+> 		c.index++ // 💡`Next()` 循环内补 `c.index++`，内层跑完把 `index` 推到底，外层 for 不再重复调 Handler。
+> 	}
+> }
+>
+> // --- 中间件 A：异常捕获 ---
+> func Recovery(c *Context) {
+> 	defer func() {
+> 		if err := recover(); err != nil {
+> 			fmt.Println("[Recovery] 捕获异常，返回 500 错误")
+> 		}
+> 	}()
+> 	fmt.Println("[Recovery] 防护开始")
+> 	c.Next()
+> 	fmt.Println("[Recovery] 防护结束")
+> }
+>
+> // --- 中间件 B：日志记录 ---
+> func Logger(c *Context) {
+> 	fmt.Println("[Log] --> 请求开始") // Next 之前：请求阶段
+> 	c.Next()                      // 暂停当前，去执行后面的
+> 	fmt.Println("[Log] <-- 响应结束") // Next 之后：响应阶段
+> }
+>
+> // --- 核心业务逻辑 ---
+> func Handler(c *Context) {
+> 	fmt.Println("[Business] 业务逻辑开始")
+> 	panic("[Business] 业务逻辑 错误❌")
+> 	c.Next()
+> 	fmt.Println("[Business] 业务逻辑结束")
+> }
+>
+> func main() {
+> 	c := &Context{
+> 		handlers: []func(*Context){Recovery, Logger, Handler},
+> 		index:    -1,
+> 	}
+> 	c.Next()
+> }
+> ```
+> 输出
+> ```
+> [Recovery] 已开启防护
+> [Log] --> 请求进入
+> [Business] 执行核心业务逻辑...
+> [Log] <-- 响应返回
+> [Recovery] 防护任务结束
+> ```
+
+关键规则：
+>`recover` 在哪个函数的 defer 里，就从「谁调用了 panic 链」的角度截断；panic 发生点之后的代码都不会再执行，包括 Logger 里 `c.Next()` 后面的那一行。
+
+<!--SR:!2026-08-21,45,267-->
+<?e?>
+# 数据库客户端
+客户端应在应用启动时创建并复用；`*sql.DB` 与 `*redis.Client` 都是并发安全的连接池句柄，不要为每个请求重新建立连接。
+## MySQL
+运行前准备 `demo` 数据库，并执行 `go get github.com/go-sql-driver/mysql`。
+示例通过 `MYSQL_DSN` 读取连接串，未设置时使用本地默认配置；程序会自动建表、写入、查询并清理示例数据。
 ```go
+// 声明可执行程序的入口包。
 package main
 
+// 导入上下文，用于控制数据库操作超时。
+import "context"
+
+// 导入 database/sql，提供统一的数据库访问接口。
+import "database/sql"
+
+// 导入 fmt，用于打印查询结果。
 import "fmt"
 
-// --- Context 结构 ---
-type Context struct {
-	handlers []func(*Context) // 处理器链条（包含中间件和控制器）
-	index    int              // 当前执行到的索引位置
-}
+// 导入 log，用于处理不可恢复的错误。
+import "log"
 
-// --- 依次执行后续的处理器，就像推倒第一块多米诺骨牌 ---
-func (c *Context) Next() {
-	c.index++
-	for c.index < len(c.handlers) {
-		c.handlers[c.index](c)
+// 导入 os，用于读取环境变量。
+import "os"
+
+// 导入 time，用于设置超时时间。
+import "time"
+
+// 匿名导入 MySQL 驱动，注册 mysql 驱动名称。
+import _ "github.com/go-sql-driver/mysql"
+
+// OpenMySQL 创建连接池并检查 MySQL 连接是否可用。
+func OpenMySQL(ctx context.Context) (*sql.DB, error) {
+	// +----------------------------------------------------------------------
+	// | 1. 连接配置与客户端初始化
+	// +----------------------------------------------------------------------
+	// 读取外部连接配置，避免把生产密码写入代码。
+	dsn := os.Getenv("MYSQL_DSN")
+	// 为本地开发环境提供默认连接串。
+	if dsn == "" {
+		// 指定默认的本地 MySQL 连接配置。
+		dsn = "root:root@tcp(10.0.0.6:3306)/demo?parseTime=true"
 	}
+	// 创建可复用的数据库连接池句柄。
+	db, err := sql.Open("mysql", dsn)
+	// 检查驱动或连接串配置错误。
+	if err != nil {
+		// 将连接配置错误返回给调用方。
+		return nil, fmt.Errorf("open mysql: %w", err)
+	}
+	// 限制连接池的最大连接数。
+	db.SetMaxOpenConns(10)
+	// 设置连接池保留的空闲连接数。
+	db.SetMaxIdleConns(5)
+	// 限制单条连接的最长生命周期。
+	db.SetConnMaxLifetime(30 * time.Minute)
+
+	// +----------------------------------------------------------------------
+	// | 2. 连接检查
+	// +----------------------------------------------------------------------
+	// 创建连接检查专用的五秒超时 Context。
+	pingCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	// 释放连接检查使用的定时器资源。
+	defer cancel()
+	// 主动检查数据库连接是否真实可用。
+	if err := db.PingContext(pingCtx); err != nil {
+		// 连接检查失败时关闭连接池。
+		db.Close()
+		// 将连接错误返回给调用方。
+		return nil, fmt.Errorf("ping mysql: %w", err)
+	}
+	// 返回已经通过连接检查的数据库客户端实例。
+	return db, nil
 }
 
-// --- 中间件 A：异常捕获 ---
-func Recovery(c *Context) {
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Println("[Recovery] 捕获异常，返回 500 错误")
-		}
-	}()
-	fmt.Println("[Recovery] 防护开始")
-	c.Next()
-	fmt.Println("[Recovery] 防护结束")
-}
-
-// --- 中间件 B：日志记录 ---
-func Logger(c *Context) {
-	fmt.Println("[Log] --> 请求开始") // Next 之前：请求阶段
-	c.Next()                      // 暂停当前，去执行后面的
-	fmt.Println("[Log] <-- 响应结束") // Next 之后：响应阶段
-}
-
-// --- 核心业务逻辑 ---
-func Handler(c *Context) {
-	fmt.Println("[Business] 业务逻辑开始")
-	c.Next()
-	fmt.Println("[Business] 业务逻辑结束")
-}
-
+// 定义程序入口。
 func main() {
-	c := &Context{
-		handlers: []func(*Context){Recovery, Logger, Handler},
-		index:    -1,
+	// 创建覆盖整个示例的十秒超时 Context。
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// 释放根 Context 使用的定时器资源。
+	defer cancel()
+	// 调用 OpenMySQL 创建并检查数据库客户端实例。
+	db, err := OpenMySQL(ctx)
+	// 检查客户端初始化是否成功。
+	if err != nil {
+		// 初始化失败时终止程序。
+		log.Fatal(err)
 	}
-	c.Next()
+	// 程序退出时关闭数据库连接池。
+	defer db.Close()
+
+	// +----------------------------------------------------------------------
+	// | 3. 创建表结构
+	// +----------------------------------------------------------------------
+	// 自动创建示例表，避免依赖预先准备的表结构。
+	_, err = db.ExecContext(ctx, `CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(64) NOT NULL, active BOOLEAN NOT NULL)`)
+	// 检查建表是否成功。
+	if err != nil {
+		// 建表失败时终止程序。
+		log.Fatal(err)
+	}
+
+	// +----------------------------------------------------------------------
+	// | 4. 清理旧数据
+	// +----------------------------------------------------------------------
+	// 清空示例数据，使程序每次运行结果稳定。
+	_, err = db.ExecContext(ctx, `DELETE FROM users`)
+	// 检查清理是否成功。
+	if err != nil {
+		// 清理失败时终止程序。
+		log.Fatal(err)
+	}
+
+	// +----------------------------------------------------------------------
+	// | 5. 插入数据
+	// +----------------------------------------------------------------------
+	// 使用占位符插入数据，避免拼接 SQL 造成注入风险。
+	_, err = db.ExecContext(ctx, `INSERT INTO users (name, active) VALUES (?, ?), (?, ?)`, "Alice", true, "Bob", false)
+	// 检查插入是否成功。
+	if err != nil {
+		// 插入失败时终止程序。
+		log.Fatal(err)
+	}
+
+	// +----------------------------------------------------------------------
+	// | 6. 查询与扫描
+	// +----------------------------------------------------------------------
+	// 查询启用的用户，并按主键排序保证输出稳定。
+	rows, err := db.QueryContext(ctx, `SELECT id, name FROM users WHERE active = ? ORDER BY id`, true)
+	// 检查查询是否成功。
+	if err != nil {
+		// 查询失败时终止程序。
+		log.Fatal(err)
+	}
+	// 查询结束时关闭结果集并归还连接。
+	defer rows.Close()
+	// 遍历查询返回的每一行。
+	for rows.Next() {
+		// 声明接收主键的变量。
+		var id int
+		// 声明接收名称的变量。
+		var name string
+		// 将当前行的列值扫描到 Go 变量。
+		if err := rows.Scan(&id, &name); err != nil {
+			// 扫描失败时终止程序。
+			log.Fatal(err)
+		}
+		// 输出查询到的用户。
+		fmt.Printf("user: id=%d name=%s\n", id, name)
+	}
+	// 检查遍历结果时是否发生读取错误。
+	if err := rows.Err(); err != nil {
+		// 读取失败时终止程序。
+		log.Fatal(err)
+	}
 }
 ```
 输出
 ```
-[Recovery] 已开启防护
-[Log] --> 请求进入
-[Business] 执行核心业务逻辑...
-[Log] <-- 响应返回
-[Recovery] 防护任务结束
+user: id=1 name=Alice
 ```
-<!--SR:!2026-07-01,94,287-->
+## Redis
+运行前启动 Redis，并执行 `go get github.com/redis/go-redis/v9`。
+示例默认连接 `10.0.0.6:6379`，也可以通过 `REDIS_ADDR` 环境变量覆盖地址。
+```go
+// 声明可执行程序的入口包。
+package main
+
+// 导入上下文，用于控制 Redis 操作的超时和取消。
+import "context"
+
+// 导入 fmt，用于打印各类数据类型的结果。
+import "fmt"
+
+// 导入 log，用于处理不可恢复的错误。
+import "log"
+
+// 导入 os，用于读取 Redis 地址和密码环境变量。
+import "os"
+
+// 导入 sort，用于稳定排序 Set 的无序返回结果。
+import "sort"
+
+// 导入 time，用于设置连接超时和键过期时间。
+import "time"
+
+// 导入 go-redis 客户端。
+import "github.com/redis/go-redis/v9"
+
+// OpenRedis 创建并检查可复用的 Redis 客户端实例。
+func OpenRedis(ctx context.Context) (*redis.Client, error) {
+	// 从环境变量读取 Redis 地址，支持本地、容器和远程环境。
+	addr := os.Getenv("REDIS_ADDR")
+	// 当环境变量为空时使用默认地址。
+	if addr == "" {
+		// 指定 Redis 默认监听地址。
+		addr = "10.0.0.6:6379"
+	}
+	// 根据配置创建 Redis 连接池客户端。
+	client := redis.NewClient(&redis.Options{
+		// 设置 Redis 服务地址。
+		Addr: addr,
+		// 从环境变量读取 Redis 密码。
+		Password: os.Getenv("REDIS_PASSWORD"),
+		// 使用默认的 Redis 数据库编号。
+		DB: 0,
+		// 限制建立连接时的等待时间。
+		DialTimeout: 3 * time.Second,
+	})
+	// 为 Ping 创建三秒超时，避免启动检查无限等待。
+	pingCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	// 释放 Ping 使用的定时器资源。
+	defer cancel()
+	// 启动时验证 Redis 服务确实可访问。
+	if err := client.Ping(pingCtx).Err(); err != nil {
+		// 连接检查失败时关闭已经创建的客户端。
+		client.Close()
+		// 将连接错误返回给调用方。
+		return nil, fmt.Errorf("ping redis: %w", err)
+	}
+	// 返回经过连通性检查的 Redis 客户端实例。
+	return client, nil
+}
+
+// must 统一处理示例中的 Redis 命令错误。
+func must(err error) {
+	// 判断 Redis 命令是否执行失败。
+	if err != nil {
+		// 输出具体错误并终止示例程序。
+		log.Fatal(err)
+	}
+}
+
+// main 演示 Redis 五种常用数据类型的基本操作。
+func main() {
+	// 创建一个十秒超时的根 Context，覆盖整个示例运行过程。
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// 释放根 Context 使用的定时器资源。
+	defer cancel()
+	// 调用 OpenRedis 创建并检查 Redis 客户端实例。
+	client, err := OpenRedis(ctx)
+	// 检查客户端初始化是否成功。
+	if err != nil {
+		// 初始化失败时终止程序。
+		log.Fatal(err)
+	}
+	// 程序结束时关闭 Redis 客户端连接池。
+	defer client.Close()
+
+	// +----------------------------------------------------------------------
+	// | 1. String：字符串
+	// +----------------------------------------------------------------------
+	// 定义 String 示例键。
+	stringKey := "go:example:string"
+	// 写入 String 值并设置十分钟过期时间。
+	must(client.Set(ctx, stringKey, "Alice", 10*time.Minute).Err())
+	// 读取 String 值。
+	stringValue, err := client.Get(ctx, stringKey).Result()
+	// 检查 String 读取是否成功。
+	must(err)
+	// 输出 String 操作结果。
+	fmt.Println("String:", stringValue)
+
+	// +----------------------------------------------------------------------
+	// | 2. List：列表
+	// +----------------------------------------------------------------------
+	// 定义 List 示例键。
+	listKey := "go:example:list"
+	// 从右侧依次追加多个 List 元素。
+	must(client.RPush(ctx, listKey, "go", "redis", "client").Err())
+	// 读取 List 的全部元素。
+	listValues, err := client.LRange(ctx, listKey, 0, -1).Result()
+	// 检查 List 读取是否成功。
+	must(err)
+	// 输出 List 操作结果。
+	fmt.Println("List:", listValues)
+
+	// +----------------------------------------------------------------------
+	// | 3. Set：集合
+	// +----------------------------------------------------------------------
+	// 定义 Set 示例键。
+	setKey := "go:example:set"
+	// 向 Set 添加成员，重复成员不会重复保存。
+	must(client.SAdd(ctx, setKey, "go", "redis", "go").Err())
+	// 读取 Set 的全部成员。
+	setValues, err := client.SMembers(ctx, setKey).Result()
+	// 检查 Set 读取是否成功。
+	must(err)
+	// Set 无序返回，排序后让示例输出稳定。
+	sort.Strings(setValues)
+	// 输出 Set 操作结果。
+	fmt.Println("Set:", setValues)
+
+	// +----------------------------------------------------------------------
+	// | 4. Hash：哈希
+	// +----------------------------------------------------------------------
+	// 定义 Hash 示例键。
+	hashKey := "go:example:hash"
+	// 使用字段和值写入 Hash。
+	must(client.HSet(ctx, hashKey, "name", "Alice", "age", 18).Err())
+	// 读取 Hash 的全部字段和值。
+	hashValues, err := client.HGetAll(ctx, hashKey).Result()
+	// 检查 Hash 读取是否成功。
+	must(err)
+	// 输出 Hash 操作结果。
+	fmt.Println("Hash:", hashValues)
+
+	// +----------------------------------------------------------------------
+	// | 5. Sorted Set：有序集合
+	// +----------------------------------------------------------------------
+	// 定义 Sorted Set 示例键。
+	zsetKey := "go:example:zset"
+	// 写入带分数的 Sorted Set 成员。
+	must(client.ZAdd(ctx, zsetKey, redis.Z{Score: 90, Member: "Alice"}, redis.Z{Score: 80, Member: "Bob"}).Err())
+	// 按分数从低到高读取 Sorted Set 成员。
+	zsetValues, err := client.ZRangeWithScores(ctx, zsetKey, 0, -1).Result()
+	// 检查 Sorted Set 读取是否成功。
+	must(err)
+	// 输出 Sorted Set 操作结果。
+	fmt.Println("Sorted Set:", zsetValues)
+
+	// 删除所有示例键，避免测试数据残留。
+	must(client.Del(ctx, stringKey, listKey, setKey, hashKey, zsetKey).Err())
+}
+```
+
+输出
+```
+String: Alice
+List: [go redis client]
+Set: [go redis]
+Hash: map[age:18 name:Alice]
+Sorted Set: [{80 0 Bob} {90 0 Alice}]
+```
+<?e?>
+## Redis Context 与 PHP Redis 调用的区别
+Go 的 `go-redis` 要求每个命令显式传入 `context.Context`，因为它描述的是**本次** Redis 操作的==1;;生命周期==。
+- `context.WithTimeout` 用于设置**单次**操作的==1;;超时时间==。
+- 上游请求取消后，Context 可以让Redis 操作尽快==1;;停止==。
+- PHP 通常把超时配置在**客户端**或**连接层**，所以可以直接调用 `get`、`set`；Go 则把控制信息作为==1;;方法参数==传入。
+- HTTP 服务应传递 `req.Context()`；命令行等没有上游请求的程序才使用 `context.Background()`。
+```go
+// 接收上游请求的 Context 和可复用的 Redis 客户端。
+func GetUser(ctx context.Context, client *redis.Client) (string, error) {
+	// 为当前 Redis 查询创建三秒截止时间。
+	queryCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	// 查询结束后释放 Context 使用的定时器资源。
+	defer cancel()
+	// 将带超时的 Context 传给 Redis 命令。
+	return client.Get(queryCtx, "user:1").Result()
+}
+```
+不要把 Context 保存到结构体中，也不要用 `context.Background()` 替代已有的请求 Context；应沿调用链继续传递上游==1;;Context==。
+<!--SR:!2026-07-25,3,250-->
 <?e?>

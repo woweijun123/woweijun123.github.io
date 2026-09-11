@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Composer/Composer basic/","title":"Composer basic","tags":["flashcards"],"noteIcon":"","created":"2026-05-11T23:45:07.000+08:00","updated":"2026-06-09T12:06:18.263+08:00","dg-note-properties":{"title":"Composer basic","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Composer/Composer basic/","title":"Composer basic","tags":["flashcards"],"noteIcon":"","created":"2026-06-09T12:06:18.000+08:00","updated":"2026-06-09T12:06:18.000+08:00","dg-note-properties":{"title":"Composer basic","tags":["flashcards"],"reference linking":null}}
 ---
 
 文档: [作曲家 - Composer 包管理器](https://composer.php.ac.cn/doc/)
@@ -258,9 +258,7 @@ composer config --global cafile ~/.config/composer/homelab-rootCA.pem
 可以组合多个限定条件。
 **语法**: 空格或逗号为 "与" (AND)，管道符 `|` 为 "或" (OR)。
 - `>=1.0 <2.0` | 等同于 `>=1.0, <2.0`
-- `^1.0 |
-{ #2}
-.0` | 允许安装 1.x 或 2.x 版本
+- `^1.0 | ^2.0` | 允许安装 1.x 或 2.x 版本
 ## 7. 预发布版本 (Stability Flags)
 强制指定接受特定稳定性的版本。
 **语法**: `@dev, @alpha, @beta, @RC, @stable`

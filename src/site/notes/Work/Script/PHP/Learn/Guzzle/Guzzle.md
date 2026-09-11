@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Guzzle/Guzzle/","title":"Guzzle 异步原理","tags":["PHP","Guzzle","异步编程","curl"],"noteIcon":"","created":"2025-06-05T13:03:22.682+08:00","updated":"2026-06-02T15:14:02.033+08:00","dg-note-properties":{"title":"Guzzle 异步原理","tags":["PHP","Guzzle","异步编程","curl"]}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Guzzle/Guzzle/","title":"Guzzle 异步原理","tags":["PHP","Guzzle","异步编程","curl"],"noteIcon":"","created":"2026-06-02T15:14:02.000+08:00","updated":"2026-06-10T19:55:02.047+08:00","dg-note-properties":{"title":"Guzzle 异步原理","tags":["PHP","Guzzle","异步编程","curl"]}}
 ---
 
 # Guzzle 异步原理

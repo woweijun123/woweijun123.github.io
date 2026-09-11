@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Openwrt/DDNS 公云/","title":"申请域名并使用DDNS","tags":["clippings","ddns"],"noteIcon":"","created":"2026-06-02T18:22:44.895+08:00","updated":"2026-06-03T12:15:02.959+08:00","dg-note-properties":{"title":"申请域名并使用DDNS","source":"https://www.cnblogs.com/NyanKoSenSei/p/13942637.html","published":"2020-11-12","created":"2026-06-02","description":"一. 前言 因为一是要搭建远程开发团队的开发环境和平台，所以需要使用公网IP作为主要的连接到我本地服务器的途径，但是因为公网IP可能会发生变化，所以使用DDNS绑定作为应急时的处理。可以通过DDNS检查出最新的IP地址。另一个原因可能我会搭建一个NAS/FTP私人服务器，所以一个DDNS是很重要的。","tags":["clippings","ddns"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Openwrt/DDNS 公云/","title":"申请域名并使用DDNS","tags":["clippings","ddns"],"noteIcon":"","created":"2026-06-03T12:15:02.000+08:00","updated":"2026-06-03T19:45:30.051+08:00","dg-note-properties":{"title":"申请域名并使用DDNS","source":"https://www.cnblogs.com/NyanKoSenSei/p/13942637.html","published":"2020-11-12","created":"2026-06-02","description":"一. 前言 因为一是要搭建远程开发团队的开发环境和平台，所以需要使用公网IP作为主要的连接到我本地服务器的途径，但是因为公网IP可能会发生变化，所以使用DDNS绑定作为应急时的处理。可以通过DDNS检查出最新的IP地址。另一个原因可能我会搭建一个NAS/FTP私人服务器，所以一个DDNS是很重要的。","tags":["clippings","ddns"],"reference linking":null}}
 ---
 
 # 前言

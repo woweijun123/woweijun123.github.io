@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Jetbrains/Phpstorm plugins/","title":"Phpstorm plugins","tags":["flashcards"],"noteIcon":"","created":"2024-06-04T01:00:23.000+08:00","updated":"2026-03-26T14:22:32.864+08:00","dg-note-properties":{"title":"Phpstorm plugins","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Jetbrains/Phpstorm plugins/","title":"Phpstorm plugins","tags":["flashcards"],"noteIcon":"","created":"2024-06-04T01:00:23.000+08:00","updated":"2026-03-26T14:22:32.000+08:00","dg-note-properties":{"title":"Phpstorm plugins","tags":["flashcards"],"reference linking":null}}
 ---
 
 - GitToolBox 每行代码显示git作者

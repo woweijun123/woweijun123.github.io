@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Docker/Docker k8s/K8S 运维管理/","title":"K8S 运维管理","tags":["flashcards"],"noteIcon":"","created":"2026-05-05T16:17:29.000+08:00","updated":"2026-05-05T16:17:29.000+08:00","dg-note-properties":{"title":"K8S 运维管理","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Docker/Docker k8s/K8S 运维管理/","title":"K8S 运维管理","tags":["flashcards"],"noteIcon":"","created":"2026-05-05T16:17:29.000+08:00","updated":"2026-06-01T19:59:15.845+08:00","dg-note-properties":{"title":"K8S 运维管理","tags":["flashcards"],"reference linking":null}}
 ---
 
 # Helm 包管理器

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Hyperf vs PHP-FPM 性能区别/","title":"Hyperf vs PHP-FPM 性能区别","tags":["flashcards"],"noteIcon":"","created":"2025-04-09T09:49:25.563+08:00","updated":"2026-06-04T17:40:18.110+08:00","dg-note-properties":{"title":"Hyperf vs PHP-FPM 性能区别","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Hyperf vs PHP-FPM 性能区别/","title":"Hyperf vs PHP-FPM 性能区别","tags":["flashcards"],"noteIcon":"","created":"2026-08-08T09:40:49.000+08:00","updated":"2026-08-08T09:40:49.000+08:00","dg-note-properties":{"title":"Hyperf vs PHP-FPM 性能区别","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 栈大小
@@ -21,7 +21,7 @@
 # +----------------------------------------------------------------------
 # |测试协程上下文中的栈大小
 # +----------------------------------------------------------------------
-\Hyperf\Coroutine\co(function () {
+\Hyperf\Coroutine\Coroutine::create(function () {
 	$stats = Coroutine::stats();
 	echo json_encode($stats, 256);
 });
@@ -118,7 +118,7 @@ testuser hard nproc 20
 # 设置栈大小限制为 1024KB (1MB)
 limit=1024
 ulimit -s "$limit" # 使用双引号以确保变量正确展开
-pid=$
+pid=$$
 # 递归函数
 recursive_function() {
   local depth=$1

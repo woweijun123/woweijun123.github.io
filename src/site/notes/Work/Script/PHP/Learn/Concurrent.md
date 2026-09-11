@@ -1,8 +1,8 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Concurrent/","title":"Concurrent","tags":["flashcards"],"noteIcon":"","created":"2024-01-21T01:00:43.000+08:00","updated":"2026-03-24T17:47:18.324+08:00","dg-note-properties":{"title":"Concurrent","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/Concurrent/","title":"Concurrent","tags":["flashcards"],"noteIcon":"","created":"2026-07-30T18:45:57.000+08:00","updated":"2026-07-30T18:45:57.000+08:00","dg-note-properties":{"title":"Concurrent","tags":["flashcards"],"reference linking":null}}
 ---
 
-参考链接
+# 参考资料
  - [php结合redis实现高并发下的抢购、秒杀功能](https://blog.csdn.net/nuli888/article/details/51865401#commentBox)
  - [PHP 并发场景的几种解决方案](https://www.jb51.net/article/163114.htm)
  - [网站大规模并发处理方案-电商秒杀与抢购](https://www.awaimai.com/348.html)
@@ -10,9 +10,14 @@
  - [单据锁](https://blog.csdn.net/zhangliangzi/article/details/79874910)
  - [lua脚本解锁](https://www.cnblogs.com/youjiaxing/p/10437674.html)
  - [PHP+Redis实现分布式锁 ](https://juejin.cn/post/7163834723200925709)
-# Redis Lock
-## Redis队列
-### 1. 初始化数据
+## 相关概念
+- [[Work/Script/PHP/Swoole/同步、异步，并发、并行，线程、进程、协程#并发、并行\|并发与并行]]：本页处理的是**并发下的共享资源竞争**。
+- [[Work/Databases/Redis/Redis basic#WATCH\|`WATCH`]]、[[Work/Databases/Redis/Redis basic#MULTI\|`MULTI`]]、[[Work/Databases/Redis/Redis basic#EXEC\|`EXEC`]]：Redis 乐观事务的命令语义。
+- [[Work/Databases/Redis/Redis Lua 脚本#9.1 分布式锁（SET NX + 安全释放）\|Redis Lua 分布式锁]]：`SET NX EX/PX`、token 校验和 Lua 原子释放。
+- [[Work/Script/PHP/Swoole/锁竞争状态\|锁竞争状态]]：竞争程度、性能影响与优化方向。
+# Redis 并发控制
+## Redis 队列
+**1. 初始化数据**
 ```php
 try {
     // 连接redis
@@ -65,7 +70,7 @@ try {
 }
 ```
 
-### 2. 进行并发测试
+**2. 进行并发测试**
 ```php
 $conn = mysqli_connect('mysql', 'root', '123456', 'big');
 if (!$conn) {
@@ -126,8 +131,9 @@ try {
 }
 ```
 
-## Redis事务
-### 1. 入库
+## Redis 事务
+`WATCH` 监测库存 → `MULTI` 入队 → `EXEC` 提交；若监测的 key 在提交前被改动，`EXEC` 返回失败，业务应重试。命令细节见 [[Work/Databases/Redis/Redis basic#WATCH\|Redis 事务]]。
+**1. 入库**
 ```php
 // 模拟唯一用户ID
 $uid = uniqid('uid-', TRUE);
@@ -142,7 +148,7 @@ $redis->set('rest_count', 100);
 echo "库存设置为: " . $redis->get('rest_count');
 ```
 
-### 2. 消费库存
+**2. 消费库存**
 ```php
 // 模拟唯一用户ID
 $uid = uniqid('uid-', TRUE);
@@ -169,7 +175,7 @@ if ($rest_count > 0) {
     $redis->decr('rest_count');
     $replies = $redis->exec(); // 执行以上redis事务
 
-    // 如果 rest_count 的值被其它的并发进程更改了，以上事务将回滚
+    // 若 rest_count 被其他进程修改，EXEC 返回失败；队列中的命令不会执行
     if (!$replies) {
         echo "订单 ${value} 回滚" . PHP_EOL;
     }
@@ -178,20 +184,9 @@ $redis->unwatch();
 echo '剩余库存: ' . $redis->get('rest_count') . PHP_EOL;
 ```
 
-## Redis 分布式锁
-### Lua脚本
-使用Lua脚本的原因:
-- 避免误删其他客户端加的锁
-    > eg. 某个客户端获取锁后做其他操作过久导致锁被自动释放, 这时候要避免这个客户端删除已经被其他客户端获取的锁, 这就用到了锁的标识.
-- lua 脚本中执行 `get` 和 `del` 是原子性的, 整个lua脚本会被当做一条命令来执行，即使 `get` 后锁刚好过期, 此时也不会被其他客户端加锁
-> eval命令执行Lua代码的时候，Lua代码将被当成一个命令去执行，并且直到eval命令执行完成，Redis才会执行其他命令。
-> 
-> 由于 script 执行的原子性, 所以不要在script中执行过长开销的程序，否则会验证影响其它请求的执行。
-解锁容易错误的点:
-- 直接 `del` 删除键
-    原因: 可能移除掉其他客户端加的锁(在自己的锁已过期情况下)
-- `get`判断锁归属, 若符合再 `del`
-    原因: 非原子性操作, 若在 `get` 后锁过期了, 此时别的客户端进行加锁操作, 这里的 `del` 就会错误的将其他客户端加的锁解开.
+# Redis 分布式锁
+## Lua 原子释放
+**核心：** `SET NX EX` 获取带过期时间的锁；释放时以 token 比对后再 `DEL`，并用 Lua 把“比对 → 删除”做成一个原子操作。完整原理、误删时序和 `NX` / `PX` 语义见 [[Work/Databases/Redis/Redis Lua 脚本#9.1 分布式锁（SET NX + 安全释放）\|Redis Lua 分布式锁]]。
 ```php
 /**
  * redis 分布式锁
@@ -278,7 +273,8 @@ if ($lockId) {
 }
 ```
 
-### Redis 事务
+## `WATCH` + `MULTI` / `EXEC`
+这是 Lua 方案的替代示例：`WATCH` 保护“读取锁 ID → 删除锁”的乐观事务；锁释放的首选仍是上方 Lua 方案，见 [[Work/Databases/Redis/Redis Lua 脚本#9.1 分布式锁（SET NX + 安全释放）\|Redis Lua 分布式锁]]。
 ```php
 /**
  * Class Lock_Service 单据锁服务
@@ -380,7 +376,7 @@ $res4 = RedisLock::unLock('666666', $res1);
 var_dump($res4); // false，解锁失败
 ```
 
-### Redis 原子锁「laravel」
+## Laravel 原子锁
 ```php
 public function atom()
 {
@@ -402,18 +398,12 @@ public function atom()
 }
 ```
 
-### redis集群分布式锁
-Redis 集群相对单机来说, 需要考虑一个 容错性, 设计上更为复杂
-RedLock 算法：官方给出了一个 RedLock 算法
-情景: 当前有N个完全独立的Redis master节点, 分别部署在不同的主机上
-客户端获取锁的操作:
-1. 使用相同key和唯一值(作为value)同时向这N个redis节点请求锁, 锁的超时时间应该 >> 超时时间(考虑到请求耗时), 若某个节点阻塞了了应尽快跳过
-2. 计算步骤1消耗的时间, 若总消耗时间大于超时时间, 则认为锁失败. 客户端需在大多数(超过一半)的节点上成功获取锁, 才认为是锁成功.
-3. 如果锁成功了, 则该锁有效时间就是 锁原始有效时间 - 步骤1消耗的时间
-4. 如果锁失败了(超时或无法获取超过一半 N/2 + 1 实例的锁), 客户端会到每个节点释放锁(是每个, 即使之前认为加锁失败的节点)
+## Redis Cluster / Redlock
+**Redlock：** 在多个独立 Master 上取得多数锁才算成功；失败则尽力释放已取得的锁。它的适用边界与争议见 [[Work/Databases/Redis/Redis Lua 脚本#9.1 分布式锁（SET NX + 安全释放）\|Redis Lua 分布式锁]]。
 
-# MYSQL Lock
-## 悲观锁、乐观锁
+# MySQL 锁
+## 悲观锁与乐观锁
+悲观锁通过 `FOR UPDATE` 排他；乐观锁通过条件更新检测冲突。与 Redis `WATCH` 的乐观重试思路关联，见 [[Work/Databases/Redis/Redis basic#WATCH\|`WATCH`]]。
 ```php
 // 悲观锁
 public function pessimistic()
@@ -454,9 +444,10 @@ public function optimistic()
 }
 ```
 
-# File Lock
-## 文件排它锁(阻塞模式)
-### 1. 入库
+# 文件锁
+仅适用于**单机共享文件系统**；多实例部署应使用 Redis / 数据库方案。竞争与性能取舍见 [[Work/Script/PHP/Swoole/锁竞争状态#文件锁优化\|锁竞争状态 · 文件锁优化]]。
+## 排它锁（阻塞模式）
+**1. 入库**
 ```php
 $redis = new Redis();
 $redis->connect('redis', 6379);
@@ -466,7 +457,7 @@ $redis->set($key, 100);
 echo '剩余次数:', $redis->get($key), PHP_EOL;
 ```
 
-### 2. 消费库存
+**2. 消费库存**
 ```php
 $redis = new Redis();
 $redis->connect('redis', 6379);
@@ -496,8 +487,8 @@ if (flock($fp, LOCK_EX))
 fclose($fp);
 ```
 
-# 文件排它锁(非阻塞模式)
-## 1. 入库
+## 排它锁（非阻塞模式）
+**1. 入库**
 ```php
 $redis = new Redis();
 $redis->connect('redis', 6379);
@@ -507,7 +498,7 @@ $redis->set($key, 100);
 echo '剩余次数:', $redis->get($key), PHP_EOL;
 ```
 
-## 2. 消费库存
+**2. 消费库存**
 ```php
 $redis = new Redis();
 $redis->connect('redis', 6379);

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/处理流程 PHP VS GO/","title":"处理流程 PHP VS GO","tags":["flashcards","#epoll","#kqueue"],"noteIcon":"","created":"2025-10-18T10:43:23.158+08:00","updated":"2026-05-21T11:11:59.471+08:00","dg-note-properties":{"title":"处理流程 PHP VS GO","tags":["flashcards","#epoll","#kqueue"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Learn/处理流程 PHP VS GO/","title":"处理流程 PHP VS GO","tags":["flashcards","#epoll","#kqueue"],"noteIcon":"","created":"2026-05-21T11:11:59.000+08:00","updated":"2026-05-21T11:11:59.000+08:00","dg-note-properties":{"title":"处理流程 PHP VS GO","tags":["flashcards","#epoll","#kqueue"],"reference linking":null}}
 ---
 
 ## Go 语言处理 HTTP 请求的完整流程

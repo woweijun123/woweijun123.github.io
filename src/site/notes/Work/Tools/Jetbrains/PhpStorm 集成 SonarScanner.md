@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Jetbrains/PhpStorm 集成 SonarScanner/","title":"PhpStorm 集成 SonarScanner","tags":["flashcards"],"noteIcon":"","created":"2026-03-25T12:27:52.861+08:00","updated":"2026-03-26T10:59:47.180+08:00","dg-note-properties":{"title":"PhpStorm 集成 SonarScanner","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Jetbrains/PhpStorm 集成 SonarScanner/","title":"PhpStorm 集成 SonarScanner","tags":["flashcards"],"noteIcon":"","created":"2026-03-25T12:27:52.861+08:00","updated":"2026-03-26T10:59:47.000+08:00","dg-note-properties":{"title":"PhpStorm 集成 SonarScanner","tags":["flashcards"],"reference linking":null}}
 ---
 
 在 macOS 环境下，如果不进行单元测试（Unit Test），操作会简单很多。你只需要关注 **静态代码扫描**（Static Analysis），它会检查代码中的 Bug、漏洞、异味（Code Smells）以及安全隐患，但不会有“代码覆盖率”这一项指标。

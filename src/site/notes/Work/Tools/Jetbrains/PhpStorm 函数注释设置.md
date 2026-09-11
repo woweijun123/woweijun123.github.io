@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Jetbrains/PhpStorm 函数注释设置/","title":"PhpStorm 函数注释设置","tags":["jetbrains","phpstorm"],"noteIcon":"","created":"2026-06-26T18:50:21.107+08:00","updated":"2026-06-26T18:51:01.890+08:00","dg-note-properties":{"title":"PhpStorm 函数注释设置","tags":["jetbrains","phpstorm"],"reference linking":"[PhpStorm函数注释的设置](https://www.cnblogs.com/Steven-shi/p/8136081.html)"}}
+{"dg-publish":true,"permalink":"/Work/Tools/Jetbrains/PhpStorm 函数注释设置/","title":"PhpStorm 函数注释设置","tags":["jetbrains","phpstorm"],"noteIcon":"","created":"2026-06-26T18:51:01.000+08:00","updated":"2026-06-26T18:51:01.000+08:00","dg-note-properties":{"title":"PhpStorm 函数注释设置","tags":["jetbrains","phpstorm"],"reference linking":"[PhpStorm函数注释的设置](https://www.cnblogs.com/Steven-shi/p/8136081.html)"}}
 ---
 
 # 概述

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Composer/Composer autoload vs provider/","title":"Composer autoload vs provider","tags":["flashcards","#review"],"noteIcon":"","created":"2026-04-12T22:49:17.000+08:00","updated":"2026-04-12T22:49:17.000+08:00","dg-note-properties":{"title":"Composer autoload vs provider","tags":["flashcards","#review"],"reference linking":null,"sr-due":"2026-04-13","sr-interval":1,"sr-ease":230}}
+{"dg-publish":true,"permalink":"/Work/Tools/Composer/Composer autoload vs provider/","title":"Composer autoload vs provider","tags":["flashcards","#review"],"noteIcon":"","created":"2026-04-12T22:49:17.000+08:00","updated":"2026-06-01T19:59:15.678+08:00","dg-note-properties":{"title":"Composer autoload vs provider","tags":["flashcards","#review"],"reference linking":null,"sr-due":"2026-04-13","sr-interval":1,"sr-ease":230}}
 ---
 
 # 1. 第三方包的基本结构

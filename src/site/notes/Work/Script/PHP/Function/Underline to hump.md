@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Underline to hump/","title":"Underline to hump","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:25:46.000+08:00","updated":"2026-04-07T15:02:19.962+08:00","dg-note-properties":{"title":"Underline to hump","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Underline to hump/","title":"Underline to hump","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:25:46.000+08:00","updated":"2026-04-07T15:02:19.000+08:00","dg-note-properties":{"title":"Underline to hump","tags":["flashcards"],"reference linking":null}}
 ---
 
 ```php

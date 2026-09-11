@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Jetbrains/Phpstorm shortcut key/","title":"Phpstorm shortcut key","tags":["flashcards"],"noteIcon":"","created":"2023-10-03T05:39:37.000+08:00","updated":"2026-03-26T11:07:57.371+08:00","dg-note-properties":{"title":"Phpstorm shortcut key","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Jetbrains/Phpstorm shortcut key/","title":"Phpstorm shortcut key","tags":["flashcards"],"noteIcon":"","created":"2023-10-03T05:39:37.000+08:00","updated":"2026-03-26T11:07:57.000+08:00","dg-note-properties":{"title":"Phpstorm shortcut key","tags":["flashcards"],"reference linking":null}}
 ---
 
 # IntelliJ IDEA 中有什么让你相见恨晚的技巧？ 

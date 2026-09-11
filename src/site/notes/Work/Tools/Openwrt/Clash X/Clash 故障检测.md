@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Openwrt/Clash X/Clash 故障检测/","title":"Clash 故障检测","tags":["踩坑","openwrt","openclash"],"noteIcon":"","created":"2026-07-16T11:31:44.081+08:00","updated":"2026-07-16T11:46:03.528+08:00","dg-note-properties":{"title":"Clash 故障检测","tags":["踩坑","openwrt","openclash"],"reference linking":null,"created":"2026-07-14"}}
+{"dg-publish":true,"permalink":"/Work/Tools/Openwrt/Clash X/Clash 故障检测/","title":"Clash 故障检测","tags":["踩坑","openwrt","openclash"],"noteIcon":"","created":"2026-07-16T11:46:03.000+08:00","updated":"2026-07-16T11:46:03.000+08:00","dg-note-properties":{"title":"Clash 故障检测","tags":["踩坑","openwrt","openclash"],"reference linking":null,"created":"2026-07-14"}}
 ---
 
 # 结论

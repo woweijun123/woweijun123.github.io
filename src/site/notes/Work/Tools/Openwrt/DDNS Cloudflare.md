@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Openwrt/DDNS Cloudflare/","title":"保姆教程 OpenWrt 配置 Cloudflare DDNS","tags":["clippings","ddns","openwrt","cloudflare"],"noteIcon":"","created":"2026-06-02T18:21:37.130+08:00","updated":"2026-06-03T12:12:46.876+08:00","dg-note-properties":{"title":"保姆教程 OpenWrt 配置 Cloudflare DDNS","source":"https://keesenz.com/2020/1067.html","author":["[[keesenz]]"],"tags":["clippings","ddns","openwrt","cloudflare"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Openwrt/DDNS Cloudflare/","title":"保姆教程 OpenWrt 配置 Cloudflare DDNS","tags":["clippings","ddns","openwrt","cloudflare"],"noteIcon":"","created":"2026-06-03T12:12:46.000+08:00","updated":"2026-06-03T19:45:30.091+08:00","dg-note-properties":{"title":"保姆教程 OpenWrt 配置 Cloudflare DDNS","source":"https://keesenz.com/2020/1067.html","author":["[[keesenz]]"],"tags":["clippings","ddns","openwrt","cloudflare"],"reference linking":null}}
 ---
 
 # 背景

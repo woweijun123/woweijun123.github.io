@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/MySql/Basics/Mysql Commands/","title":"Mysql Commands","tags":["#flashcards"],"noteIcon":"","created":"2024-12-20T18:02:33.000+08:00","updated":"2026-06-17T14:43:40.624+08:00","dg-note-properties":{"title":"Mysql Commands","tags":["#flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Databases/MySql/Basics/Mysql Commands/","title":"Mysql Commands","tags":["#flashcards"],"noteIcon":"","created":"2026-06-17T14:43:40.000+08:00","updated":"2026-06-17T14:43:40.000+08:00","dg-note-properties":{"title":"Mysql Commands","tags":["#flashcards"],"reference linking":null}}
 ---
 
 # 配置相关

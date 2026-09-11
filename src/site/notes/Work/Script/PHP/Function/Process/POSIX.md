@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/POSIX/","title":"POSIX","tags":["flashcards"],"noteIcon":"","created":"2025-11-04T15:32:55.184+08:00","updated":"2026-05-21T11:11:59.931+08:00","dg-note-properties":{"title":"POSIX","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/POSIX/","title":"POSIX","tags":["flashcards"],"noteIcon":"","created":"2026-05-21T11:11:59.000+08:00","updated":"2026-05-21T11:11:59.000+08:00","dg-note-properties":{"title":"POSIX","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 函数

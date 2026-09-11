@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 协程解析/","title":"Hyperf 协程解析","tags":["flashcards","#hyperf","#coroutine"],"noteIcon":"","created":"2026-04-06T17:02:57.000+08:00","updated":"2026-07-20T14:46:10.632+08:00","dg-note-properties":{"title":"Hyperf 协程解析","tags":["flashcards","#hyperf","#coroutine"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 协程解析/","title":"Hyperf 协程解析","tags":["flashcards","#hyperf","#coroutine"],"noteIcon":"","created":"2026-08-08T09:40:15.000+08:00","updated":"2026-08-08T09:40:15.000+08:00","dg-note-properties":{"title":"Hyperf 协程解析","tags":["flashcards","#hyperf","#coroutine"],"reference linking":null}}
 ---
 
 ### 一、协程是什么？
@@ -8,14 +8,14 @@
 Hyperf 的协程能力主要构建在 **Swoole** 扩展之上。
 #### 1. 协作式调度 (Cooperative Scheduling)
 Hyperf 的协程调度器采用**协作式调度**。这意味着：
-*   **主动让出（Yield）**：一个协程在执行过程中，如果遇到 **I/O** 操作（如数据库查询、HTTP 请求、Redis 操作）或通过 `co::sleep()` 主动休眠，它会**主动让出**当前 CPU 的使用权。
-*   **恢复执行（Resume）**：当该协程等待的 I/O 操作完成或休眠时间到后，调度器会在合适的时机**恢复其执行**。
+*   **主动让出（Yield）**：协程在执行过程中，若遇到**I/O**操作(Mysql、HTTP、Redis)或 `co::sleep()` 主动休眠，它会**主动让出**当前 CPU 的使用权。
+*   **恢复执行（Resume）**：当该协程**等待的I/O操作完成**或**休眠时间到**后，调度器会在合适的时机**恢复其执行**。
 #### 2. 协程调度器：智慧的“大脑”
 协程调度器就像是协程的“指挥中心”，它主要包含以下几个部分：
 *   **就绪队列 (Ready Queue)**：存放那些已经准备好、可以马上被执行的协程。调度器会从这里选择下一个要运行的协程。
 *   **阻塞队列 (Blocking Queue)**：存放那些正在等待 I/O 操作完成而暂时挂起的协程。一旦它们等待的事件完成，就会被移回就绪队列。
 *   **计时器 (Timer)**：管理协程的睡眠和超时设置。
-*   **调度算法**：目前 Hyperf（Swoole）的调度器默认是**非抢占式**的，主要遵循 **FIFO（先进先出）** 和**事件驱动**的原则。
+*   **调度算法**：目前 Hyperf（Swoole）的调度器默认是**协作式**的，主要遵循 **FIFO（先进先出）** 和**事件驱动**的原则。
 ##### 协程调度器工作流程图
 
 ```mermaid
@@ -34,9 +34,9 @@ J -- 是 --> K["事件回调将协程<br>重新放回就绪队列"]
 K --> C
 ```
 #### 3. 协程的创建
-在 Hyperf 中，你可以使用 `co()` 函数或 `Coroutine::create()` 来创建协程：
+在 Hyperf 中，可以使用 `Coroutine::create()` 来创建协程：
 ```php
-co(function () {
+Coroutine::create(function () {
 // 你的协程代码
 $result = someAsyncOperation();
 });
@@ -55,12 +55,12 @@ use Hyperf\Utils\WaitGroup; // 注意：新版本中可能在 Utils\Coroutine �
 $wg = new WaitGroup();
 $wg->add(2); // 计数器加2
 
-co(function () use ($wg) {
+Coroutine::create(function () use ($wg) {
 	// 任务A
 	$wg->done(); // 计数器减1
 });
 
-co(function () use ($wg) {
+Coroutine::create(function () use ($wg) {
 	// 任务B
 	$wg->done(); // 计数器减1
 });
@@ -102,7 +102,7 @@ for ($i = 0; $i < 15; ++$i) {
 ```php
 $cid = SwooleCo::getCid(); // 获取当前协程ID
 $pid = SwooleCo::getPcid($cid); // 获取父协程ID
-co(function () use ($pid) {
+Coroutine::create(function () use ($pid) {
 	Context::copy($pid); // 关键：复制父协程上下文
 	// ... 现在可以获取到父协程的上下文数据了
 	$requestId = Context::get(self::TRACE_ID);

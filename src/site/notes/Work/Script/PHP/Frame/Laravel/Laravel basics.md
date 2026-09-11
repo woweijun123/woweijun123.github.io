@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel basics/","title":"Laravel basics","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:45:00.000+08:00","updated":"2026-06-02T14:18:12.564+08:00","dg-note-properties":{"title":"Laravel basics","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel basics/","title":"Laravel basics","tags":["flashcards"],"noteIcon":"","created":"2026-06-02T14:18:12.000+08:00","updated":"2026-06-02T14:18:12.000+08:00","dg-note-properties":{"title":"Laravel basics","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 安装(composer)

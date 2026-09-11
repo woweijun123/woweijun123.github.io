@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Linux/ZSH-终端美化/","title":"ZSH-终端美化","noteIcon":"","created":"2026-05-18T22:59:24.000+08:00","updated":"2026-05-21T11:12:00.013+08:00","dg-note-properties":{"title":"ZSH-终端美化","tags":null,"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Linux/ZSH-终端美化/","title":"ZSH-终端美化","noteIcon":"","created":"2026-05-21T11:12:00.000+08:00","updated":"2026-05-21T11:12:00.000+08:00","dg-note-properties":{"title":"ZSH-终端美化","tags":null,"reference linking":null}}
 ---
 
 

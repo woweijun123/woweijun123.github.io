@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/PostgreSql/Basics/PostgreSQL Basics/","title":"PostgreSQL Basics","tags":["PostgreSQL","MySQL","flashcards"],"noteIcon":"","created":"2026-06-17T14:30:06.017+08:00","updated":"2026-07-01T11:38:10.580+08:00","dg-note-properties":{"title":"PostgreSQL Basics","tags":["PostgreSQL","MySQL","flashcards"],"reference linking":["[[Work/Databases/MySql/Basics/Mysql Basics\|Mysql Basics]]"]}}
+{"dg-publish":true,"permalink":"/Work/Databases/PostgreSql/Basics/PostgreSQL Basics/","title":"PostgreSQL Basics","tags":["PostgreSQL","MySQL","flashcards"],"noteIcon":"","created":"2026-06-17T14:39:31.000+08:00","updated":"2026-06-17T14:39:31.000+08:00","dg-note-properties":{"title":"PostgreSQL Basics","tags":["PostgreSQL","MySQL","flashcards"],"reference linking":["[[Work/Databases/MySql/Basics/Mysql Basics]]"]}}
 ---
 
 # 概念
@@ -152,7 +152,12 @@ ORDER BY u.id DESC, p.updated_at DESC NULLS LAST;
 SELECT * FROM users WHERE name LIKE '%关键字%';
 
 -- 正则（MySQL 的 REGEXP）
-SELECT * FROM users WHERE email ~ '^[a-z]+@example\.com
+SELECT * FROM users WHERE email ~ '^[a-z]+@example\.com$';      -- 区分大小写
+SELECT * FROM users WHERE email ~* '^[a-z]+@example\.com$';     -- 不区分大小写
+
+-- ILIKE：不区分大小写的 LIKE（MySQL 需 COLLATE 或 LOWER）
+SELECT * FROM users WHERE name ILIKE '%abc%';
+```
 ## 表关系（与 MySQL 相同思路）
 一对一、一对多、多对多中间表写法与 [[Work/Databases/MySql/Basics/Mysql Basics\|Mysql Basics]] 一致；PG 外键**默认 enforced**，无需选存储引擎。
 ```sql
@@ -492,40 +497,40 @@ CREATE OR REPLACE FUNCTION dept_avg_salary(p_dept TEXT)
 RETURNS NUMERIC
 LANGUAGE sql
 STABLE
-AS $
+AS $$
     SELECT AVG(salary) FROM employees WHERE department_name = p_dept;
-$;
+$$;
 SELECT dept_avg_salary('IT');
 
 -- plpgsql 过程（无返回值）
 CREATE OR REPLACE PROCEDURE reset_stale_orders()
 LANGUAGE plpgsql
-AS $
+AS $$
 BEGIN
     UPDATE orders SET status = 0 WHERE updated_at < NOW() - INTERVAL '7 days';
 END;
-$;
+$$;
 CALL reset_stale_orders();
 
 -- 返回多行
 CREATE OR REPLACE FUNCTION list_users()
 RETURNS TABLE (id BIGINT, email VARCHAR)
 LANGUAGE sql
-AS $
+AS $$
     SELECT id, email FROM users;
-$;
+$$;
 SELECT * FROM list_users();
 ```
 ## DO 块（匿名代码，MySQL 无直接等价）
 ```sql
-DO $
+DO $$
 DECLARE
     v_sum INT := 0;
 BEGIN
     v_sum := 1 + 2;
     RAISE NOTICE 'sum = %', v_sum;
 END;
-$;
+$$;
 ```
 # CTE 与窗口函数（PG 强项）
 MySQL 8.0+ 也支持 CTE；PG 更早、更完整（含递归、写 CTE）。
@@ -558,321 +563,6 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO app_rw;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_rw;  -- 序列权限，MySQL 无此概念
 REVOKE INSERT ON users FROM app_rw;
 ```
-# MySQL 迁移 PostgreSQL 速查
-| MySQL 写法 | PostgreSQL 写法 |
-| --- | --- |
-| `` `col` `` | `"col"` 或 `col` |
-| `AUTO_INCREMENT` | `BIGSERIAL` 或 `GENERATED AS IDENTITY` |
-| `LIMIT 10, 20` | `LIMIT 20 OFFSET 10` |
-| `IFNULL(a,b)` | `COALESCE(a,b)` |
-| `GROUP_CONCAT(x)` | `string_agg(x::text, ',')` |
-| `ON DUPLICATE KEY UPDATE` | `ON CONFLICT … DO UPDATE` |
-| `REPLACE INTO` | `INSERT … ON CONFLICT DO UPDATE` |
-| `FIND_IN_SET(v, col)` | `v = ANY(string_to_array(col, ','))` |
-| `DATE_FORMAT(d, '%Y-%m')` | `TO_CHAR(d, 'YYYY-MM')` |
-| `UNIX_TIMESTAMP()` | `EXTRACT(EPOCH FROM NOW())` |
-| `JSON_EXTRACT(j, '$.a')` | `j->>'a'` 或 `j #>> '{a,b}'` |
-| `REGEXP 'pat'` | `~ 'pat'` 或 `~* 'pat'` |
-| `BOOLEAN` 用 0/1 | 用 `true`/`false` |
-| `ENGINE=InnoDB` | 删除（无引擎选项） |
-| `UNSIGNED` | 换更大类型或 `CHECK (col >= 0)` |
-| `TINYINT(1)` 布尔 | `BOOLEAN` |
-| `DATETIME` | `TIMESTAMP` 或 `TIMESTAMPTZ` |
-| `SHOW TABLES` | `\dt` 或查 `information_schema.tables` |
-| `DESCRIBE t` | `\d t` |
-# 一句话总结
-会 MySQL 的上手 PostgreSQL：**SQL 主干相同**，重点改 **Schema/序列/Upsert/聚合函数/JSONB/RETURNING/隔离级别默认值**，并用 **psql + EXPLAIN ANALYZE** 替代 mysql 习惯；标准 SQL 与高级特性（CTE、窗口、数组、FULL JOIN）在 PG 里更完整，值得优先掌握。
-;      -- 区分大小写
-SELECT * FROM users WHERE email ~* '^[a-z]+@example\.com
-## 表关系（与 MySQL 相同思路）
-一对一、一对多、多对多中间表写法与 [[Work/Databases/MySql/Basics/Mysql Basics\|Mysql Basics]] 一致；PG 外键**默认 enforced**，无需选存储引擎。
-{{CODE_BLOCK_7}}
-# SQL
-## DDL（定义语言）
-{{CODE_BLOCK_8}}
-## Schema 与字符集（对照 MySQL CHARSET）
-MySQL 在库/表级设 `utf8mb4`；PG 在**数据库创建时**定 encoding/collation，表继承库设置。
-{{CODE_BLOCK_9}}
-## 导入导出（对照 mysqldump）
-{{CODE_BLOCK_10}}
-## DQL（查询语言）
-### LIMIT / DISTINCT / 分页
-{{CODE_BLOCK_11}}
-### JOIN 对照
-| 类型 | MySQL | PostgreSQL |
-| --- | --- | --- |
-| 内连接 | `INNER JOIN` / `JOIN` | 相同 |
-| 左/右连接 | `LEFT JOIN` / `RIGHT JOIN` | 相同 |
-| 全外连接 | **不支持** | `FULL OUTER JOIN` |
-| 交叉连接 | `CROSS JOIN` | 相同 |
-| 自然连接 | `NATURAL JOIN` | 相同（仍不推荐） |
-| USING | `JOIN t USING(id)` | 相同 |
-{{CODE_BLOCK_12}}
-### UNION
-与 MySQL 相同：`UNION` 去重，`UNION ALL` 保留重复；列数、类型需兼容。
-### 子查询 / EXISTS
-`WHERE` / `SELECT` / `FROM` / `EXISTS` 子查询语法与 MySQL 高度一致。
-{{CODE_BLOCK_13}}
-### GROUP BY / HAVING
-规则与 MySQL 5.7+ `ONLY_FULL_GROUP_BY` 一致：**SELECT 中非聚合列必须出现在 GROUP BY**。
-{{CODE_BLOCK_14}}
-**MySQL `GROUP_CONCAT` → PostgreSQL `string_agg`**：
-{{CODE_BLOCK_15}}
-**MySQL `WITH ROLLUP` → PostgreSQL `ROLLUP` / `CUBE` / `GROUPING SETS`**：
-{{CODE_BLOCK_16}}
-### 常用函数对照
-| 场景 | MySQL | PostgreSQL |
-| --- | --- | --- |
-| 空值 | `IFNULL(a,b)` | `COALESCE(a,b)` |
-| 条件 | `IF(cond,a,b)` | `CASE WHEN cond THEN a ELSE b END` |
-| 字符串拼接 | `CONCAT(a,b)` | `a \|\| b` 或 `CONCAT(a,b)` |
-| 截取 | `SUBSTRING(str, pos, len)` | `SUBSTRING(str FROM pos FOR len)` |
-| 长度 | `CHAR_LENGTH` / `LENGTH` | `char_length` / `length` / `octet_length` |
-| 去空格 | `TRIM` | `TRIM` / `BTRIM` / `LTRIM` / `RTRIM` |
-| 替换 | `REPLACE` | `REPLACE` |
-| 填充 | `LPAD` / `RPAD` | `LPAD` / `RPAD` |
-| 索引 | `LOCATE` / `INSTR` | `POSITION(sub IN str)` / `STRPOS` |
-| 聚合拼接 | `GROUP_CONCAT` | `string_agg` |
-| 条件聚合 | `SUM(IF(...))` | `SUM(CASE WHEN ... END)` 或 `FILTER` |
-| 时间格式化 | `DATE_FORMAT` | `TO_CHAR(ts, 'YYYY-MM-DD')` |
-| 字符串转时间 | `STR_TO_DATE` | `TO_TIMESTAMP` |
-| 当前时间 | `NOW()` | `NOW()` / `CURRENT_TIMESTAMP` |
-| 时间差 | `TIMESTAMPDIFF` | `AGE(t1, t2)` 或 `t1 - t2` |
-| MD5 | `MD5()` | `MD5()`（扩展 `pgcrypto` 更安全） |
-| UUID | `UUID()` | `gen_random_uuid()` |
-**FILTER 子句（PG 特色，替代 SUM(IF)）**：
-{{CODE_BLOCK_17}}
-**FIND_IN_SET 替代**：
-{{CODE_BLOCK_18}}
-## DML（操纵语言）
-### 基础 CRUD
-{{CODE_BLOCK_19}}
-### RETURNING（PG 强项，MySQL 8.0.21+ 才部分支持）
-{{CODE_BLOCK_20}}
-### Upsert（对照 replace / on duplicate key）
-{{CODE_BLOCK_21}}
-**注意**：必须有 **PRIMARY KEY 或 UNIQUE** 约束；PG **无 `REPLACE INTO`**。
-### 多表 UPDATE / DELETE
-PG 支持 `UPDATE … FROM` / `DELETE … USING`，比 MySQL 多表语法更标准。
-{{CODE_BLOCK_22}}
-### INSERT … SELECT（复制表）
-{{CODE_BLOCK_23}}
-### DELETE vs TRUNCATE
-| 对比项 | DELETE | TRUNCATE |
-| --- | --- | --- |
-| WHERE | 支持 | 不支持 |
-| 速度 | 逐行慢 | 快 |
-| 序列重置 | 不重置 | `RESTART IDENTITY` 可重置 |
-| 回滚 | 事务内可回滚 | **事务内可回滚**（与 MySQL 不同） |
-| 触发器 | 逐行触发 | 不触发 `FOR EACH ROW`（PG 11+ 有 `TRUNCATE` 触发器） |
-# 约束
-## 对照 MySQL 约束写法
-| MySQL | PostgreSQL |
-| --- | --- |
-| `PRIMARY KEY` | `PRIMARY KEY` |
-| `AUTO_INCREMENT` | `SERIAL` / `GENERATED BY DEFAULT AS IDENTITY` |
-| `UNIQUE` | `UNIQUE` 或 `CONSTRAINT name UNIQUE` |
-| `NOT NULL` | `NOT NULL` |
-| `DEFAULT` | `DEFAULT` |
-| `FOREIGN KEY … REFERENCES` | 相同，默认 `NO ACTION` |
-| `ON DELETE CASCADE` | 相同 |
-{{CODE_BLOCK_24}}
-## 自增 / 序列（对照 AUTO_INCREMENT）
-{{CODE_BLOCK_25}}
-## 索引（对照 MySQL）
-{{CODE_BLOCK_26}}
-# 事务
-## ACID 与 MySQL 对比
-语义相同；实现不同：MySQL InnoDB 用 undo/redo + Read View；PostgreSQL 用 **xmin/x xmax + clog** 判断元组可见性，无 undo log 回滚旧行，而是写新行版本 + vacuum 清理死元组。
-## 使用语法
-{{CODE_BLOCK_27}}
-**差异**：
-- PG 默认 **`READ COMMITTED`**：每条语句看到已提交快照；MySQL InnoDB 默认 **RR**。
-- PG **无 `READ UNCOMMITTED`**。
-- `SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;` 在 PG 中 RR 也能防幻读（通过 SI / 锁升级）。
-- DDL（`CREATE TABLE` 等）**可在事务中回滚**（MySQL 多数 DDL 隐式提交）。
-{{CODE_BLOCK_28}}
-## 并发问题（与 MySQL 相同概念）
-脏读、不可重复读、幻读；PG 在 RC 下允许不可重复读；RR/SERIALIZABLE 更严格。写冲突可用 `SELECT … FOR UPDATE` / `FOR SHARE` / `SKIP LOCKED` / `NOWAIT`。
-{{CODE_BLOCK_29}}
-# 视图
-语法与 MySQL 类似；PG 视图默认可更新需满足规则（无聚合、DISTINCT 等）。
-{{CODE_BLOCK_30}}
-# 函数与存储过程
-## 对照 MySQL 函数/存储过程
-| MySQL | PostgreSQL |
-| --- | --- |
-| `DELIMITER $$` | 用 `$$ … $$` 或 `$func$` 美元引号 |
-| `@变量` | `plpgsql` 内变量，或 `SET` 会话参数 |
-| `CREATE PROCEDURE` | `CREATE PROCEDURE`（PG11+）或 **`CREATE FUNCTION`** 更常见 |
-| 函数必须有返回值 | `RETURNS void` / `RETURNS TABLE` / `RETURNS SETOF` |
-{{CODE_BLOCK_31}}
-## DO 块（匿名代码，MySQL 无直接等价）
-{{CODE_BLOCK_32}}
-# CTE 与窗口函数（PG 强项）
-MySQL 8.0+ 也支持 CTE；PG 更早、更完整（含递归、写 CTE）。
-{{CODE_BLOCK_33}}
-# 权限（DCL）
-{{CODE_BLOCK_34}}
-# MySQL 迁移 PostgreSQL 速查
-| MySQL 写法 | PostgreSQL 写法 |
-| --- | --- |
-| `` `col` `` | `"col"` 或 `col` |
-| `AUTO_INCREMENT` | `BIGSERIAL` 或 `GENERATED AS IDENTITY` |
-| `LIMIT 10, 20` | `LIMIT 20 OFFSET 10` |
-| `IFNULL(a,b)` | `COALESCE(a,b)` |
-| `GROUP_CONCAT(x)` | `string_agg(x::text, ',')` |
-| `ON DUPLICATE KEY UPDATE` | `ON CONFLICT … DO UPDATE` |
-| `REPLACE INTO` | `INSERT … ON CONFLICT DO UPDATE` |
-| `FIND_IN_SET(v, col)` | `v = ANY(string_to_array(col, ','))` |
-| `DATE_FORMAT(d, '%Y-%m')` | `TO_CHAR(d, 'YYYY-MM')` |
-| `UNIX_TIMESTAMP()` | `EXTRACT(EPOCH FROM NOW())` |
-| `JSON_EXTRACT(j, '$.a')` | `j->>'a'` 或 `j #>> '{a,b}'` |
-| `REGEXP 'pat'` | `~ 'pat'` 或 `~* 'pat'` |
-| `BOOLEAN` 用 0/1 | 用 `true`/`false` |
-| `ENGINE=InnoDB` | 删除（无引擎选项） |
-| `UNSIGNED` | 换更大类型或 `CHECK (col >= 0)` |
-| `TINYINT(1)` 布尔 | `BOOLEAN` |
-| `DATETIME` | `TIMESTAMP` 或 `TIMESTAMPTZ` |
-| `SHOW TABLES` | `\dt` 或查 `information_schema.tables` |
-| `DESCRIBE t` | `\d t` |
-# 一句话总结
-会 MySQL 的上手 PostgreSQL：**SQL 主干相同**，重点改 **Schema/序列/Upsert/聚合函数/JSONB/RETURNING/隔离级别默认值**，并用 **psql + EXPLAIN ANALYZE** 替代 mysql 习惯；标准 SQL 与高级特性（CTE、窗口、数组、FULL JOIN）在 PG 里更完整，值得优先掌握。
-;     -- 不区分大小写
-
--- ILIKE：不区分大小写的 LIKE（MySQL 需 COLLATE 或 LOWER）
-SELECT * FROM users WHERE name ILIKE '%abc%';
-```
-## 表关系（与 MySQL 相同思路）
-一对一、一对多、多对多中间表写法与 [[Work/Databases/MySql/Basics/Mysql Basics\|Mysql Basics]] 一致；PG 外键**默认 enforced**，无需选存储引擎。
-{{CODE_BLOCK_7}}
-# SQL
-## DDL（定义语言）
-{{CODE_BLOCK_8}}
-## Schema 与字符集（对照 MySQL CHARSET）
-MySQL 在库/表级设 `utf8mb4`；PG 在**数据库创建时**定 encoding/collation，表继承库设置。
-{{CODE_BLOCK_9}}
-## 导入导出（对照 mysqldump）
-{{CODE_BLOCK_10}}
-## DQL（查询语言）
-### LIMIT / DISTINCT / 分页
-{{CODE_BLOCK_11}}
-### JOIN 对照
-| 类型 | MySQL | PostgreSQL |
-| --- | --- | --- |
-| 内连接 | `INNER JOIN` / `JOIN` | 相同 |
-| 左/右连接 | `LEFT JOIN` / `RIGHT JOIN` | 相同 |
-| 全外连接 | **不支持** | `FULL OUTER JOIN` |
-| 交叉连接 | `CROSS JOIN` | 相同 |
-| 自然连接 | `NATURAL JOIN` | 相同（仍不推荐） |
-| USING | `JOIN t USING(id)` | 相同 |
-{{CODE_BLOCK_12}}
-### UNION
-与 MySQL 相同：`UNION` 去重，`UNION ALL` 保留重复；列数、类型需兼容。
-### 子查询 / EXISTS
-`WHERE` / `SELECT` / `FROM` / `EXISTS` 子查询语法与 MySQL 高度一致。
-{{CODE_BLOCK_13}}
-### GROUP BY / HAVING
-规则与 MySQL 5.7+ `ONLY_FULL_GROUP_BY` 一致：**SELECT 中非聚合列必须出现在 GROUP BY**。
-{{CODE_BLOCK_14}}
-**MySQL `GROUP_CONCAT` → PostgreSQL `string_agg`**：
-{{CODE_BLOCK_15}}
-**MySQL `WITH ROLLUP` → PostgreSQL `ROLLUP` / `CUBE` / `GROUPING SETS`**：
-{{CODE_BLOCK_16}}
-### 常用函数对照
-| 场景 | MySQL | PostgreSQL |
-| --- | --- | --- |
-| 空值 | `IFNULL(a,b)` | `COALESCE(a,b)` |
-| 条件 | `IF(cond,a,b)` | `CASE WHEN cond THEN a ELSE b END` |
-| 字符串拼接 | `CONCAT(a,b)` | `a \|\| b` 或 `CONCAT(a,b)` |
-| 截取 | `SUBSTRING(str, pos, len)` | `SUBSTRING(str FROM pos FOR len)` |
-| 长度 | `CHAR_LENGTH` / `LENGTH` | `char_length` / `length` / `octet_length` |
-| 去空格 | `TRIM` | `TRIM` / `BTRIM` / `LTRIM` / `RTRIM` |
-| 替换 | `REPLACE` | `REPLACE` |
-| 填充 | `LPAD` / `RPAD` | `LPAD` / `RPAD` |
-| 索引 | `LOCATE` / `INSTR` | `POSITION(sub IN str)` / `STRPOS` |
-| 聚合拼接 | `GROUP_CONCAT` | `string_agg` |
-| 条件聚合 | `SUM(IF(...))` | `SUM(CASE WHEN ... END)` 或 `FILTER` |
-| 时间格式化 | `DATE_FORMAT` | `TO_CHAR(ts, 'YYYY-MM-DD')` |
-| 字符串转时间 | `STR_TO_DATE` | `TO_TIMESTAMP` |
-| 当前时间 | `NOW()` | `NOW()` / `CURRENT_TIMESTAMP` |
-| 时间差 | `TIMESTAMPDIFF` | `AGE(t1, t2)` 或 `t1 - t2` |
-| MD5 | `MD5()` | `MD5()`（扩展 `pgcrypto` 更安全） |
-| UUID | `UUID()` | `gen_random_uuid()` |
-**FILTER 子句（PG 特色，替代 SUM(IF)）**：
-{{CODE_BLOCK_17}}
-**FIND_IN_SET 替代**：
-{{CODE_BLOCK_18}}
-## DML（操纵语言）
-### 基础 CRUD
-{{CODE_BLOCK_19}}
-### RETURNING（PG 强项，MySQL 8.0.21+ 才部分支持）
-{{CODE_BLOCK_20}}
-### Upsert（对照 replace / on duplicate key）
-{{CODE_BLOCK_21}}
-**注意**：必须有 **PRIMARY KEY 或 UNIQUE** 约束；PG **无 `REPLACE INTO`**。
-### 多表 UPDATE / DELETE
-PG 支持 `UPDATE … FROM` / `DELETE … USING`，比 MySQL 多表语法更标准。
-{{CODE_BLOCK_22}}
-### INSERT … SELECT（复制表）
-{{CODE_BLOCK_23}}
-### DELETE vs TRUNCATE
-| 对比项 | DELETE | TRUNCATE |
-| --- | --- | --- |
-| WHERE | 支持 | 不支持 |
-| 速度 | 逐行慢 | 快 |
-| 序列重置 | 不重置 | `RESTART IDENTITY` 可重置 |
-| 回滚 | 事务内可回滚 | **事务内可回滚**（与 MySQL 不同） |
-| 触发器 | 逐行触发 | 不触发 `FOR EACH ROW`（PG 11+ 有 `TRUNCATE` 触发器） |
-# 约束
-## 对照 MySQL 约束写法
-| MySQL | PostgreSQL |
-| --- | --- |
-| `PRIMARY KEY` | `PRIMARY KEY` |
-| `AUTO_INCREMENT` | `SERIAL` / `GENERATED BY DEFAULT AS IDENTITY` |
-| `UNIQUE` | `UNIQUE` 或 `CONSTRAINT name UNIQUE` |
-| `NOT NULL` | `NOT NULL` |
-| `DEFAULT` | `DEFAULT` |
-| `FOREIGN KEY … REFERENCES` | 相同，默认 `NO ACTION` |
-| `ON DELETE CASCADE` | 相同 |
-{{CODE_BLOCK_24}}
-## 自增 / 序列（对照 AUTO_INCREMENT）
-{{CODE_BLOCK_25}}
-## 索引（对照 MySQL）
-{{CODE_BLOCK_26}}
-# 事务
-## ACID 与 MySQL 对比
-语义相同；实现不同：MySQL InnoDB 用 undo/redo + Read View；PostgreSQL 用 **xmin/x xmax + clog** 判断元组可见性，无 undo log 回滚旧行，而是写新行版本 + vacuum 清理死元组。
-## 使用语法
-{{CODE_BLOCK_27}}
-**差异**：
-- PG 默认 **`READ COMMITTED`**：每条语句看到已提交快照；MySQL InnoDB 默认 **RR**。
-- PG **无 `READ UNCOMMITTED`**。
-- `SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;` 在 PG 中 RR 也能防幻读（通过 SI / 锁升级）。
-- DDL（`CREATE TABLE` 等）**可在事务中回滚**（MySQL 多数 DDL 隐式提交）。
-{{CODE_BLOCK_28}}
-## 并发问题（与 MySQL 相同概念）
-脏读、不可重复读、幻读；PG 在 RC 下允许不可重复读；RR/SERIALIZABLE 更严格。写冲突可用 `SELECT … FOR UPDATE` / `FOR SHARE` / `SKIP LOCKED` / `NOWAIT`。
-{{CODE_BLOCK_29}}
-# 视图
-语法与 MySQL 类似；PG 视图默认可更新需满足规则（无聚合、DISTINCT 等）。
-{{CODE_BLOCK_30}}
-# 函数与存储过程
-## 对照 MySQL 函数/存储过程
-| MySQL | PostgreSQL |
-| --- | --- |
-| `DELIMITER $$` | 用 `$$ … $$` 或 `$func$` 美元引号 |
-| `@变量` | `plpgsql` 内变量，或 `SET` 会话参数 |
-| `CREATE PROCEDURE` | `CREATE PROCEDURE`（PG11+）或 **`CREATE FUNCTION`** 更常见 |
-| 函数必须有返回值 | `RETURNS void` / `RETURNS TABLE` / `RETURNS SETOF` |
-{{CODE_BLOCK_31}}
-## DO 块（匿名代码，MySQL 无直接等价）
-{{CODE_BLOCK_32}}
-# CTE 与窗口函数（PG 强项）
-MySQL 8.0+ 也支持 CTE；PG 更早、更完整（含递归、写 CTE）。
-{{CODE_BLOCK_33}}
-# 权限（DCL）
-{{CODE_BLOCK_34}}
 # MySQL 迁移 PostgreSQL 速查
 | MySQL 写法 | PostgreSQL 写法 |
 | --- | --- |

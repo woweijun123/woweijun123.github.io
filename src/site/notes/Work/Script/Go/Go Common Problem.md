@@ -1,15 +1,15 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-05-05T17:29:29.000+08:00","updated":"2026-06-13T11:03:54.359+08:00","dg-note-properties":{"title":"Go Common Problem","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-08-17T11:15:29.000+08:00","updated":"2026-09-06T21:17:24.784+08:00","dg-note-properties":{"title":"Go Common Problem","tags":["flashcards"]}}
 ---
 
 # 为什么 Go 语言要求 Map 键必须可比较？
 Go 语言的 `map` 是使用 ==1;;哈希表（Hash Table）== 实现的。
 1. 要查找、存储键值对，`map` 需要计算键的==1;;哈希值 (Hash Value)== 来确定数据在内存中的存储位置。
-2. 然后在槽位上==1;;比较 (Compare)== **存储的键**和**查找的键**是否**相等**，以处理哈希冲突。
+2. 然后在槽位上比较 **存储的键**和**查找的键**是否**相等**，以处理哈希冲突。
 - 如果一个类型（如切片或函数）是不可比较的，那么：
 	- **无法确定唯一的存储位置：** 无法对它执行可靠的相等性检查 (`==`)，也就无法正确地处理哈希冲突。
 	- **语义不明确：** 即使对切片进行 `==` 比较在 Go 中是非法的，也无法定义它作为哈希键的唯一性。
-因此，**可比较性是 Go 语言中实现 `map` 数据结构的基本前提**。
+因此，**可比较性**是 Go 语言中实现 `map` 数据结构的**基本前提**。
 ### 泛型 map 的 key 类型必须是 comparable
 注意：map 的 key 类型必须是可比较的（comparable），所以泛型类型参数 K 需要有 comparable 约束；K any 会失败。
 ```go
@@ -23,13 +23,13 @@ func MapKeys[k comparable, v any](m map[k]v) []k {
 	return r
 }
 ```
-<!--SR:!2026-07-31,87,270-->
+<!--SR:!2027-03-23,235,270-->
 <?e?>
 # 关于死锁
-因为 channel 的接收操作是==1;;阻塞==的，runtime 只有在==1;;所有协程==都处于==1;;阻塞==无法继续执行 时才会报 `fatal error: all goroutines are asleep - deadlock!`
+因为 channel 的接收操作是**阻塞**的，runtime 只有在**所有协程**都处于**阻塞**无法继续执行 时才会报 `fatal error: all goroutines are asleep - deadlock!`
 ### 要点
 - 在主协程里执行 `readOp := <-r`时，主协程被阻塞。如果没有其它协程能发送到 r，就会出现全局死锁，runtime 抛出 panic。
-- 把接收放到一个子协程里时，只有该子协程被阻塞，==1;;主协程==仍然可运行（可以继续执行或退出），因此不会触发全局==1;;死锁==检查（即不会立即报错）。
+- 把接收放到一个子协程里时，只有该子协程被阻塞，**主协程**仍然可运行（可以继续执行或退出），因此不会触发全局**死锁**检查（即不会立即报错）。
 ### 示例
 #### 主协程阻塞（会死锁）
 ```go
@@ -54,7 +54,6 @@ func main() {
 ### 解决方式
 1. 确保有发送者（在其他 goroutine 里发送）
 2. 用带缓冲的通道、select+default 等避免长期阻塞。
-<!--SR:!2026-09-06,123,292-->
 <?e?>
 # 切片扩容的零拷贝读取 (Zero-copy Read)
 ## 切片的本质：SliceHeader
@@ -132,7 +131,7 @@ if len(b) == cap(b) {
 ### 关键结论
 * **修改 Len 的开销极小**：仅仅是 CPU 寄存器级别的整数赋值，不涉及数组拷贝。
 * **零拷贝思想**：预留 `Cap`  底层填充  更新 `Len`。这是 Go 处理高性能 I/O 的核心套路。
-<!--SR:!2026-08-17,65,212-->
+<!--SR:!2027-01-01,137,212-->
 <?e?>
 ## Append 扩容机制
 ### 扩容公式 (Go 1.18+)

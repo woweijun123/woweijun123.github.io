@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 嵌套事务/","title":"Laravel 嵌套事务","tags":["flashcards"],"noteIcon":"","created":"2025-07-31T21:40:32.636+08:00","updated":"2026-07-17T10:57:01.743+08:00","dg-note-properties":{"title":"Laravel 嵌套事务","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 嵌套事务/","title":"Laravel 嵌套事务","tags":["flashcards"],"noteIcon":"","created":"2026-08-18T18:54:39.000+08:00","updated":"2026-08-18T18:54:39.000+08:00","dg-note-properties":{"title":"Laravel 嵌套事务","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 核心结论
@@ -17,9 +17,8 @@ MySQL / Laravel / Hyperf 不支持==1;;真正==的嵌套事务；用 `transactio
 - 无保存点时：任意层异常==1;;整单==回滚。
 两种模式真正落盘都只在==1;;最外==层。
 # 开启与提交顺序
-**进入**闭包由**外到内**；`commit()` 由**内到外**减计数。
+`begin`由**外到内**提交闭包；`commit()` 由**内到外**减计数。
 三层嵌套事件顺序：
-- begin顺序为 ==1;;1→2→3==，commit顺序为 ==1;;3→2→1==。
 - 真正 `PDO::commit()` 仅当 `transactions` = ==1;;1==。
 - 框架内层成功不执行==1;;`RELEASE SAVEPOINT`==只 `transactions--`；与「库可 `RELEASE SAVEPOINT`」的示意不同。
 ### Laravel 关键源码片段
@@ -104,4 +103,4 @@ public function rollBack($toLevel = null)
 > ```
 >
 > 输出：`begin 1` `2` `3` → `commit 3` `2` `1`
-<!--SR:!2026-07-25,8,250-->
+<!--SR:!2026-10-10,53,250-->

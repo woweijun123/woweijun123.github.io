@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Linux/Network/SMTP/","title":"SMTP","tags":["flashcards","#network","#smtp"],"noteIcon":"","created":"2026-07-18T21:33:26.000+08:00","updated":"2026-07-18T21:33:26.000+08:00","dg-note-properties":{"title":"SMTP","tags":["flashcards","#network","#smtp"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Linux/Network/SMTP/","title":"SMTP","tags":["flashcards","#network","#smtp"],"noteIcon":"","created":"2025-11-19T16:37:35.316+08:00","updated":"2026-07-18T21:33:26.623+08:00","dg-note-properties":{"title":"SMTP","tags":["flashcards","#network","#smtp"],"reference linking":null}}
 ---
 
 SMTP（Simple Mail Transfer Protocol，简单邮件传输协议）是互联网中用于**发送电子邮件**的核心协议。

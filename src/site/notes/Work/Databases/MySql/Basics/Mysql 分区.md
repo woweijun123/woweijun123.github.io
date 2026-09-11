@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/MySql/Basics/Mysql 分区/","title":"Mysql 分区","tags":["#flashcards"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-06-17T14:43:57.104+08:00","dg-note-properties":{"title":"Mysql 分区","tags":["#flashcards"],"reference linking":"[高性能可扩展mysql](https://www.cnblogs.com/wushaopei/tag/%E9%AB%98%E6%80%A7%E8%83%BD%E5%8F%AF%E6%89%A9%E5%B1%95mysql/)"}}
+{"dg-publish":true,"permalink":"/Work/Databases/MySql/Basics/Mysql 分区/","title":"Mysql 分区","tags":["#flashcards"],"noteIcon":"","created":"2026-06-17T14:43:57.000+08:00","updated":"2026-06-17T14:43:57.000+08:00","dg-note-properties":{"title":"Mysql 分区","tags":["#flashcards"],"reference linking":"[高性能可扩展mysql](https://www.cnblogs.com/wushaopei/tag/%E9%AB%98%E6%80%A7%E8%83%BD%E5%8F%AF%E6%89%A9%E5%B1%95mysql/)"}}
 ---
 
 ### 概念

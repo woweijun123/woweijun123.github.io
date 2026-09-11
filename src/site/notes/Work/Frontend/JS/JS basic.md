@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Frontend/JS/JS basic/","title":"JS basic","noteIcon":"","created":"2026-04-23T23:31:44.000+08:00","updated":"2026-05-25T16:47:03.045+08:00","dg-note-properties":{"title":"JS basic","tags":null,"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Frontend/JS/JS basic/","title":"JS basic","noteIcon":"","created":"2026-05-25T16:47:03.000+08:00","updated":"2026-05-25T16:47:03.000+08:00","dg-note-properties":{"title":"JS basic","tags":null,"reference linking":null}}
 ---
 
 # 入门

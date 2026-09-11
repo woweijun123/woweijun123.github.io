@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-04-04T23:19:08.000+08:00","updated":"2026-07-15T21:47:49.527+08:00","dg-note-properties":{"title":"PHP","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-09-03T09:33:06.000+08:00","updated":"2026-09-03T09:33:06.000+08:00","dg-note-properties":{"title":"PHP","tags":["flashcards"]}}
 ---
 
 # 基本语法 [¶](https://www.php.net/manual/zh/language.basic-syntax.php#language.basic-syntax)
@@ -391,7 +391,7 @@ global
 ## 可变变量
 ```php
 $a = 'hello';
-$a = 'world';
+$$a = 'world';
 echo "$a $hello"; // hello world
 ```
 ## 来自 PHP 之外的变量 [¶](https://www.php.net/manual/zh/language.variables.external.php#language.variables.external)
@@ -994,18 +994,20 @@ echo $a, '-', $b; // 888-666
 将一个数的各二进制位，全部左移若干位右边补0。
 相当于该数**乘以2**。
 #### 用途
- 乘以2
+快速**乘法**
 ```php
 echo 2 << 1; // 4
+echo 1 << 5; // 32
 ```
 ### 按位右移 >>
 #### 定义
 将一个数的各二进制位，全部右移若干位，正数左补0，负数左补1，右边丢弃。
 相当于该数**除以2**。
 #### 用途
- 除以2
+快速**除法**
 ```php
 echo 2 >> 1; // 1
+echo 32 >> 5; // 1
 ```
 ### 复合赋值运算符
 位运算符与赋值运算符结合，组成新的复合赋值运算符，它们是：
@@ -5330,7 +5332,7 @@ echo $nextMonth->format("Y-m-d H:i:s"), PHP_EOL;
 */
 ```
 ## 加密
-[[Work/Script/PHP/Basics/Encrypt\|Encrypt]]
+相关加密算法在[[Work/Script/PHP/Basics/Encrypt\|Encrypt]]
 # 文件和目录函数
 ## fopen 能打开哪些类型
 | 类型 / 前缀 | 示例 | 典型用途 | 可读 | 可写 | 可 seek | Guzzle 常见场景 |

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Linux/Network/Rpc/","title":"RPC","tags":["flashcards","#network","#rpc"],"noteIcon":"","created":"2026-07-18T21:32:53.000+08:00","updated":"2026-07-18T21:32:53.000+08:00","dg-note-properties":{"title":"RPC","tags":["flashcards","#network","#rpc"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Linux/Network/Rpc/","title":"RPC","tags":["flashcards","#network","#rpc"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-07-18T21:32:53.199+08:00","dg-note-properties":{"title":"RPC","tags":["flashcards","#network","#rpc"],"reference linking":null}}
 ---
 
 ## RPC（远程过程调用）

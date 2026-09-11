@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-07-21T10:47:55.095+08:00","updated":"2026-07-24T11:56:52.233+08:00","dg-note-properties":{"title":"Go By Example","tags":["flashcards"],"links":"[Go by Example 中文版](https://gobyexample-cn.github.io/)"}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go By Example/","title":"Go By Example","tags":["flashcards"],"noteIcon":"","created":"2026-09-11T15:01:25.000+08:00","updated":"2026-09-11T15:01:25.000+08:00","dg-note-properties":{"title":"Go By Example","tags":["flashcards"],"links":"[Go by Example 中文版](https://gobyexample-cn.github.io/)"}}
 ---
 
 # Hello World
@@ -132,11 +132,9 @@ func main() {
 ```
 <?e?>
 # 常量
-常量中的数据类型只可以是? <?:?> 布尔型、数字型（整数型、浮点型和复数）和字符串型。
-<!--SR:!2026-10-06,105,268-->
-常量不能用什么语法声明? <?:?> :=
-<!--SR:!2026-08-15,85,268-->
-常量可以用函数计算表达式的值，但要求是？<?:?> 函数必须是`len(), cap(), unsafe.Sizeof()`这样的内置函数，否则编译不过
+常量中的数据类型只可以是==1;;布尔==型、==1;;数字(整数型、浮点型和复数)==型、==1;;字符串==型
+常量不能用==1;;:===语法声明
+常量可以用函数计算表达式的值，但要求函数必须是==1;;内置`len(), cap(), unsafe.Sizeof()`==函数，否则编译不过
 <!--SR:!2027-05-03,305,288-->
 <?e?>
 常量的枚举写法？
@@ -733,7 +731,7 @@ func main() {
 11.3AfterGrowth: len=4 cap=6 [1 2 3 4]
 12.AfterDelete: [a c]
 ```
-<!--SR:!2026-08-16,126,268-->
+<!--SR:!2026-10-19,63,248-->
 <?e?>
 # Map
 ```go
@@ -790,8 +788,7 @@ func main() {
 ```
 <?e?>
 # Range 遍历
-range遍历字符串返回的是什么?<?:?>迭代的是 Unicode 码点 (Rune) 而非字节
-<!--SR:!2026-09-24,70,229-->
+range遍历字符串迭代的是 ==1;;Unicode 码点 (Rune)== 而非字节
 ```go
 package main
 
@@ -847,6 +844,8 @@ func main() {
 5.StringIter: 0 103
 5.StringIter: 1 111
 ```
+<!--SR:!2026-09-24,70,229-->
+<?e?>
 # 函数
 ```go
 package main
@@ -910,10 +909,18 @@ func main() {
 ```
 <?e?>
 # 变参函数
-申明时 ... 分别在php和go函数的哪边？调用时 ... 分别在php和go的哪边？
-<?l?>
-左边，php左、go右
-
+- 申明时 `...` 在php、go函数的==1;;左==边
+- 调用时 `...` 在php==1;;左==边、go的==1;;右==边
+### php
+```php
+function t(...$a)
+{
+    var_dump($a);
+}
+$a = [1, 2, 3, 4, 5];
+t(...$a);
+```
+### go
 ```go
 package main
 
@@ -950,9 +957,12 @@ func main() {
 1.InputParams:[1 2 3] 2.ResultSum: 6
 1.InputParams:[1 2 3 4] 2.ResultSum: 10
 ```
-<!--SR:!2026-08-07,53,270-->
+<!--SR:!2026-11-07,66,250-->
 <?e?>
 # 闭包
+## 闭包的判定
+- 闭包：关注的是是否捕获了==1;;外部==变量；
+- 指针参数：关注的是是否保存了==1;;地址==并在稍后==1;;解引用==。
 ```go
 package main
 
@@ -1012,10 +1022,51 @@ func main() {
 3.ClosureAsVariable: 4
 3.ClosureAsVariable: 5
 ```
+## 三种情况对比
+```go
+i := 1
+
+// 1. 闭包：直接捕获 i
+defer func() {
+	fmt.Println(i)
+}()
+
+// 2. 非闭包：参数值立即复制
+defer func(v int) {
+	fmt.Println(v)
+}(i)
+
+// 3. 非闭包：参数是指针，稍后解引用
+defer func(p *int) {
+	fmt.Println(*p)
+}(&i)
+```
+### 💡注意事项
+| 写法                                     | 是否是闭包 | defer 注册时保存什么   | 执行时读取什么  |
+| -------------------------------------- | ----- | --------------- | -------- |
+| `func() { fmt.Println(i) }`            | ✅     | 对外部变量 `i` 的捕获关系 | 当前的 `i`  |
+| `func(v int) { fmt.Println(v) }(i)`    | ❌     | 整数值 `i`         | 已保存的整数   |
+| `func(p *int) { fmt.Println(*p) }(&i)` | ❌     | 指针地址            | 地址指向的当前值 |
+## Go 闭包 vs PHP 闭包对比节
+| 维度        | Go                       | PHP                            |
+| --------- | ------------------------ | ------------------------------ |
+| 默认捕获方式    | **引用捕获**（共享内存地址）         | **值捕获**（复制值）                   |
+| 显式引用捕获    | 不需要（默认就是引用）              | `function() use (&$x)`         |
+| 值捕获       | 需手动创建局部副本 `v := v`       | `function() use ($x)` 或 `fn()` |
+| 变量导入      | 隐式（直接使用外层变量）             | 必须显式 `use ($x)` 或 `fn()` 自动导入  |
+| 循环变量捕获    | Go<1.22 有经典陷阱；Go≥1.22 安全 | `fn()` 值捕获天然安全                 |
+| 闭包内修改外层变量 | ✅ 直接修改（引用捕获）             | ❌ 值捕获时无法修改                     |
+**示例代码块：**
+1. Go 引用捕获 → 闭包内修改影响外层
+2. PHP `function() use ($x)` 值捕获 → 闭包内修改不影响外层
+3. PHP `function() use (&$x)` 引用捕获 → 与 Go 行为一致
+4. PHP `fn()` 箭头函数 → 自动值捕获，简洁但不能修改
+5. 循环闭包对比（Go vs PHP）
+<!--SR:!2026-09-17,8,250-->
+
 <?e?>
 # 递归
-匿名函数定义递归时的注意事项?<?:?>必须先声明变量名，再进行赋值
-<!--SR:!2027-04-23,318,309-->
+匿名函数定义递归时必须先声明==1;;变量==名，再进行赋值
 ```go
 package main
 
@@ -1060,6 +1111,7 @@ func main() {
 1.Factorial(7): 5040
 2.Fibonacci(7): 13
 ```
+<!--SR:!2027-04-23,318,309-->
 <?e?>
 # 指针
 打印 `&i` 会输出什么样的结果? <?:?> 会输出类似 `0xc000012088` **十六进制**的**内存地址**
@@ -1156,14 +1208,17 @@ func main() {
 	// +----------------------------------------------------------------------
 	/*
 	   内存安全与垃圾回收（GC）
-	   在 C/C++ 中，你可以通过 p++ 移动指针来访问数组的下一个元素。如果计算错误，指针可能会指向非法的内存区域，导致程序崩溃（Buffer Overflow）。
-	   更重要的是，Go 拥有自动垃圾回收机制。如果允许指针随意运算，GC 就很难追踪每一个指针究竟指向哪里，这会极大增加内存管理的复杂度和不确定性。
+	   在 C/C++ 中，你可以通过 p++ 移动指针来访问数组的下一个元素。
+	   如果计算错误，指针可能会指向非法的内存区域，导致程序崩溃（Buffer Overflow）。
+	   更重要的是，Go 拥有自动垃圾回收机制。如果允许指针随意运算，GC 就很难追踪每一个指针究竟指向哪里，
+	   这会极大增加内存管理的复杂度和不确定性。
 
 	   简洁性
-	   Go 提倡“一种任务只有一种做法”。在 C 语言中，访问数组元素既可以用 a[i] 也可以用 *(a + i)。Go 强制要求使用索引访问，提高了代码的可读性和一致性。
+	   Go 提倡“一种任务只有一种做法”。在 C 语言中，访问数组元素既可以用 a[i] 也可以用 *(a + i)。
+	   Go 强制要求使用索引访问，提高了代码的可读性和一致性。
 	*/
 
-	/* 禁止的操作：指针运算
+	/* ❌禁止的操作：指针运算
 	   在 Go 中，你不能对指针进行加减运算。
 	   arr := [3]int{1, 2, 3}
 	   p := &arr[0]
@@ -1172,10 +1227,10 @@ func main() {
 	*/
 
 	/* 特殊情况：unsafe 包
-	   虽然标准 Go 不允许指针运算，但 Go 提供了一个名为 unsafe 的包。通过 unsafe.Pointer，你可以将指针转换为 uintptr 类型（一个足以容纳地址的整数），
-	   进行运算后再转回指针。
+	   虽然标准 Go 不允许指针运算，但 Go 提供了一个名为 unsafe 的包。通过 unsafe.Pointer，
+	   你可以将指针转换为 uintptr 类型（一个足以容纳地址的整数），进行运算后再转回指针。
 
-	   警告：正如其名，这通常是不安全的。除非在极致的性能优化或底层系统调用中，否则不建议使用。
+	   💡警告：正如其名，这通常是不安全的。除非在极致的性能优化或底层系统调用中，否则不建议使用。
 	*/
 	// 1. 定义一个包含两个整数的数组
 	// 在内存中，这两个 int 是连续排列的
@@ -1184,16 +1239,18 @@ func main() {
 	// unsafe.Pointer 是一种特殊指针类型，它可以指向任意变量，也可以转换回 uintptr
 	p := unsafe.Pointer(&arr[0])
 	// 3. 强制进行指针运算：移动到下一个 int 的位置
-	// 核心步骤解析：
-	// - uintptr(p): 将通用指针转为数值（uintptr），因为只有数值才能进行加法运算
-	// - unsafe.Sizeof(arr[0]): 计算一个 int 占用多少字节（通常是 8 字节）
-	// - uintptr(p) + offset: 在内存地址数值上往后移动 8 个字节
-	// - unsafe.Pointer(...): 将运算后的数值地址重新转回通用指针
+	/** 核心步骤解析：
+		uintptr(p): 将通用指针转为数值（uintptr），因为只有数值才能进行加法运算
+		unsafe.Sizeof(arr[0]): 计算一个 int 占用多少字节（通常是 8 字节）
+		uintptr(p) + offset: 在内存地址数值上往后移动 8 个字节
+		unsafe.Pointer(...): 将运算后的数值地址重新转回通用指针
+	**/
 	nextP := unsafe.Pointer(uintptr(p) + unsafe.Sizeof(arr[0]))
-	// 4. 读取运算后的指针对应的值
-	// *(*int)(nextP):
-	//   - (*int)(nextP) 将通用指针强转为具体的整型指针
-	//   - * 取值操作，访问该内存地址上的数据
+	// 4. 读取运算后的指针对应的值,
+	/** *(*int)(nextP):
+		(*int)(nextP) 将通用指针强转为具体的整型指针
+		* 取值操作，访问该内存地址上的数据
+	**/
 	fmt.Printf("8.%d\n", *(*int)(nextP)) // 输出 20
 }
 ```
@@ -1215,7 +1272,7 @@ func main() {
 7.4**ptr3 = 3000
 8.20
 ```
-<!--SR:!2026-08-07,21,249-->
+<!--SR:!2026-09-14,26,229-->
 <?e?>
 # 字符串和rune类型
 1. 打印原始字符串?
@@ -1320,7 +1377,7 @@ func examineRune(r rune) {
 7.Value:3637 Width:3 Char:U+0E35 'ี'
 8.MatchRune: U+0E2A 'ส'
 ```
-<!--SR:!2026-09-03,129,249-->
+<!--SR:!2026-11-08,66,229-->
 <?e?>
 # 结构体
 1. 按顺序初始化?
@@ -1461,7 +1518,7 @@ func (r rect2) perim() int {
 }
 
 // --- 2. 非结构体类型的方法 ---
-// Go 不允许直接给 int/float 加方法，但可以给“自定义别名类型”加方法
+// Go ❌不允许直接给 int/float 加方法，但✅可以给“自定义别名类型”加方法
 type TmpFloat float64
 
 func (f TmpFloat) Abs() float64 {
@@ -1472,12 +1529,12 @@ func (f TmpFloat) Abs() float64 {
 }
 
 /*
-// 错误示例：尝试为基本类型 int 添加方法（非法）
+// ❌错误示例：尝试为基本类型 int 添加方法（非法）
 func (i int) Square() int {  // 编译错误
     return i * i
 }
 
-// 错误示例：尝试为字符串类型添加方法（非法）
+// ❌错误示例：尝试为字符串类型添加方法（非法）
 func (s string) Reverse() string {  // 编译错误
     return reverse(s)
 }
@@ -1541,10 +1598,10 @@ func main() {
 
 	// --- 接口赋值与方法集 (Method Sets) ---
 	/* 💡 核心笔记：
-	   	   虽然在【调用方法】时，Go 会自动处理指针/值的转换（语法糖）；
-	   	   但在【分配接口】时，规则非常严格：
-	              - 如果方法是 (v T) 接收，则 T 和 *T 都实现了接口。
-	              - 如果方法是 (v *T) 接收，则只有 *T 实现了接口。
+	   虽然在【调用方法】时，Go 会自动处理指针/值的转换（语法糖）；
+	   但在【分配接口】时，规则非常严格：
+		  - 如果方法是 (v T) 值接收者，则T、*T都实现了接口。
+		  - 如果方法是 (v *T) 指针接收者，则只有*T实现了接口。
 	*/
 	var a Abser
 	f := TmpFloat(-math.Sqrt2)
@@ -1553,8 +1610,8 @@ func main() {
 	a = f  // 值类型 TmpFloat 实现了 Abs (值接收者)，匹配成功
 	a = &f // 引用类型 TmpFloat 实现了 Abs (值接收者)，匹配成功
 	// 场景 B：
-	a = &v2 // 指针类型 *Vertex 实现了 Abs (指针接收者)，匹配成功
 	// a = v2 // 值类型 ❌ 错误：Vertex 未实现 Abser (Abs 方法需要指针接收者)
+	a = &v2 // 指针类型 *Vertex 实现了 Abs (指针接收者)，匹配成功
 	fmt.Printf("6.最终结果: v=%v, a_result=%.2f\n", v, a.Abs())
 }
 ```
@@ -1567,7 +1624,7 @@ func main() {
 5.最终结果: v={60 80}, p=&{96 72}
 6.最终结果: v={60 80}, a_result=5.00
 ```
-<!--SR:!2026-08-24,132,269-->
+<!--SR:!2026-10-29,66,249-->
 <?e?>
 # 接口
 实现了接口的全部方法，就**自动实现**了 geometry 接口
@@ -1719,7 +1776,7 @@ func main() {
 <!--SR:!2026-11-14,113,250-->
 <?e?>
 # 静态类型与方法调用
-Go 的**方法调用**、**字段访问**、**运算符** 在==1;;编译期==按变量的==1;;静态==类型解析**决定**，不看接口变量运行时实际装的是什么。
+Go 的**方法调用**、**字段访问**、**运算符** 在==1;;编译==期按变量的==1;;静态==类型解析**决定**，不看接口变量运行时实际装的是什么。
 ## 三个概念
 | 概念       | 含义            | 谁决定        |
 | :------- | :------------ | :--------- |
@@ -1755,11 +1812,15 @@ v + 1        // ✅
 ```text
 m.Type undefined (type any has no field or method Type)
 ```
-这是==1;;编译==期错误，不是 panic；运行时断言失败才会 panic：`interface conversion: interface {} is int, not reflect.Value`。
+这是==1;;编译==期错误，不是 panic；
+运行时断言失败才会 panic：`interface conversion: interface {} is int, not reflect.Value`。
 ## 与反射的关系
-`sync.Map.Load` 返回 `(any, bool)`，边界处断言一次即可：`method, ok := raw.(reflect.Value)`；更好：`map[string]reflect.Value` 或 typed cache wrapper。
+- `sync.Map.Load` 返回 `(any, bool)`，边界处断言一次即可：`method, ok := raw.(reflect.Value)`；
+- 更好：`map[string]reflect.Value` 或 typed cache wrapper。
+
 > **一句话**：Go 编译器只认**声明类型**；要从 `any` 调用具体方法，先==1;;类型断言==，或一开始就用具体类型声明。
-<!--SR:!2026-07-26,12,230-->
+
+<!--SR:!2026-10-31,67,230-->
 <?e?>
 # Embedding
 1. 字段提升 (Field Promotion)
@@ -1990,11 +2051,13 @@ func main() {
 4.自定义接口约束应用: Alice (25 years old)
 5.复杂约束调用: Value: 123.46, Doubled: 246.91
 ```
-<!--SR:!2026-08-18,36,210-->
+<!--SR:!2026-11-03,76,210-->
 <?e?>
 # 错误处理
-错误处理
-这些代码是怎么写的?
+1. 标准错误检查流程
+2. 处理自定义错误
+3. 生产级类型转换
+4. 错误类型判断
 <?l?>
 ```go
 package main
@@ -2066,7 +2129,6 @@ func main() {
 			fmt.Println("1.2 成功返回值:", i)
 		}
 	}
-
 	// 2. 处理自定义错误
 	_, e := custom(0)
 	fmt.Println("2. 打印完整错误信息:", e)
@@ -2077,33 +2139,23 @@ func main() {
 		fmt.Println("3.1 类型断言:", instance.Code)
 		fmt.Println("3.1 类型断言:", instance.Msg)
 	}
-	// 💡注意：生产环境使用 errors.As 进行更稳健的类型转换
-	var target *argsError
-	// 将错误类型的内存地址赋值给指针变量target的内存地址
-	if errors.As(e, &target) {
-		fmt.Println("3.2 errors.As:", target.Code)
-		fmt.Println("3.2 errors.As:", target.Msg)
+	// 4. 💡生产级类型转换
+	// 返回的是 *MyError，但被接收为 error 接口
+	err2 := getError()
+	// 声明目标类型的nil指针变量并提取出的具体类型是 *MyError
+	var myErr *MyError
+	// 使用 errors.As 进行探测和转换: 参数1=原始错误 (err2) 参数2=目标变量的地址 (&myErr)
+	if errors.As(err2, &myErr) {
+		// 转换成功后，myErr 不再是 nil，而是指向了原始错误中的具体结构体实例
+		// 此时可以直接访问 MyError 特有的字段：Code 和 Msg
+		fmt.Printf("5.Custom error - Code: %d, Msg: %s\n", myErr.Code, myErr.Msg)
 	}
-
-	// 4.errors.Is
+	// 5. 错误类型判断
 	err := findItem(1)
 	if errors.Is(err, ErrNotFound) {
 		fmt.Println("4.Item not found")
 	} else {
 		fmt.Println("4.Other error:", err)
-	}
-
-	// 5.errors.As
-	// 返回的是 *MyError，但被接收为 error 接口
-	err2 := getError()
-	// 声明目标类型的nil指针变量并提取出的具体类型是 *MyError
-	var myErr *MyError
-	// 使用 errors.As 进行探测和转换
-	// 参数1：原始错误 (err2) 参数2：目标变量的地址 (&myErr)
-	if errors.As(err2, &myErr) {
-		// 转换成功后，myErr 不再是 nil，而是指向了原始错误中的具体结构体实例
-		// 此时可以直接访问 MyError 特有的字段：Code 和 Msg
-		fmt.Printf("5.Custom error - Code: %d, Msg: %s\n", myErr.Code, myErr.Msg)
 	}
 }
 
@@ -2120,7 +2172,7 @@ func main() {
 4.Item not found
 5.Custom error - Code: 404, Msg: Not Found
 ```
-<!--SR:!2026-08-01,78,268-->
+<!--SR:!2026-09-30,19,228-->
 <?e?>
 # 协程
 ```go
@@ -2199,8 +2251,7 @@ go2:  pong
 ```
 <?e?>
 # 通道缓冲
-无缓冲通道的发送操作是 (?)  必须等到 (?) 才能完成发送? <?:?> 同步的; 有接收者准备好接收时
-<!--SR:!2026-08-04,131,290-->
+无缓冲通道的发送操作是**同步**的必须等到**有接收者准备好接收**时才能完成发送
 在**主协程**使用无缓冲通道并且**没有接收者**准备好接收时(在**子协程**中使用无缓冲通道不会触发死锁)
 ```go
 package main
@@ -2353,9 +2404,9 @@ func main() {
 ```
 from to pong: traverse
 ```
+<?e?>
 # 通道选择器
-若多个 case 同时就绪，执行顺序是怎样的?<?:?>随机挑选一个执行
-<!--SR:!2027-05-14,326,310-->
+若多个 case 同时就绪，执行顺序是==1;;随机挑选一个==执行
 ```go
 package main
 
@@ -2406,6 +2457,8 @@ func main() {
 received one
 received two
 ```
+<!--SR:!2026-09-17,30,270-->
+<?e?>
 # 超时处理
 ```go
 package main
@@ -2562,9 +2615,9 @@ received job 2
 received job 3
 received all jobs
 ```
+<?e?>
 # 通道遍历
-更底层的写法<?:?>`if msg, bl := <-queue2; bl {...}`
-<!--SR:!2027-05-27,339,311-->
+更底层的写法是==1;;`if msg, bl := <-queue2; bl {...}`==
 ```go
 package main
 
@@ -2609,6 +2662,8 @@ range: two
 for: three
 for: four
 ```
+<!--SR:!2026-10-17,46,250-->
+<?e?>
 # Timer
 ```go
 package main
@@ -2781,8 +2836,8 @@ worker 2 finished job 4
 <?e?>
 # WaitGroup
 方法传参 WaitGroup 必须是指针 (`*sync.WaitGroup`)类型，以确保操作的是同一个计数器
-go 1.22前的问题
- `i := i` 避免在每个协程闭包中重复利用相同的 i 值 更多细节可以参考 the FAQ(https://go.dev/doc/faq#closures_and_goroutines)
+> 💡**Go 1.22**前的[[Work/Script/Go/Golang开发新手常犯的50个错误#15、for语句中闭包的迭代变量问题\|迭代变量问题]]：`i := i` 在每个协程闭包中重复利用相同的 i 值，会导致所有协程读取到该变量在循环结束时的**最后一个值**。 
+> 更多细节可以参考 the FAQ(https://go.dev/doc/faq#closures_and_goroutines) 
 ```go
 package main
 
@@ -3215,7 +3270,7 @@ panic: a problem
 <?e?>
 # Defer
 Defer 三大规则?
-循环defer的坑?
+循环defer的坑? [[Work/Script/Go/Golang开发新手常犯的50个错误#17、 `defer` 函数级生命周期与循环陷阱\|`defer` 函数级生命周期与循环陷阱]]
 <?l?>
 ```go
 package main
@@ -3345,7 +3400,7 @@ rule 3: 2
 避坑指南 [112]
 3. 关闭文件 (由 defer 调用)
 ```
-<!--SR:!2026-08-05,40,232-->
+<!--SR:!2026-11-08,95,232-->
 <?e?>
 # Recover
 ```go
@@ -3584,7 +3639,7 @@ width5: |foo   |b     |
 sprintf: a string
 io: an error
 ```
-<!--SR:!2026-08-18,43,232-->
+<!--SR:!2026-11-26,99,232-->
 <?e?>
 # 文本模板
 1. 使用 Must 方法简化错误处理，重新解析模板?
@@ -3655,7 +3710,7 @@ yes
 no
 Range: Go Rust C++ C#
 ```
-<!--SR:!2026-08-17,27,192-->
+<!--SR:!2026-10-11,53,192-->
 <?e?>
 ## 代码自动生成
 ```go
@@ -4070,7 +4125,7 @@ func main() {
    </parent>
  </nesting>
 ```
-<!--SR:!2026-09-10,71,212-->
+<!--SR:!2027-02-07,150,212-->
 <?e?>
 # 时间
 1. 获取当前本地时间
@@ -4082,74 +4137,71 @@ func main() {
 7. 时间点的加法与减法偏移
 <?l?>
 ```go
-package main
+// 1. 获取当前本地时间
+now := time.Now()
+fmt.Println("1.1 Now:", now)
+// 1.2 获取上海时间
+zone := time.FixedZone("Asia/Shanghai", 8*3600)
+fmt.Println("1.2 Asia/Shanghai Now:", time.Now().In(zone))
 
-import (
-	"fmt"
-	"time"
-)
+// 2. 构造一个特定的时间点 (年, 月, 日, 时, 分, 秒, 纳秒, 时区)
+then := time.Date(2025, 11, 17, 20, 34, 58, 651387237, time.UTC)
+fmt.Println("2. Then:", then)
 
-func main() {
-	// 1. 获取当前本地时间
-	now := time.Now()
-	fmt.Println("1.Now:", now)
+// 3. 提取时间分量
+fmt.Println("3.1 Year:", then.Year())
+fmt.Println("3.2 Month:", then.Month())
+fmt.Println("3.3 Day:", then.Day())
+fmt.Println("3.4 Hour:", then.Hour())
+fmt.Println("3.5 Minute:", then.Minute())
+fmt.Println("3.6 Second:", then.Second())
+fmt.Println("3.7 Nanosecond:", then.Nanosecond())
+fmt.Println("3.8 Location:", then.Location()) // 获取时区
+fmt.Println("3.9 Weekday:", then.Weekday())
 
-	// 2. 构造一个特定的时间点 (年, 月, 日, 时, 分, 秒, 纳秒, 时区)
-	then := time.Date(2025, 11, 17, 20, 34, 58, 651387237, time.UTC)
-	fmt.Println("2.Then:", then)
+// 4. 时间点比较 (早于、晚于、相等)
+fmt.Println("4.1 Before:", then.Before(now))
+fmt.Println("4.2 After:", then.After(now))
+fmt.Println("4.3 Equal:", then.Equal(now))
 
-	// 3. 提取时间分量
-	fmt.Println("3.1Year:", then.Year())
-	fmt.Println("3.2Month:", then.Month())
-	fmt.Println("3.3Day:", then.Day())
-	fmt.Println("3.4Hour:", then.Hour())
-	fmt.Println("3.5Minute:", then.Minute())
-	fmt.Println("3.6Second:", then.Second())
-	fmt.Println("3.7Nanosecond:", then.Nanosecond())
-	fmt.Println("3.8Location:", then.Location()) // 获取时区
-	fmt.Println("3.9Weekday:", then.Weekday())
+// 5. 计算两个时间点的时间差 (Duration)
+diff := now.Sub(then)
+fmt.Println("5.1 Diff:", diff)
+fmt.Println("5.2 Hours:", int(diff.Hours()))
+fmt.Println("5.3 Minutes:", int(diff.Minutes()))
+fmt.Println("5.4 Seconds:", int(diff.Seconds()))
+fmt.Println("5.5 Nanoseconds:", int(diff.Nanoseconds()))
 
-	// 4. 时间点比较 (早于、晚于、相等)
-	fmt.Println("4.1Before:", then.Before(now))
-	fmt.Println("4.2After:", then.After(now))
-	fmt.Println("4.3Equal:", then.Equal(now))
-
-	// 5. 计算两个时间点的时间差 (Duration)
-	diff := now.Sub(then)
-	fmt.Println("5.Diff:", diff)
-	fmt.Println("5.Diff Hours:", int(diff.Hours()))
-	fmt.Println("5.Diff Minutes:", int(diff.Minutes()))
-	fmt.Println("5.Diff Seconds:", int(diff.Seconds()))
-	fmt.Println("5.Diff Nanoseconds:", int(diff.Nanoseconds()))
-
-	// 6. 时间点的加法与减法偏移
-	fmt.Println("6.AddDiff:", then.Add(diff))  // 加上时间差
-	fmt.Println("6.SubDiff:", then.Add(-diff)) // 减去时间差
-}
+// 6. 时间点的加法与减法偏移
+fmt.Println("6.1 AddDiff:", then.Add(diff))  // 加上时间差
+fmt.Println("6.2 SubDiff:", then.Add(-diff)) // 减去时间差
+fmt.Println("6.3 Since:", time.Since(now)) // 时间差
 ```
 输出
 ```
-1.Now: 2026-01-22 15:48:56.254889 +0800 CST m=+0.000038543
-2.Then: 2025-11-17 20:34:58.651387237 +0000 UTC
-3.1Year: 2025
-3.2Month: November
-3.3Day: 17
-3.4Hour: 20
-3.5Minute: 34
-3.6Second: 58
-3.7Nanosecond: 651387237
-3.8Location: UTC
-3.9Weekday: Monday
-4.1Before: true
-4.2After: false
-4.3Equal: false
-5.Diff: 1571h13m57.603501763s
-5.Diff Hours: 1571
-5.Diff Minutes: 94273
-5.Diff Seconds: 5656437
-5.Diff Nanoseconds: 5656437603501763
-6.AddDiff: 2026-01-22 07:48:56.254889 +0000 UTC
-6.SubDiff: 2025-09-13 09:21:01.047885474 +0000 UTC
+1.1 Now: 2026-07-30 15:39:41.449279 +0800 CST m=+0.000048917
+1.2 Asia/Shanghai Now: 2026-07-30 15:39:41.449383 +0800 Asia/Shanghai
+2. Then: 2025-11-17 20:34:58.651387237 +0000 UTC
+3.1 Year: 2025
+3.2 Month: November
+3.3 Day: 17
+3.4 Hour: 20
+3.5 Minute: 34
+3.6 Second: 58
+3.7 Nanosecond: 651387237
+3.8 Location: UTC
+3.9 Weekday: Monday
+4.1 Before: true
+4.2 After: false
+4.3 Equal: false
+5.1 Diff: 6107h4m42.797891763s
+5.2 Hours: 6107
+5.3 Minutes: 366424
+5.4 Seconds: 21985482
+5.5 Nanoseconds: 21985482797891763
+6.1 AddDiff: 2026-07-30 07:39:41.449279 +0000 UTC
+6.2 SubDiff: 2025-03-08 09:30:15.853495474 +0000 UTC
+6.3 Since: 177.375µs
 ```
 <!--SR:!2026-09-18,146,252-->
 <?e?>
@@ -4157,10 +4209,8 @@ func main() {
 1. 获取当前时间对象
 2. 获取 Unix 时间戳（自 1970-01-01 以来的秒数）
 3. 获取纳秒级时间戳
-4. 将纳秒转换为毫秒 (1毫秒 = 1,000,000纳秒)
-5. 将秒级时间戳还原为 time.Time 对象
-6. 将纳秒级时间戳还原为 time.Time 对象
-7. 将字符串还原为 time.Time 对象
+4. 将秒/纳秒时间戳还原为 time.Time 对象
+5. 将字符串还原为 time.Time 对象
 <?l?>
 ```go
 package main
@@ -4203,7 +4253,7 @@ func main() {
 6.Nanos Transform Time: 2026-01-22 15:49:43.084436 +0800 CST
 7.String Transform Time: 2026-01-01 00:00:00 +0000 UTC
 ```
-<!--SR:!2026-07-30,123,292-->
+<!--SR:!2026-10-01,63,272-->
 <?e?>
 # 时间的格式化和解析
 1. 使用预定义的 RFC3339 标准格式输出
@@ -4262,7 +4312,7 @@ fmt.Printf(
 8.ParseError: parsing time "8:41PM" as "Mon Jan _2 15:04:05 2006": cannot parse "8:41PM" as "Mon"
 9.Custome 2025-12-10 13:09:24
 ```
-<!--SR:!2026-09-04,65,252-->
+<!--SR:!2027-02-15,164,252-->
 <?e?>
 # 随机数
 1. 生成 0-99 之间的随机整数（使用默认种子，多次运行结果相同）
@@ -4314,7 +4364,88 @@ func main() {
 5.FixedSeed1:  5
 6.FixedSeed2:  5
 ```
-<!--SR:!2026-08-01,113,252-->
+<!--SR:!2027-05-15,285,252-->
+<?e?>
+# UUID
+**Go 标准库**没有直接提供 UUID 类型；项目中通常使用 `github.com/google/uuid` 生成 **UUID v4**。
+```bash
+go get github.com/google/uuid
+```
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
+
+func main() {
+	id := uuid.New()             // UUID 类型
+	idString := uuid.NewString() // 直接返回 string
+	fmt.Println(id)
+	fmt.Println(idString)
+}
+```
+输出（两行均为随机 UUID，每次运行不同）：
+```text
+550e8400-e29b-41d4-a716-446655440000
+2f1c8e6d-7e5c-4b4e-9d4c-1a8f7c2e6b31
+```
+- `uuid.New()` 生成 UUID。
+- `uuid.NewString()` 直接返回字符串。
+- `uuid.MustParse(s)` 解析字符串，失败时触发 panic。
+- 数据库主键、幂等号、请求追踪 ID 等场景优先使用 `uuid.NewString()`。
+- 若需要**可排序 ID**，应改用雪花 ID、ULID 等方案。
+## 标准库实现（UUID v4）
+- 标准库没有 UUID API。
+- 使用 `crypto/rand` 生成 **16 字节随机数**。
+- 按 UUID v4 规范设置**版本与变体位**。
+- 使用 `encoding/hex` 格式化为 UUID 字符串。
+```go
+package main
+
+import (
+	"crypto/rand"
+	"encoding/hex"
+	"fmt"
+)
+
+func newUUID() (string, error) {
+	var id [16]byte
+	if _, err := rand.Read(id[:]); err != nil {
+		return "", err
+	}
+	id[6] = (id[6] & 0x0f) | 0x40 // UUID v4
+	id[8] = (id[8] & 0x3f) | 0x80 // RFC 4122 variant
+	buf := make([]byte, 36)
+	hex.Encode(buf[0:8], id[0:4])
+	buf[8] = '-'
+	hex.Encode(buf[9:13], id[4:6])
+	buf[13] = '-'
+	hex.Encode(buf[14:18], id[6:8])
+	buf[18] = '-'
+	hex.Encode(buf[19:23], id[8:10])
+	buf[23] = '-'
+	hex.Encode(buf[24:36], id[10:16])
+	return string(buf), nil
+}
+
+func main() {
+	id, err := newUUID()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(id)
+}
+```
+输出（每次运行结果不同）：
+```text
+7f3a9d2c-4b61-4e08-9c72-1a5f6b8d3e40
+```
+- 适合**不想引入依赖**的简单场景。
+- 需要**解析、校验、批量生成**等完整能力时，优先使用 `github.com/google/uuid`。
 <?e?>
 # 数字解析
 1. 将字符串解析为 64 位浮点数
@@ -4368,7 +4499,7 @@ func main() {
 5.Atoi: 135
 6.Error: strconv.Atoi: parsing "wat": invalid syntax
 ```
-<!--SR:!2026-08-09,41,252-->
+<!--SR:!2026-10-16,46,232-->
 <?e?>
 # URL 解析
 1. 解析 URL 字符串为 url.URL 对象
@@ -4627,7 +4758,7 @@ func main() {
 7.2 Peek(5): hello
 7.2 OS指针位置: 0
 ```
-<!--SR:!2026-08-11,42,212-->
+<!--SR:!2026-10-10,39,192-->
 <?e?>
 # 写文件
 1. 快速写入文件：直接将字节切片写入指定路径
@@ -4858,7 +4989,7 @@ Is '/dir/file' absolute? true
   是否目录: false
   系统底层数据: &{16777231 33188 1 61802447 501 20 0 [0 0 0 0] {1767991750 990384404} {1767941624 91188997} {1767941624 91188997} {1767869716 625129705} 19 8 4096 0 0 0 [0 0]}
 ```
-<!--SR:!2026-08-31,61,231-->
+<!--SR:!2027-03-18,199,251-->
 <?e?>
 # 目录
 1. 基础目录操作
@@ -5060,7 +5191,7 @@ func main() {
 临时目录路径: /var/folders/27/r0n6fv0103b790l89g7wlsr40000gn/T/sampledir_2178860841
 在临时目录内创建了文件: /var/folders/27/r0n6fv0103b790l89g7wlsr40000gn/T/sampledir_2178860841/workspace_file.txt
 ```
-<!--SR:!2026-07-29,30,191-->
+<!--SR:!2026-09-24,57,191-->
 <?e?>
 # 单元测试和基准测试
 ```go
@@ -5264,7 +5395,7 @@ func main() {
 尾部参数数量: 2
 尾部参数内容: [hello world]
 ```
-<!--SR:!2026-07-26,26,211-->
+<!--SR:!2026-09-20,55,211-->
 <?e?>
 # 命令行子命令
 1. 定义子命令及其独立的 FlagSet
@@ -5328,7 +5459,7 @@ func main() {
 用户名称: aa
 剩余参数: []
 ```
-<!--SR:!2026-08-17,48,251-->
+<!--SR:!2026-12-17,120,251-->
 <?e?>
 # 环境变量
 ```go
@@ -5445,7 +5576,7 @@ Line 3:   <head>
 Line 4:     <meta charset="utf-8">
 Line 5:     <title>Go by Example</title>
 ```
-<!--SR:!2026-08-12,30,231-->
+<!--SR:!2026-11-19,99,251-->
 <?e?>
 # HTTP 服务端
 1. 注册路由映射
@@ -5504,22 +5635,22 @@ HTTP 服务已启动，正在监听 :8090...
 <?e?>
 # Context
 1. 获取请求关联的 ==1;;Context==
-2. 模拟业务逻辑中的 ==1;;元数据传递==
-3. 核心：监听 ==1;;取消信号==
-`req.Context()` 会返回与当前 HTTP 请求关联的 Context；当客户端**断开连接**或**请求超时**，该 ctx 会自动触发 ==1;;Done 信号==。
-`context.WithValue()` 不会修改原 Context，而是返回一个 ==1;;新的 Context 副本==。
-业务逻辑中应通过 `select` 同时等待正常完成和 ==1;;ctx.Done()==；收到取消信号后应立即停止后续计算或数据库查询，用于 ==1;;释放资源==。
+2. 模拟业务逻辑中的 ==1;;元== 数据传递
+3. 核心：监听 ==1;;取消==信号
+`req.Context()` 会返回与当前 HTTP 请求关联的 Context；当客户端**断开连接**或**请求超时**，该 ctx 会自动触发 ==1;;Done==信号。
+`context.WithValue()` 不会修改原 Context，而是返回一个新的Context ==1;;副本==。
+业务逻辑中应通过 `select` 同时等待正常完成和 ==1;;ctx.Done()==；收到取消信号后应立即停止后续计算或数据库查询，用于立即 ==1;;释放== 资源。
 ## 常见 Context 构造方式
 `context.Context` 是一个接口；下面列出的是创建根 Context 或派生 Context 的函数，不是不同的 Context 接口类型。
 
-| 写法                                      | 类型         | 作用与使用场景                                           |
-| :-------------------------------------- | :--------- | :------------------------------------------------ |
-| `context.Background()`                  | 根 Context  | 返回一个==1;;不会自动取消==的空 Context；适合 `main`、测试和程序最外层入口。 |
-| `context.TODO()`                        | 根 Context  | 暂时不知道该使用哪个 Context 时的==1;;占位符==；业务代码中应尽快替换。       |
-| `context.WithCancel(parent)`            | 派生 Context | 返回 `ctx` 和 `cancel`，由调用方==1;;主动取消==，适合手动停止任务。     |
-| `context.WithTimeout(parent, d)`        | 派生 Context | 在指定时长后自动取消，用于设置==1;;超时==。                         |
-| `context.WithDeadline(parent, t)`       | 派生 Context | 在指定时间点自动取消，用于共享同一个==1;;截止时间==。                    |
-| `context.WithValue(parent, key, value)` | 派生 Context | 用于传递请求范围内的==1;;元数据==，例如 Trace ID；不应存放业务参数或可选配置。   |
+| 写法                                      | 类型         | 作用与使用场景                                         |
+| :-------------------------------------- | :--------- | :---------------------------------------------- |
+| `context.Background()`                  | 根 Context  | 返回一个**不会自动取消**的空 Context；适合 `main`、测试和程序最外层入口。  |
+| `context.TODO()`                        | 根 Context  | 暂时不知道该使用哪个 Context 时的==1;;占位==符；业务代码中应尽快替换。     |
+| `context.WithCancel(parent)`            | 派生 Context | 返回 `ctx` 和 `cancel`，由调用方==1;;主动==取消，适合手动停止任务。   |
+| `context.WithTimeout(parent, d)`        | 派生 Context | 在指定时长后自动取消，用于设置==1;;超时==。                       |
+| `context.WithDeadline(parent, t)`       | 派生 Context | 在指定时间点自动取消，用于共享同一个==1;;截止==时间。                  |
+| `context.WithValue(parent, key, value)` | 派生 Context | 用于传递请求范围内的==1;;元数据==，例如 Trace ID；不应存放业务参数或可选配置。 |
 
 `Background()` 和 `TODO()` 没有父 Context；
 `WithCancel`、`WithTimeout`、`WithDeadline`、`WithValue` 都应基于已有的父 Context 创建，形成一棵取消信号可以向下传播的 Context 树。
@@ -5580,6 +5711,9 @@ func main() {
 	// +----------------------------------------------------------------------
 	// 创建一个在指定时间点自动取消的截止时间 Context。
 	deadline := time.Now().Add(10 * time.Millisecond)
+	// 设置上海时区的时间点
+    // zone := time.FixedZone("Asia/Shanghai", 8*3600)
+    // deadline, _ := time.ParseInLocation(time.DateTime, "2026-07-30 14:45:10", zone)
 	// 根据截止时间创建派生 Context。
 	deadlineCtx, deadlineCancel := context.WithDeadline(backgroundCtx, deadline)
 	// 释放截止时间 Context 使用的定时器资源。
@@ -5588,16 +5722,6 @@ func main() {
 	<-deadlineCtx.Done()
 	// 输出截止时间取消的错误原因。
 	fmt.Println("WithDeadline:", deadlineCtx.Err())
-
-	// +----------------------------------------------------------------------
-	// | 5. WithValue：传递请求元数据
-	// +----------------------------------------------------------------------
-	// 创建携带用户 ID 元数据的派生 Context。
-	valueCtx := context.WithValue(backgroundCtx, userIDKey{}, 9527)
-	// 从 Context 中读取用户 ID 元数据。
-	userID, ok := valueCtx.Value(userIDKey{}).(int)
-	// 输出读取到的用户 ID 和类型断言结果。
-	fmt.Println("WithValue:", userID, ok)
 }
 ```
 
@@ -5657,7 +5781,7 @@ func main() {
 > 处理成功，用户ID: 9527
 > --- 处理器退出 ---
 > ```
-<!--SR:!2026-07-30,19,271-->
+<!--SR:!2026-11-04,61,251-->
 <?e?>
 # 生成进程
 1. 基础用法：获取命令输出 (output)
@@ -5763,9 +5887,10 @@ func main() {
 	}
 	// 3. 此时数据已经全部在 buf 里了
 	fmt.Printf("--- 3.3: Shell 复合命令「bytes.Buffer 读取」 ---\n%s\n", buf.String())
-	lsCmd3.Wait()
+	if err := lsCmd3.Wait(); err != nil {
+		panic(err)
+	}
 }
-
 ```
 输出
 ```
@@ -5791,7 +5916,7 @@ total 768
 -rw-r--r--  1 weichengjun  staff   2.4K  1 21 15:44 array.go
 -rw-r--r--  1 weichengjun  staff   908B  1  8 10:38 atomic.go
 ```
-<!--SR:!2026-08-01,9,131-->
+<!--SR:!2026-09-23,20,131-->
 <?e?>
 # 执行进程
 1. 查找二进制文件的完整路径
@@ -5932,255 +6057,7 @@ func main() {
 <!--SR:!2026-10-20,190,311-->
 <?e?>
 # 模块
-Go Modules 是 Go 语言的官方依赖管理工具，自 Go 1.11 版本开始引入，在 Go 1.16 版本成为默认的依赖管理模式。
-Go Modules 解决了 Go 语言长期以来在依赖管理方面的痛点，为开发者提供了版本控制、依赖隔离和可重复构建等核心功能。
-Go Modules 是一组相关 Go 包的集合，它们被版本化并作为一个独立的单元进行管理。每个模块都有一个明确的版本标识，允许开发者在项目中精确指定所需依赖的版本。
-### 核心概念解析
-**模块（Module）** ：包含 `go.mod` 文件的目录树，该文件定义了模块的路径、Go 版本要求和依赖关系。
-**版本（Version）** ：遵循语义化版本控制（Semantic Versioning）的标识符，格式为 `vMAJOR.MINOR.PATCH` 。
-**依赖图（Dependency Graph）** ：模块及其所有传递依赖的层次结构，Go 工具会自动解析和维护。
-## 为什么需要 Go Modules？
-### 传统 GOPATH 的问题
-在 Go Modules 出现之前，Go 使用 GOPATH 模式，存在以下局限性：
-1. **工作空间限制** ：所有项目必须放在 GOPATH 目录下
-2. **版本管理困难** ：无法精确控制依赖版本
-3. **依赖冲突** ：多个项目可能使用同一依赖的不同版本
-4. **可重复构建挑战** ：难以确保不同环境下的构建一致性
-### GOPATH vs Go Modules
-| 特性     | GOPATH 模式     | Go Modules |
-| ------ | ------------- | ---------- |
-| 项目位置限制 | 必须放在 GOPATH 下 | 任意位置均可     |
-| 版本控制   | 有限支持          | 完整的语义化版本控制 |
-| 依赖隔离   | 全局共享          | 项目级隔离      |
-| 可重复构建  | 困难            | 自动保障       |
-| 离线工作   | 不支持           | 支持本地缓存     |
-## 核心文件解析
-### go.mod 文件
-`go.mod` 是模块的定义文件，包含以下主要部分：
-```go
-module example.com/mymodule // 模块路径
-
-go 1.21 // Go 版本要求
-
-require (
-    github.com/gin-gonic/gin v1.9.1
-    golang.org/x/text v0.12.0
-)
-
-replace golang.org/x/text => ../local/text // 本地替换
-
-exclude github.com/old/module v1.0.0 // 排除特定版本
-```
-### go.sum 文件
-`go.sum` 文件记录依赖模块的加密哈希值，用于验证模块内容的完整性：
-```go
-github.com / bytedance / sonic v1.9.1 h1:ei0tVql02GmiYGRCTUcI6g...
-github.com / bytedance / sonic v1.9.1 / go.mod h1:iZcSUejdk5C4OW...
-```
-## 基本命令详解
-### 模块初始化
-```go
-# 创建新模块
-go mod init example.com/myproject
-
-# 在现有项目中初始化
-cd /path/to/project
-go mod init
-```
-### 依赖管理
-```go
-# 添加依赖（自动选择最新版本）
-go get github.com/gin-gonic/gin
-
-# 添加特定版本
-go get github.com/gin-gonic/gin@v1.9.1
-
-# 更新到最新版本
-go get -u github.com/gin-gonic/gin
-
-# 更新所有依赖
-go get -u all
-
-# 下载依赖到本地缓存
-go mod download
-
-# 整理 go.mod 文件
-go mod tidy
-```
-### 依赖查询
-```go
-# 查看所有依赖
-go list -m all
-
-# 查看特定依赖的可用版本
-go list -m -versions github.com/gin-gonic/gin
-
-# 查看为什么需要某个依赖
-go mod why github.com/gin-gonic/gin
-```
-## 实际工作流程
-### 1\. 新项目初始化
-```go
-# 创建项目目录
-mkdir myproject && cd myproject
-
-# 初始化模块
-go mod init github.com/username/myproject
-
-# 编写代码并导入依赖
-# 然后运行以下命令自动处理依赖
-go mod tidy
-```
-### 2\. 依赖版本控制策略
-```go
-// go.mod 中的版本指定方式
-require (
-    github.com/lib/pq v1.10.9          // 精确版本
-    golang.org/x/text v0.3.7           // 精确版本
-    github.com/stretchr/testify v1.8.0 // 测试依赖
-)
-
-// 间接依赖由 Go 工具自动管理
-```
-### 3\. 版本选择机制
-Go Modules 使用 **最小版本选择（MVS** ）算法：
-![](https://weichengjun2.dpdns.org/i/2026/01/19/696e0a3627cef.png)
-## 高级特性
-### 版本替换（Replace）
-```go
-// 用本地路径替换远程依赖
-replace github.com/some/dependency => ../local/dependency
-
-// 用不同版本替换
-replace github.com/some/dependency => github.com/some/dependency v2.0.0
-
-// 用 fork 仓库替换
-replace github.com/some/dependency => github.com/myfork/dependency v1.0.0
-```
-### 排除特定版本
-```go
-exclude (
-    github.com/problematic/module v1.0.0
-    github.com/another/badmodule v2.1.0
-)
-```
-### 私有仓库支持
-```go
-# 配置私有仓库认证
-git config --global url."https://user:token@github.com".insteadOf "https://github.com"
-
-# 或使用环境变量
-export GOPRIVATE=github.com/mycompany/*
-```
-## 最佳实践
-### 1\. 版本管理策略
-```go
-# 开发阶段使用最新版本
-go get -u ./...
-
-# 发布前锁定版本
-go mod tidy
-go mod vendor  # 可选：创建vendor目录
-
-# 定期更新依赖
-go get -u all
-go mod tidy
-```
-### 2\. 协作开发规范
-```go
-# 提交前确保 go.mod 和 go.sum 一致
-go mod tidy
-go mod verify
-
-# 检查未使用的依赖
-go mod tidy -v
-```
-### 3\. CI/CD 集成
-```go
-# GitHub Actions 示例
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
-        with:
-          go-version: '1.21'
-      - run: go mod download
-      - run: go test ./...
-```
-## 常见问题与解决方案
-### 问题 1: 依赖下载失败
-解决方案
-```go
-# 设置代理
-go env -w GOPROXY=https://goproxy.cn,direct
-
-# 清理缓存并重试
-go clean -modcache
-go mod download
-```
-### 问题 2: 版本冲突
-解决方案
-```go
-# 查看依赖图
-go mod graph
-
-# 分析冲突原因
-go mod why -m conflicting/package
-
-# 使用 replace 指令解决
-```
-### 问题 3: 私有模块认证
-解决方案
-```go
-# 配置 netrc 文件
-machine github.com
-login username
-password token
-
-# 或使用 SSH 替代 HTTPS
-git config --global url."git@github.com:".insteadOf "https://github.com/"
-```
-## 实践练习
-### 练习 1: 创建第一个模块
-1、创建新目录并初始化模块：
-```shell
-mkdir hello-world && cd hello-world
-go mod init example.com/hello
-```
-2、创建 `main.go` ：
-```go
-package main
-
-import (
-    "fmt"
-    "rsc.io/quote"
-)
-
-func main() {
-    fmt.Println(quote.Hello())
-}
-```
-3、运行并观察依赖管理：
-```go
-go run main.go
-go mod tidy
-cat go.mod
-```
-### 练习 2: 版本控制实践
-1、添加特定版本的依赖：
-```shell
-go get golang.org/x/text@v0.3.7
-```
-2、尝试更新到最新版本：
-```shell
-go get -u golang.org/x/text
-```
-3、查看版本变化：
-```shell
-go list -m all | grep text
-```
+模块内容已完整迁移至 [[Work/Script/Go/Go Modules 完全操作指南\|Go Modules 完全操作指南]]。
 # 反射
 ## 基础
 <?e?>
@@ -6188,7 +6065,7 @@ go list -m all | grep text
 ### 反射的三大定律
 1. 从`interface{}`到**反射对象**：reflect.==1;;TypeOf(i)== 取类型，reflect.==1;;ValueOf(i)== 取值；传参隐式转为 ==1;;interface{}==，得 `reflect.Type`（类型）与 `reflect.Value`（动态值）。
 2. **修改**反射对象：值须 ==1;;可设置(Settable)==；传 ==1;;值（副本）== 不可 Set，须传 ==1;;指针== 并用 ==1;;Elem()== 解引用。
-3. 从**反射对象**到 `interface{}`：v.==1;;Interface()== ==1;;重新装箱== 为接口，再经 ==1;;类型断言== 还原为原始类型。
+3. 从**反射对象**到 `interface{}`：使用==1;;Interface()== 重新装箱为接口，再经 ==1;;类型断言== 还原为原始类型。
 ### 可见性与导出规则
 #### 1. 核心原则：可见性隔离
    Go反射严格遵循语言的**封装性**。只有首字母 **大写** 的**方法**和**字段**，才能通过反射进行**获取**、**调用**、**修改**。
@@ -6214,7 +6091,7 @@ if !method.IsValid() {
    反射被设计为一种“观察者”，而不是“破坏者”。它**禁止**访问**私有成员**是为了保护包的内部逻辑不被外部恶意或无意地篡改，确保系统的稳定性。
 > [!TIP]
 > **记忆口诀**：反射不是万能匙，首字母大写是前提；调用之前看 Valid，安全稳定第一位。
-<!--SR:!2026-07-27,27,253-->
+<!--SR:!2026-10-04,69,253-->
 <?e?>
 ### 基础结构
 ```go
@@ -6255,12 +6132,12 @@ func (s *MyService) HandlePtr(p *Player) {
 }
 ```
 #### 专家提示 (Expert Tips):
-1. 性能：反射比直接调用慢 ==1;;1-100== 倍。它是将“编译时检查”推迟到“运行时计算”。
+1. 性能：reflect.Value.Call 通常比直接调用慢==1;;几十到数百==倍；。它是将“编译时检查”推迟到“运行时计算”。
 2. 缓存：在高性能 ORM 或 JSON 库中，通常会用 ==1;;sync.Map== 缓存 Type 的 ==1;;Field==索引 和 ==1;;Tag==解析结果。
 3. 谨慎：反射可以==1;;读取==私有字段(PkgPath != "")，但绝对无法通过反射 SetString ==1;;修改==它们（除非使用 unsafe）。
 4. 类型安全：反射绕过了==1;;编译器==检查。如果 SetString 到了一个 int 字段，程序会直接 ==1;;Panic==。
 5. 对齐：Method.Call 对参数极其严格。传入 Value 还是 Pointer 必须与 ==1;;Method.Type().In(i)== 严格匹配。
-<!--SR:!2026-07-31,31,253-->
+<!--SR:!2026-10-17,78,253-->
 <?e?>
 ### 元数据探索
 **一句话总结**：`Type` 是你用来**看**的元数据，`Value` 是你用来**做**动作的执行者。
@@ -6279,8 +6156,8 @@ func (s *MyService) HandlePtr(p *Player) {
 | **主要用途** | 类型判断、Tag 读取、元数据校验 | 序列化、字段读写、调用方法 |
 | **性能开销** | 极低（仅读取类型） | 较高（涉及堆分配与封装） |
 #### 3. 精简决策法则
-* **只查配置，不用写数据**：首选 `reflect.TypeOf`，它开销更小且语义清晰。
-* **需要修改或读取数据**：必须使用 `reflect.ValueOf`，它是进行数据映射（如 ORM、JSON 解析）的必经之路。
+* **只查**配置，**不改写**数据：首选 `reflect.TypeOf`，它**开销更小**且语义清晰。
+* 需要**修改**或**读取**数据：必须使用 `reflect.ValueOf`，它是进行数据映射（如 ORM、JSON 解析）的必经之路。
 <?l?>
 #### TypeOf
 >**💡注意**：u 是`&User{}`**(指针)** 时 不能调用 `NumField()`
@@ -6351,7 +6228,7 @@ for j := 0; j < vo.NumField(); j++ {
 <!--SR:!2026-12-21,174,273-->
 <?e?>
 ### 动态值操作与可设置性
-💡重点：CanSet() 的前提是 ==1;;ValueOf(&x).Elem()==
+💡重点：CanSet() 的前提是 ==1;;传指针：&x==和==1;;解引用：Elem()==
 > [!question]- 示例代码
 > ```go
 > fmt.Println("\n2. [值操作与寻址]")
@@ -6376,7 +6253,7 @@ for j := 0; j < vo.NumField(); j++ {
 <?e?>
 ### 方法动态调用
 - `reflect.Value.Method()` 是==1;;绑定==态：拿到的是绑定了具体**实例的方法值**，调用时==1;;不需要==传接收者。
-- `reflect.Type.Method().Func` 是==1;;非绑定==态：拿到的是**底层函数**，调用时==1;;第一个参数必须==传接收者，参数不匹配导致==1;;panic==。
+- `reflect.Type.Method().Func` 是==1;;非绑定==态：拿到的是**底层函数**，调用时第==1;;一==个参数必须传接收者，参数不匹配导致==1;;panic==。
 - `Value.Method(i)` 的参数数量是==1;;N==，`Type.Method(i).Func` 的参数数量是==1;;N + 1==。
 - 固定实例缓存/一般业务调用优先用==1;;绑定==态；框架、DI、底层复用优先用==1;;非绑定==态。
 
@@ -6452,7 +6329,7 @@ for j := 0; j < vo.NumField(); j++ {
 #### 架构级记忆要点
 - 90% 场景选==1;;方式 A==：处理一个具体对象时更直觉，参数列表也更贴近原生函数签名。
 - 10% 场景选==1;;方式 B==：需要**同一个方法**定义作用于**大量不同实例**时，更利于内存复用。
-<!--SR:!2026-08-14,36,253-->
+<!--SR:!2026-10-16,44,233-->
 <?e?>
 ### 运行时动态构造
 💡重点：可以在完全不知道类型名的情况下，根据 Type 生产实物
@@ -6509,7 +6386,7 @@ vPtr.Elem().Field(1).SetInt(1024)
 // 5. 【类型导出】还原为 interface{}。此时该对象可直接配合 json.Marshal 等标准库使用
 fmt.Printf("凭空构造体: %+v\n", vPtr.Interface())
 ```
-<!--SR:!2026-09-01,40,233-->
+<!--SR:!2026-11-30,90,233-->
 <?e?>
 #### slice
 `reflect.MakeSlice` 模拟了内建函数 `make([]T, len, cap)` 的底层行为。
@@ -6531,7 +6408,7 @@ vSlice = reflect.Append(vSlice, reflect.ValueOf(100), reflect.ValueOf(200))
 // 4.【类型导出】通过 .Interface() 消除反射包装，回归普通切片视图
 fmt.Printf("动态切片: %v\n", vSlice.Interface()) // 动态切片: [100 200]
 ```
-<!--SR:!2026-08-09,34,253-->
+<!--SR:!2026-12-10,122,273-->
 <?e?>
 #### map
 `reflect.MakeMap` 模拟了内建函数 `make(map[K]V)` 的底层行为。
@@ -6554,7 +6431,7 @@ vMap.SetMapIndex(reflect.ValueOf("Go"), reflect.ValueOf(2026))
 // 4.【类型导出】通过 .Interface() 卸载反射外壳，回归标准的 map 视图
 fmt.Printf("动态映射: %v\n", vMap.Interface()) // 动态映射: map[Go:2026]
 ```
-<!--SR:!2026-07-31,25,253-->
+<!--SR:!2026-10-02,63,253-->
 <?e?>
 #### chan
 `reflect.MakeChan` 模拟了内建函数 `make(chan T, buffer)` 的底层行为。
@@ -6580,7 +6457,7 @@ msg, _ := vChan.Recv()
 // 5.【类型导出】通过 .String() 直接提取底层字符串，或使用 .Interface() 还原类型
 fmt.Printf("动态通道接收: %s\n", msg.String()) // 动态通道接收: 反射消息
 ```
-<!--SR:!2026-08-05,30,253-->
+<!--SR:!2026-10-22,78,253-->
 <?e?>
 #### func
 💡重点：这是反射最**黑魔法**的部分，运行时“捏”出一个逻辑函数
@@ -6628,14 +6505,14 @@ fmt.Printf("%v\n", doubleFunc([]int{10, 20})) // [20 40]
 doubleFunc2 := vFunc.Interface().(func([]int) []int)
 fmt.Printf("%v\n", doubleFunc2([]int{30, 40})) // [60 80]
 ```
-<!--SR:!2026-08-08,33,253-->
+<!--SR:!2026-10-27,80,253-->
 <?e?>
 ### 防御性检查与接口
 #### 空值校验
-反映指针变量本身的“合法性”与“内容”。
+区分反射值是否有效、可 nil 值是否为 nil，以及值是否处于语言层面的零值状态。
 ##### 1. `IsValid()` —— 判定：反射对象是否存在？
-**底层逻辑**：`IsValid()` 检查 `reflect.Value` 内部是否持有有效的 ==1;;类型（Type）信息==。如果返回 ==1;;false==，代表这个 `Value` 是一个 ==1;;空壳==；此时调用任何其他方法都会直接 ==1;;Panic==。
-> **准则**：调用任何方法前，先用 ==1;;IsValid()== 防 Panic。
+**底层逻辑**：`IsValid()` 判断 `reflect.Value` 是否表示一个有效值。`reflect.Value{}`、`reflect.ValueOf(nil)` 或查找不存在的字段都会返回 ==1;;无效 Value==；对无效值调用部分反射方法可能 ==1;;Panic==。
+> **准则**：处理可能为空的反射结果时，先用 ==1;;IsValid()== 检查。
 
 - **场景一**：`MapIndex` 找不到 key 时会返回 ==1;;无效 Value==。
 > [!question]- 获取不存在的 Map Key
@@ -6653,8 +6530,8 @@ fmt.Printf("%v\n", doubleFunc2([]int{30, 40})) // [60 80]
 > ```
 <!--SR:!2027-01-12,190,273-->
 <?e?>
-##### 2. `IsNil()` —— 判定：持有的地址是否为空？
-**底层逻辑**：检查变量持有的底层内存地址（Uintptr）是否为 ==1;;0==。只适用于 ==1;;引用类型==：**Ptr, Chan, Map, Slice, Func, Interface**。
+##### 2. `IsNil()` —— 判定：可 nil 类型的值是否为 nil？
+**底层逻辑**：判断值本身是否为 `nil`。只适用于可 nil 类型：**Ptr、Chan、Map、Slice、Func、Interface**；它不判断内存连通性，也不适用于 `int`、`struct` 等类型。
 * **场景一：声明但未初始化的切片/映射**
 未初始化 slice/map → IsNil() 为 ==1;;true==
 > [!question]- 示例代码
@@ -6673,8 +6550,8 @@ fmt.Printf("%v\n", doubleFunc2([]int{30, 40})) // [60 80]
 
 <!--SR:!2026-12-31,183,273-->
 <?e?>
-##### 3. `IsZero()` —— 判定：内容是否为初始零值？
-**底层逻辑**：检查该变量的值是否等于其类型的 ==1;;默认值（零值）==（`0`, `""`, `false`）。**结构体**会 ==1;;递归检查所有字段== 是否均为零值。
+##### 3. `IsZero()` —— 判定：值是否等于类型零值？
+**底层逻辑**：检查值是否等于其类型的 ==1;;零值==（如 `0`、`""`、`false`、`nil`）。**结构体**会检查所有字段是否都处于零值状态；这表示语言层面的零值，不等同于业务上的“空”或“未使用”。
 * **场景一：基础类型的零值**
 `0`、`""` 等基础零值 → ==1;;true==
 > [!question]- 示例代码
@@ -6726,8 +6603,11 @@ true (里面的 Name 和 Age 确实都是零值)
 | **`IsNil()`**   | ==1;;Panic==           | ==1;;true==        | ==1;;false==    | ==1;;Panic== |
 | **`IsZero()`**  | ==1;;Panic==           | ==1;;true==        | ==1;;false==    | ==1;;false== |
 ##### 架构级记忆要点 💡
-* **防御式编程**：在处理外部传入的 `interface{}` 时，标准的检查流程是：`v.IsValid()` -> `if v.Kind() == Ptr { v.IsNil() }` -> `v.IsZero()`
-* **语义差异**：`IsNil` 关注的是==1;;内存连通性==，而 `IsZero` 关注的是==1;;业务状态==
+* **防御式编程**：在处理外部传入的 `interface{}` 时，先 `v.IsValid()`；再确认 `Kind` 属于可 nil 类型后调用 `v.IsNil()`；需要判断类型零值时再调用 `v.IsZero()`。
+* **语义差异**：
+	* `IsValid()` 判断反射值是否有效。
+	* `IsNil()` 判断可为 nil 的类型是否为 nil。
+	* `IsZero()` 判断值是否等于其类型的零值。
 ##### 通用的 `IsEmpty` 函数
 它需要处理从基础类型到复杂容器（Slice, Map, Chan）的所有“空”语义。
 逻辑建模为 **“三层过滤网”：无效性检查 -> 引用零值检查 -> 容器长度检查。**
@@ -6760,10 +6640,10 @@ func IsEmpty(i interface{}) bool {
 	}
 }
 ```
-<!--SR:!2026-08-02,32,253-->
+<!--SR:!2026-09-17,20,213-->
 <?e?>
 #### 接口类型采样
-**一句话**：`TypeOf` 返回的是接口变量中保存的==1;;动态==类型，不是接口==1;;定义==本身；要做 `Implements` 判定，必须先拿到接口定义的 `reflect.Type`，所以要用==1;;指针绕路==采样。
+**一句话**：`TypeOf` 返回的是接口变量中保存的==1;;动态==类型，不是接口==1;;定义==本身；要做 `Implements` 判定，必须先拿到接口定义的 `reflect.Type`，所以要用==1;;指针==绕路采样。
 **类比**：接口变量像贴了「Stringer」标签的盒子，里面装着 `User`；
 - `TypeOf(盒子)` 答「里面是 User」；
 - 指针采样答「标签/interface 定义是 Stringer」。
@@ -6781,6 +6661,8 @@ func IsEmpty(i interface{}) bool {
 ##### 指针采样怎么做？
 1. **直接传接口的问题**：传入 `fmt.Stringer` 变量时，Go 将其存为 `(itab, data)`；`TypeOf` 会跳过==1;;接口==外壳，只提取 `data` 对应的具体实现类型。
 2. **指针绕路**：`(*fmt.Stringer)(nil)` 在编译期锁定 `*fmt.Stringer`，无需真实对象；`TypeOf` 得到指针 Type，`.Elem()` 剥掉指针层，得到==1;;接口==定义本身。
+
+>💡注意：接口实现判定时，**方法集的归属**取决于**接收者类型**。[[Work/Script/Go/Go By Example#方法\|方法]]
 ```go
 // 1. 静态类型锁定：编译期声明 *fmt.Stringer 空指针，无需 Stringer 实体
 ptr := (*fmt.Stringer)(nil)
@@ -6792,18 +6674,19 @@ tPtr := reflect.TypeOf(ptr)
 // 等价：reflect.TypeOf(new(fmt.Stringer)).Elem()
 stringerType := tPtr.Elem()
 
-// 4. 合法性判定：用接口 Type 作基准，判定 User 是否 Implements
-isImplement := reflect.TypeOf(User{}).Implements(stringerType)
+// 4. 合法性判定：用接口 Type 作基准，判定 User 是否 Implements「如果方法使用指针接收者，只有指针类型满足接口」
+// isImplement := reflect.TypeOf(User{}).Implements(stringerType)
+isImplement := reflect.TypeOf(&User{}).Implements(stringerType)
 fmt.Printf("User 是否实现了 Stringer: %v\n", isImplement) // false
 ```
 ##### 为什么需要 `.Elem()`？
 `Elem()` 是剥离「容器」拿「内容 Type」的通用 API：
-- 对指针类型调用 `.Elem()`，返回其指向的==1;;基础==类型。
-- 对 `*接口` 指针调用 `.Elem()`，返回的基础类型就是该==1;;接口==类型本身。
+- 对**指针类型**调用 `.Elem()`，返回其指向的==1;;基础==类型。
+- 对**接口指针**调用 `.Elem()`，返回的基础类型就是该==1;;接口==类型本身。
 ##### 记忆要点
 - **采样公式**：`reflect.TypeOf((*T)(nil)).Elem()`，等价于 `reflect.TypeOf(new(T)).Elem()`。
 - **用途**：为 `Implements` / `AssignableTo` 提供所需的接口==1;;基准==Type，直接对接口变量 `TypeOf` 不可替代。
-<!--SR:!2026-07-25,9,213-->
+<!--SR:!2026-09-12,7,133-->
 <?e?>
 #### 兼容性比对
 扫描 User 类型的 Method Set（方法集），检查是否**完全覆盖**了 Stringer 接口定义的**所有函数**
@@ -6839,7 +6722,8 @@ for i := 0; i < vSvc.NumMethod(); i++ {
 	originType := method.Type().In(0)
 	// 2.【类型转换】检测参数是否为指针。若是指针，通过 Elem() 提取其指向的“基准类型”(Base Type)
 	tmpType := originType
-	if originType.Kind() == reflect.Ptr {
+	isPtr := originType.Kind() == reflect.Ptr
+	if isPtr {
 		tmpType = originType.Elem()
 	}
 	// 3.【堆内存动态分配】在内存中为基准类型申请零值空间，并返回指向该空间的指针 Value
@@ -6850,7 +6734,7 @@ for i := 0; i < vSvc.NumMethod(); i++ {
 	// 5.【类型对齐与解引用】根据目标方法对参数的要求（值传递 vs 指针传递）进行最终适配
 	// 核心逻辑：若方法需要值类型，则通过 .Elem() 实现 *T -> T 的转换；否则直接传递指针
 	arg := ptrVal
-	if originType.Kind() != reflect.Ptr {
+	if !isPtr {
 		arg = ptrVal.Elem() // 解引用：*Player -> Player
 	}
 	// 6.【反射触发调用】将适配后的参数压入反射调用栈，执行目标逻辑并输出结果
@@ -6864,12 +6748,20 @@ for i := 0; i < vSvc.NumMethod(); i++ {
    Pointer接收成功: M4-Core-Data
 */
 ```
-<!--SR:!2026-07-30,24,235-->
+<!--SR:!2026-09-23,55,235-->
 <?e?>
 ## 实现结构体方法动态回调
 <?l?>
 ### 动态回调Map
 ```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+	"strings"
+)
+
 // --- 1. 数据模型定义层 ---
 // 状态结构体
 type StatusDO struct {
@@ -6891,7 +6783,7 @@ const (
 )
 
 // 预定义方法缓存，避免高频调用时 MethodByName 的性能损耗
-var eventCache map[string]reflect.Value
+var eventCache = map[string]reflect.Value{}
 
 // --- 2. 业务逻辑层 ---
 // 请求参数结构体：使用 map 标签声明数据来源路径
@@ -6938,28 +6830,23 @@ func call(eventName string, req map[string]any) any {
 	}
 	// reflect.New(...) -> 分配内存，得到新实例的指针 (*Cancel)
 	reqValue := reflect.New(e).Elem() // .Elem() -> 进入实例内部，使其字段变为“可填充”状态
-
 	// 遍历结构体字段，根据 Tag 注入数据
 	for i := 0; i < reqValue.NumField(); i++ {
 		fieldV := reqValue.Field(i)        // 获取字段的反射值
 		fieldT := reqValue.Type().Field(i) // 获取字段的元数据（包括 Tag）
 		path := fieldT.Tag.Get("map")      // 获取 map 标签定义的路径
-
 		// 路径解析：支持 "a.b.c" 格式的深层 map 提取
-		var current any = req
+		var field any
 		for _, part := range strings.Split(path, ".") {
-			if m, ok := current.(map[string]any); ok {
-				current = m[part]
-			}
+			field = req[part]
 		}
-
 		// 如果路径解析失败，跳过当前字段
-		if current == nil {
+		if field == nil {
 			continue
 		}
 		// 如果查找到有效数据，则注入到结构体实例中
-		val := reflect.ValueOf(current)
-		// 核心：检查【数据源类型】是否可以赋值给【目标字段类型】，fieldT.Type 是结构体定义的类型，val.Type() 是实际数据的类型
+		val := reflect.ValueOf(field)
+		// 💡核心：检查【数据源类型】是否可以赋值给【目标字段类型】，fieldT.Type 是结构体定义的类型，val.Type() 是实际数据的类型
 		if !val.Type().AssignableTo(fieldT.Type) {
 			// 生产环境建议：在这里可以记录日志，说明类型不匹配
 			fmt.Printf("方法参数类型不匹配: 期望 %v, 得到 %v\n", fieldT.Type, val.Type())
@@ -6978,16 +6865,11 @@ func call(eventName string, req map[string]any) any {
 func main() {
 	// 声明数据结构
 	orderActionService := &OrderActionService{}
-	eventCache = make(map[string]reflect.Value)
-
 	// 扫描结构体的所有方法, 并加入缓存
 	vo := reflect.ValueOf(orderActionService)
-	numMethod := vo.NumMethod()
-	for i := 0; i < numMethod; i++ {
-		m := vo.Method(i)
-		eventCache[vo.Type().Method(i).Name] = m
+	for i := 0; i < vo.NumMethod(); i++ {
+		eventCache[vo.Type().Method(i).Name] = vo.Method(i)
 	}
-
 	// 模拟来自上游的原始数据源
 	rawData := map[string]any{
 		"status": &StatusDO{Status: 1},
@@ -6996,7 +6878,6 @@ func main() {
 			"reason": "设备升级，重新下单",
 		},
 	}
-
 	// 触发调度：指定服务、方法和数据源
 	result := call(OrderCancel, rawData)
 	// 最终结果转换与输出
@@ -7004,6 +6885,7 @@ func main() {
 		fmt.Printf("【调用完成】返回状态码: %d, 消息: %s\n", finalStatus.Status, finalStatus.Msg)
 	}
 }
+
 ```
 输出
 ```
@@ -7160,7 +7042,7 @@ func main() {
 【取消】原因: 设备升级，重新下单, 订单ID: 1
 【调用完成】返回状态码: 2
 ```
-<!--SR:!2026-07-27,7,154-->
+<!--SR:!2026-09-24,34,174-->
 <?e?>
 ## GO VS PHP 反射耗时对比
 | 语言  | 计时               | 防优化                                             | 场景                                       |
@@ -7227,138 +7109,149 @@ PHP Reflect                   83.29 ns/op
 **实战结论**
 - **PHP**：反射 ~==1;;4.6==×，Web 毫秒级请求通常可接受。
 - **Go**：缓存 `reflect.Value` / 字段索引后 ~==1;;1.1==×；==1;;FieldByName==在循环内 ~==1;;16==×，高频路径应预 ==1;;缓存== 或 ==1;;代码生成==。
-<!--SR:!2026-07-26,9,230-->
+<!--SR:!2026-10-01,45,230-->
 <?e?>
 # 中间件
 ## 拦截错误
-- `middleA()()` 能成功捕获 panic，因为 `recover` 被注册在==1;;真正执行 panic 的匿名函数内部==。
-- `middleB()()` 会崩溃，因为 `recover` 只守护==1;;`middleB` 本身==，不能跨函数边界救火。
-> [!question]- 示例代码
-> ```go
-> package main
->
-> import "fmt"
->
-> func main() {
-> 	// ✅情况 A：执行 middleA() 返回匿名函数，然后立即调用该函数
-> 	middleA()() // 结果：打印 "recoverA: 错误了A"，成功捕获
->
-> 	// ❌情况 B：执行 middleB() 返回函数，然后立即调用该函数
-> 	middleB()() // 结果：程序崩溃 (Panic)，无法捕获
-> }
->
-> // --- 情况 A：通过闭包将 recover 注入到执行逻辑内部 ---
-> func middleA() func() {
-> 	// 步骤 1: middleA 开始运行
-> 	// 步骤 2: 直接返回一个匿名函数（此时内部代码还未执行）
-> 	return func() {
-> 		// 步骤 3: main 调用此函数，开始执行
-> 		// 步骤 4: 注册 defer，它守护的是当前这个匿名函数
-> 		defer func() {
-> 			if err := recover(); err != nil {
-> 				fmt.Println("recoverA: ", err)
-> 			}
-> 		}()
-> 		// 步骤 5: 触发 panic
-> 		panic("错误了A")
-> 		// 步骤 6: panic 向上寻找最近的守护者，触发步骤 4 的 defer -> 成功捕获
-> 	}
-> }
->
-> // --- 情况 B：recover 注册在了错误的生命周期 ---
-> func middleB() func() {
-> 	// 步骤 1: middleB 开始运行
-> 	// 步骤 2: 注册 defer，但它只守护 middleB 函数本身
-> 	defer func() {
-> 		if err := recover(); err != nil {
-> 			fmt.Println("recoverB: ", err)
-> 		}
-> 	}()
-> 	// 步骤 3: middleB 运行结束，返回 handlerFunc 地址
-> 	// 步骤 4: 执行 middleB 的 defer（此时无 panic，recover 为空）
-> 	return func() { panic("错误了B") }
-> 	// 步骤 5: main 函数拿到地址后开始执行该函数 -> 触发 panic
-> 	// 此时 middleB 已销毁，其 defer 无法跨越函数边界去救火
-> }
-> ```
-> 输出
-> ```
-> recoverA:  错误了A
-> panic: 错误了B
-> ```
+```go
+package main
+
+import "fmt"
+
+// --- 情况 A：通过闭包将 recover 注入到执行逻辑内部 ---
+func middleA() func() {
+	// 步骤 1: middleA 开始运行
+	// 步骤 2: 直接返回一个匿名函数（此时内部代码还未执行）
+	return func() {
+		// 步骤 3: main 调用此函数，开始执行
+		// 步骤 4: 注册 defer，它守护的是当前这个匿名函数
+		defer func() {
+			if err := recover(); err != nil {
+				fmt.Println("recoverA: ", err)
+			}
+		}()
+		// 步骤 5: 触发 panic
+		panic("错误了A")
+		// 步骤 6: panic 向上寻找最近的守护者，触发步骤 4 的 defer -> 成功捕获
+	}
+}
+
+// --- 情况 B：recover 注册在了错误的生命周期 ---
+func middleB() func() {
+	// 步骤 1: middleB 开始运行
+	// 步骤 2: 注册 defer，但它只守护 middleB 函数本身
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("recoverB: ", err)
+		}
+	}()
+	// 步骤 3: middleB 运行结束，返回 handlerFunc 地址
+	// 步骤 4: 执行 middleB 的 defer（此时无 panic，recover 为空）
+	return func() { panic("错误了B") }
+	// 步骤 5: main 函数拿到地址后开始执行该函数 -> 触发 panic
+	// 此时 middleB 已销毁，其 defer 无法跨越函数边界去救火
+}
+
+func main() {
+	// ✅情况 A：执行 middleA() 返回匿名函数，然后立即调用该函数
+	middleA()() // 结果：打印 "recoverA: 错误了A"，成功捕获
+
+	// ❌情况 B：执行 middleB() 返回函数，然后立即调用该函数
+	middleB()() // 结果：程序崩溃 (Panic)，无法捕获
+}
+```
+输出
+```
+recoverA:  错误了A
+panic: 错误了B
+```
+
+- `middleA()()` 能成功捕获 panic，因为 `recover` 被注册在真正执行 panic 的匿名函数==1;;内==部。
+- `middleB()()` 会崩溃，因为 `recover` 只守护==1;;`middleB`==本身，不能跨函数边界救火函数==1;;内==部。
 ## 洋葱模型 onion
-- 洋葱模型的核心是==1;;`Context.Next()` 依次推进处理器链==。
-- `Recovery` 负责==1;;异常捕获==，`Logger` 负责==1;;请求/响应日志==，`Handler` 负责==1;;核心业务处理==。
-- `index: -1` 表示==1;;从第一个中间件开始执行==。
-> [!question]- 示例代码
-> ```go
-> package main
->
-> import "fmt"
->
-> // --- Context 结构 ---
-> type Context struct {
-> 	handlers []func(*Context) // 处理器链条（包含中间件和控制器）
-> 	index    int              // 当前执行到的索引位置
-> }
->
-> // --- 依次执行后续的处理器，就像推倒第一块多米诺骨牌 ---
-> func (c *Context) Next() {
-> 	c.index++
-> 	for c.index < len(c.handlers) {
-> 		c.handlers[c.index](c)
-> 		c.index++ // 💡`Next()` 循环内补 `c.index++`，内层跑完把 `index` 推到底，外层 for 不再重复调 Handler。
-> 	}
-> }
->
-> // --- 中间件 A：异常捕获 ---
-> func Recovery(c *Context) {
-> 	defer func() {
-> 		if err := recover(); err != nil {
-> 			fmt.Println("[Recovery] 捕获异常，返回 500 错误")
-> 		}
-> 	}()
-> 	fmt.Println("[Recovery] 防护开始")
-> 	c.Next()
-> 	fmt.Println("[Recovery] 防护结束")
-> }
->
-> // --- 中间件 B：日志记录 ---
-> func Logger(c *Context) {
-> 	fmt.Println("[Log] --> 请求开始") // Next 之前：请求阶段
-> 	c.Next()                      // 暂停当前，去执行后面的
-> 	fmt.Println("[Log] <-- 响应结束") // Next 之后：响应阶段
-> }
->
-> // --- 核心业务逻辑 ---
-> func Handler(c *Context) {
-> 	fmt.Println("[Business] 业务逻辑开始")
-> 	panic("[Business] 业务逻辑 错误❌")
-> 	c.Next()
-> 	fmt.Println("[Business] 业务逻辑结束")
-> }
->
-> func main() {
-> 	c := &Context{
-> 		handlers: []func(*Context){Recovery, Logger, Handler},
-> 		index:    -1,
-> 	}
-> 	c.Next()
-> }
-> ```
-> 输出
-> ```
-> [Recovery] 已开启防护
-> [Log] --> 请求进入
-> [Business] 执行核心业务逻辑...
-> [Log] <-- 响应返回
-> [Recovery] 防护任务结束
-> ```
+```go
+package main
+
+import "fmt"
+
+// --- Context 结构 ---
+type Context struct {
+	handlers []func(*Context) // 处理器链条（包含中间件和控制器）
+	index    int              // 当前执行到的索引位置
+}
+
+// --- 依次执行后续的处理器，就像推倒第一块多米诺骨牌 ---
+func (c *Context) Next() {
+	c.index++
+	for c.index < len(c.handlers) {
+		c.handlers[c.index](c)
+		c.index++ // 💡`Next()`循环内补`c.index++`，内层跑完把`index`推到底，外层 for 不再重复调 Handler。
+	}
+}
+
+// --- 中间件 A：异常捕获 ---
+func Recovery(c *Context) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("[Recovery] 捕获异常: ", err)
+		}
+	}()
+	fmt.Println("[Recovery] 防护开始")
+	c.Next()
+	fmt.Println("[Recovery] 防护结束")
+}
+
+// --- 中间件 B：日志记录 ---
+func Logger(c *Context) {
+	fmt.Println("[Log] --> 请求开始") // Next 之前：请求阶段
+	c.Next()                      // 暂停当前，去执行后面的
+	fmt.Println("[Log] <-- 响应结束") // Next 之后：响应阶段
+}
+
+// --- 业务逻辑 ---
+func Handler(c *Context) {
+	fmt.Println("[Business] 业务逻辑开始")
+	panic("[Business] 业务逻辑 错误❌")
+	c.Next()
+	fmt.Println("[Business] 业务逻辑结束")
+}
+
+// --- 业务逻辑2 ---
+func Handler2(c *Context) {
+	fmt.Println("[Business2] 业务逻辑开始")
+	c.Next()
+	fmt.Println("[Business2] 业务逻辑结束")
+}
+
+func main() {
+	c := &Context{
+		handlers: []func(*Context){Recovery, Logger, Handler, Handler2},
+		index:    -1,
+	}
+	c.Next()
+}
+
+```
+输出
+```
+[Recovery] 防护开始
+[Log] --> 请求开始
+[Business] 业务逻辑开始
+[Recovery] 捕获异常:  [Business] 业务逻辑 错误❌
+[Business2] 业务逻辑开始
+[Business2] 业务逻辑结束
+```
+
+- 洋葱模型的核心是==1;;`Context.Next()`==依次推进处理器链。
+- `Recovery` 负责==1;;异常==捕获，`Logger` 负责==1;;请求/响应==日志，`Handler` 负责核心==1;;业务==处理。
+- `index: -1` 表示从第==1;;一==个中间件开始执行。
+- 💡`Next()`循环内补`c.index++`，**内层跑完把`index`推到底**从而让**后续逻辑有机会执行**，外层 for 不再重复调 Handler。
+	- `defer` **只执行一次**；首次 `panic` 被 `recover` 后，`Recovery` 会直接返回，**不会继续执行** `c.Next()` 后的代码。
 
 关键规则：
 >`recover` 在哪个函数的 defer 里，就从「谁调用了 panic 链」的角度截断；panic 发生点之后的代码都不会再执行，包括 Logger 里 `c.Next()` 后面的那一行。
 
-<!--SR:!2026-08-21,45,267-->
+<!--SR:!2026-09-14,23,247-->
 <?e?>
 # 数据库客户端
 客户端应在应用启动时创建并复用；`*sql.DB` 与 `*redis.Client` 都是并发安全的连接池句柄，不要为每个请求重新建立连接。
@@ -7712,5 +7605,5 @@ func GetUser(ctx context.Context, client *redis.Client) (string, error) {
 }
 ```
 不要把 Context 保存到结构体中，也不要用 `context.Background()` 替代已有的请求 Context；应沿调用链继续传递上游==1;;Context==。
-<!--SR:!2026-07-25,3,250-->
+<!--SR:!2026-09-14,28,230-->
 <?e?>

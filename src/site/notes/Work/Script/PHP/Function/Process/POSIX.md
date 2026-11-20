@@ -1,7 +1,11 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/POSIX/","title":"POSIX","tags":["flashcards"],"noteIcon":"","created":"2026-05-21T11:11:59.000+08:00","updated":"2026-05-21T11:11:59.000+08:00","dg-note-properties":{"title":"POSIX","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/POSIX/","title":"POSIX","tags":["flashcards"],"noteIcon":"","created":"2025-11-04T15:32:55.184+08:00","updated":"2026-11-10T12:20:06.211+08:00","dg-note-properties":{"title":"POSIX","tags":["flashcards"],"reference linking":null}}
 ---
 
+# 信号与 FIFO：从操作入口联想到 IPC
+- **发送与处理分工**：`posix_kill()` 发信号，[[Work/Script/PHP/Function/Process/PCNTL#pcntl_signal\|pcntl_signal()]] 注册接收处理器；信号只通知事件，通信边界见 [[Work/Script/PHP/Function/Process/IPC#6. 信号：通知进程发生了事件\|IPC：信号]]。
+- **FIFO 入口**：`posix_mkfifo()` 创建特殊文件节点，读写仍用流 API；路径存在不代表消息保存在磁盘，见 [[Work/Script/PHP/Function/Process/IPC#2. 命名管道 FIFO：不靠亲缘关系，用路径找到管道\|FIFO 与匿名管道的区别及示例]]。
+- **进程身份与生命周期**：PID／进程组帮助确定信号目标；`setsid()` 改变会话归属，不会自动建立通信通道。创建与回收进程见 [[Work/Script/PHP/Function/Process/PCNTL#pcntl_fork\|PCNTL]]。
 # 函数
 1. [posix_access](https://www.php.net/manual/zh/function.posix-access.php) — 确定文件的可访问性
 2. [posix_ctermid](https://www.php.net/manual/zh/function.posix-ctermid.php) — 获取控制终端的路径名
@@ -44,6 +48,39 @@
 39. [posix_times](https://www.php.net/manual/zh/function.posix-times.php) — 获取处理时间
 40. [posix_ttyname](https://www.php.net/manual/zh/function.posix-ttyname.php) — 确定终端设备名称
 41. [posix_uname](https://www.php.net/manual/zh/function.posix-uname.php) — 获取系统名称
+# posix_mkfifo
+`posix_mkfifo($path, 0600)` 只负责创建 FIFO 节点；之后仍用 `fopen()`、`fwrite()` 和 `fgets()` 通信。下面由子进程写入、父进程读取：
+```php
+// 使用当前进程 PID 构造唯一的临时 FIFO 路径。
+$path = sys_get_temp_dir() . '/posix-mkfifo-' . getmypid();
+// 创建仅当前用户可读写的 FIFO 节点。
+if (!posix_mkfifo($path, 0600)) {
+    throw new RuntimeException('create FIFO failed');
+}
+// 创建子进程作为写端，父进程作为读端。
+$pid = pcntl_fork();
+if ($pid === -1) {
+    // fork 失败时删除已经创建的 FIFO 节点。
+    unlink($path);
+    throw new RuntimeException('fork failed');
+}
+if ($pid === 0) {
+    // 子进程打开写端并发送一行消息；读端未打开前 fopen() 会阻塞。
+    $writer = fopen($path, 'w');
+    fwrite($writer, "hello\n");
+    fclose($writer);
+    exit; // 子进程必须在此退出，否则会继续执行后面的父进程代码，可能导致意想不到的问题
+}
+// 父进程打开读端并读取消息；写端未打开前 fopen() 会阻塞。
+$reader = fopen($path, 'r');
+echo fgets($reader); // hello
+fclose($reader);
+// 回收子进程，并删除文件系统中的 FIFO 节点。
+pcntl_waitpid($pid, $status);
+unlink($path);
+```
+- **阻塞点**：读端或写端单独打开时通常会等待另一端就绪。
+- **清理**：通信结束后用 `unlink()` 删除 FIFO 节点。
 # posix_getppid
 返回父进程标识符
 ```php
@@ -51,7 +88,7 @@ echo posix_getppid(); // 8259
 ```
 # posix_setsid
 [PHP: posix\_setsid - Manual](https://www.php.net/manual/zh/function.posix-setsid.php)
-`proc_open` 用于**启动外部程序**并进行 I/O 通信，而 `pcntl` (配合 `posix_setsid`) 用于在 **同一 PHP 脚本内部创建并发子进程**，并将其**后台化为守护进程**。
+`proc_open` 用于**启动外部程序** 并进行 I/O 通信，而 `pcntl` (配合 `posix_setsid`) 用于在 **同一 PHP 脚本内部创建并发子进程**，并将其**后台化为守护进程**。
 ```php
 // 确保扩展已加载
 if (!extension_loaded('pcntl') || !extension_loaded('posix')) {

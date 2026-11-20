@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/PCNTL/","title":"PCNTL","tags":["flashcards"],"noteIcon":"","created":"2026-05-21T11:12:00.000+08:00","updated":"2026-05-21T11:12:00.000+08:00","dg-note-properties":{"title":"PCNTL","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/PCNTL/","title":"PCNTL","tags":["flashcards"],"noteIcon":"","created":"2025-05-29T13:46:57.137+08:00","updated":"2026-11-10T12:18:30.052+08:00","dg-note-properties":{"title":"PCNTL","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 函数
@@ -32,11 +32,12 @@
 27. [pcntl_wstopsig](https://www.php.net/manual/zh/function.pcntl-wstopsig.php) — 返回导致子进程停止的信号
 28. [pcntl_wtermsig](https://www.php.net/manual/zh/function.pcntl-wtermsig.php) — 返回导致子进程中断的信号
 # pcntl_fork
+- **先定位职责**：`fork` 负责创建执行者，不负责把变量修改传回父进程；如何传数据见 [[Work/Script/PHP/Function/Process/IPC#总览：有哪些方式，区别是什么\|IPC 总览与选型]]。启动另一个程序而非复制当前脚本，见 [[Work/Script/PHP/Function/Process/PHP Process Management#核心模型\|proc_open()]]。
 当调用 `pcntl_fork()` 时，它会创建一个子进程，这个子进程几乎是父进程的一个完美克隆。子进程代码的执行细节可以总结为以下几个关键点：
 ### 1. 从 `pcntl_fork()` 处继续执行
-子进程不会从脚本的开头重新执行，它会从 `pcntl_fork()` **被调用的那一行开始**继续执行。
-- **父进程**的 `pcntl_fork()` 会返回子进程的 PID (进程ID)，一个大于0的整数。
-- **子进程**的 `pcntl_fork()` 会返回 `0`。
+子进程不会从脚本的开头重新执行，它会从 `pcntl_fork()` **被调用的那一行开始** 继续执行。
+- **父进程** 的 `pcntl_fork()` 会返回子进程的 PID (进程ID)，一个`>0`的整数。
+- **子进程** 的 `pcntl_fork()` 会返回 `0`。
 根据这个返回值，你就可以在 `if/else` 结构中编写不同的逻辑，让父子进程走上不同的执行路径。
 ### 2. 完美的副本
 子进程是父进程的一个完整副本。这意味着它**继承了**：
@@ -45,9 +46,10 @@
 - **进程状态**：包括当前的工作目录、用户ID、组ID等。
 这就是为什么在 `pcntl_fork()` 之后，父子进程可以共享 `stream_socket_pair` 创建的套接字。
 ### 3. 写时复制（Copy-on-Write）
+- **联想分界**：COW 的普通变量修改后各自独立，不等于 [[Work/Script/PHP/Function/Process/IPC#4. 共享内存：共享数据，不经过反复收发\|IPC 共享内存]]；需要回传结果，可用管道／Socket，或显式创建 [[Work/Script/PHP/Function/Process/SHMOP#PHP 主子进程共享内存\|SHMOP 共享段]]。
 虽然子进程继承了父进程的所有内存，但操作系统并不会立即复制所有数据。为了节省内存和提高效率，它会使用**写时复制（Copy-on-Write, COW）** 机制。
 - **初始状态**：父子进程共享同一份物理内存页。
-- **修改时**：只有当父进程或子进程中的**任何一方**试图修改共享内存中的数据时，操作系统才会为修改的那一方**创建一份新的内存页副本**。
+- **修改时**：父进程或子进程写入普通私有映射中的 COW 页面时，操作系统为写入方提供独立页面；这与显式共享映射的修改传播不同。
 举个例子：
 ```PHP
 $data = "Hello";
@@ -62,12 +64,14 @@ if ($pid === 0) {
 一旦分叉完成，子进程就拥有了自己的**独立生命周期**。它有自己独立的 PID，可以独立地运行、终止。它的终止不会影响父进程，除非父进程主动去等待或处理子进程的结束。
 这使得父进程可以分派任务给子进程，让它们在后台并行处理，而父进程可以继续执行其他任务。
 # pcntl_wait vs pcntl_waitpid
+- **联想职责**：[[Work/Script/PHP/Function/Process/IPC#6. 信号：通知进程发生了事件\|SIGCHLD 是通知]]，`wait/waitpid` 才获取子进程状态并回收已退出子进程；接到通知不等于已经完成回收。
+
 | 特性                  | `pcntl_wait($status)` | `pcntl_waitpid($pid, $status, $options)`                                                                                                                 |
 | ------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **等待目标**            | **任意一个**子进程退出         | **指定的**某个或某一类子进程退出                                                                                                                                       |
+| **等待目标**            | **任意一个** 子进程退出         | **指定的** 某个或某一类子进程退出                                                                                                                                       |
 | **控制精度**            | 低。谁先退出就处理谁。           | 高。可以指定等待哪个进程、或是否非阻塞。                                                                                                                                     |
-| **进程ID参数**          | 没有                    | **`$pid`** 参数决定了等待谁：  <br>- `> 0`: 等待指定PID的子进程  <br>- `-1`: 等待**任意**子进程（同`wait`）  <br>- `0`: 等待与父进程**同进程组**的任意子进程  <br>- `< -1`: 等待进程组ID等于\|$pid\|的任意子进程 |
-| **选项 (`$options`)** | 没有选项，**总是阻塞**。        | **`$options`** 参数提供额外控制：  <br>- `0`: 默认行为，阻塞等待  <br>- `WNOHANG`: **非阻塞**模式。立即返回，即使没有子进程退出。  <br>- `WUNTRACED`: 也返回已停止的子进程信息（不常用）。                        |
+| **进程ID参数**          | 没有                    | **`$pid`** 参数决定了等待谁：  <br>- `> 0`: 等待指定PID的子进程  <br>- `-1`: 等待**任意** 子进程（同`wait`）  <br>- `0`: 等待与父进程**同进程组** 的任意子进程  <br>- `< -1`: 等待进程组ID等于\|$pid\|的任意子进程 |
+| **选项 (`$options`)** | 没有选项，**总是阻塞**。        | **`$options`** 参数提供额外控制：  <br>- `0`: 默认行为，阻塞等待  <br>- `WNOHANG`: **非阻塞** 模式。立即返回，即使没有子进程退出。  <br>- `WUNTRACED`: 也返回已停止的子进程信息（不常用）。                        |
 | **返回值**             | 退出子进程的PID，出错时返回-1。    | 退出子进程的PID；如果使用 `WNOHANG` 且没有子进程退出，则返回 **0**；出错时返回-1。                                                                                                     |
 ## 轮询式多进程管理
 ```php
@@ -89,7 +93,7 @@ for ($i = 0; $i < 3; $i++) {
 while (count($children) > 0) {
     foreach ($children as $key => $pid) {
         $res = pcntl_waitpid($pid, $status, WNOHANG);
-        
+
         if ($res == $pid) {
             // 子进程已退出
             echo "子进程 $pid 退出，状态: " . pcntl_wexitstatus($status) . "\n";
@@ -153,6 +157,7 @@ for ($i = 0; $i < 10; $i++) {
         // 子进程会进入这里，因为 $pid 是 0
         echo "子进程: 我正在工作，我的PID是 " . getmypid() . "\n";
         sleep(30);
+        // 子进程必须在此退出，否则会继续执行后面的父进程代码。
         exit(123); // 子进程工作完成，退出，退出码为123
     }
 }
@@ -224,8 +229,10 @@ pcntl_alarm(0); // 设置为 0 取消当前的警报
 echo "程序正常退出。\n";
 ```
 # pcntl_signal
+- **联想链**：[[Work/Script/PHP/Function/Process/POSIX#信号与 FIFO：从操作入口联想到 IPC\|posix_kill()]] 负责发送，`pcntl_signal()` 注册处理器，`pcntl_async_signals()`／`pcntl_signal_dispatch()` 控制回调分发；为何不能把普通信号当可靠消息队列，见 [[Work/Script/PHP/Function/Process/IPC#6. 信号：通知进程发生了事件\|IPC：信号与消息的区别]]。
 安装信号处理程序
->`pcntl` 是 **P**rocess **C**o**nt**ro**l** 的缩写。
+> PCNTL 是 Process Control（进程控制）的缩写。
+
 它是 PHP 的一个扩展，提供了进程控制功能，允许 PHP 脚本执行类似 Unix 系统的进程创建、执行、信号处理等操作。`pcntl_signal` 就是其中一个函数，用于注册信号处理器。
 ## 函数写法
 ```php
@@ -503,7 +510,7 @@ while (true) {
     sleep(10); // 长时间阻塞
 }
 ```
-- 发送 `SIGINT`（Ctrl+C）后，信号会**立即**被处理完成。
+- 发送 `SIGINT`（Ctrl+C）后，信号会**立即** 被处理完成。
 ### 实际应用场景
 1. **实时响应信号**：
    - 在服务器进程中，需要立即处理 `SIGTERM`（终止）或 `SIGHUP`（重载配置）信号。
@@ -521,7 +528,7 @@ while (true) {
    - 在同步模式下，`pcntl_signal_dispatch()` 是必须的，但会消耗额外资源（如高频率调用）。
 # pcntl_signal_dispatch
 ### 1. `sleep()` 的中断行为
-在 PHP 中，`sleep()` 是通过底层的系统调用（如 Linux 的 `sleep()` 系统调用）实现的。当进程处于 `sleep()` 阻塞状态时，**如果收到信号（如 `SIGINT`），系统调用会立即中断**，并返回**剩余未睡眠**的时间。例如：
+在 PHP 中，`sleep()` 是通过底层的系统调用（如 Linux 的 `sleep()` 系统调用）实现的。当进程处于 `sleep()` 阻塞状态时，**如果收到信号（如 `SIGINT`），系统调用会立即中断**，并返回**剩余未睡眠** 的时间。例如：
 ```php
 $remaining = sleep(5); // 如果收到信号，立即返回剩余时间
 ```
@@ -529,7 +536,7 @@ $remaining = sleep(5); // 如果收到信号，立即返回剩余时间
 - `sleep(5)` 并不会完全阻塞 5 秒，而是会在接收到信号时提前返回。
 - **信号的到达会直接中断 `sleep()`，从而让程序继续执行后续代码**（即 `echo 'processing...'` 和 `pcntl_signal_dispatch()`）。
 ### 2. `pcntl_signal_dispatch()` 的调用时机
-你的代码中，`pcntl_signal_dispatch()` 是在 `sleep(5)` **之后**调用的。由于 `sleep()` 被信号中断后，程序会立即执行 `pcntl_signal_dispatch()`，从而触发信号处理函数。
+你的代码中，`pcntl_signal_dispatch()` 是在 `sleep(5)` **之后** 调用的。由于 `sleep()` 被信号中断后，程序会立即执行 `pcntl_signal_dispatch()`，从而触发信号处理函数。
 #### 关键流程：
 1. **`sleep(5)` 被信号中断**：进程从 `sleep()` 返回，无需等待 5 秒。
 2. **执行 `pcntl_signal_dispatch()`**：PHP 会检查是否有待处理的信号，并调用对应的处理函数（如 `SIGINT` 的回调）。
@@ -739,14 +746,14 @@ SIGSYS
 # 退出码
 ### 一、PHP `exit` 错误码规范
 PHP CLI脚本通过`exit(int $status)`返回状态码，需遵守以下规范：
-#### 1. 取值范围  
-   - 成功状态：`0`  
-   - 错误状态：`1-254`（避免使用`255`，因PHP保留）  
-   - 非法值处理：  
-     - `exit(-1)` → 转换为`255`  
-     - `exit(256)` → 取模运算为`0`（因`256 % 256 = 0`）  
+#### 1. 取值范围
+   - 成功状态：`0`
+   - 错误状态：`1-254`（避免使用`255`，因PHP保留）
+   - 非法值处理：
+     - `exit(-1)` → 转换为`255`
+     - `exit(256)` → 取模运算为`0`（因`256 % 256 = 0`）
      - `exit(258)` → 取模运算为`2`（`258 % 256 = 2`）
-#### 2. 常见错误码含义  
+#### 2. 常见错误码含义
 | 状态码   | 含义             | 触发场景举例                     |
 | ----- | -------------- | -------------------------- |
 | 1     | 通用错误（如逻辑异常）    | exit(1) 或未捕获的除零错误          |
@@ -755,20 +762,20 @@ PHP CLI脚本通过`exit(int $status)`返回状态码，需遵守以下规范：
 | 127   | 命令未找到          | 脚本路径错误                     |
 | 128+n | 进程被信号终止（n=信号值） | 139 = 128+11（段错误 SIGSEGV）2 |
 | 255   | 非法退出码转换结果      | exit(-1) 或 exit(300)       |
-#### 3. 设计原则  
-   - 业务错误码建议从`10`开始预留扩展空间（如`10`=参数错误，`11`=数据库连接失败）  
+#### 3. 设计原则
+   - 业务错误码建议从`10`开始预留扩展空间（如`10`=参数错误，`11`=数据库连接失败）
    - 避免与系统信号冲突
 ### 二、Supervisor 对PHP退出码的处理逻辑
-Supervisor通过状态码判断进程是否异常，关键行为包括：  
-1. **预期与非预期退出**  
-   - **预期退出**：返回`0` → Supervisor记录`EXITED`但不会重启  
-   - **非预期退出**：返回非`0` → Supervisor标记`not expected`并自动重启（若配置`autorestart=true`）  
-   - **示例日志**：  
+Supervisor通过状态码判断进程是否异常，关键行为包括：
+1. **预期与非预期退出**
+   - **预期退出**：返回`0` → Supervisor记录`EXITED`但不会重启
+   - **非预期退出**：返回非`0` → Supervisor标记`not expected`并自动重启（若配置`autorestart=true`）
+   - **示例日志**：
 ```plaintext
 INFO exited: worker1 (exit status 1; not expected)  // 非0触发重启
 INFO gave up: worker1 entered FATAL state           // 连续失败超阈值
 ```
-2. **关键配置参数**  
+2. **关键配置参数**
 ```ini
 [program:php_worker]
 autorestart = true         ; 非0退出时重启
@@ -778,20 +785,20 @@ startsecs = 5              ; 进程持续5秒才视为启动成功
 ```
 ### 三、常见问题与解决方案
 #### 1. 脚本立即退出（Exited too quickly）
-   - **现象**：Supervisor报错`FATAL Exited too quickly`  
-   - **原因**：  
-     - PHP脚本路径错误 → 触发退出码`127`  
-     - 文件权限问题 → 触发退出码`126`（如用户无权执行脚本）  
-     - 脚本包含`exit(1)`（例如初始化失败后主动退出）  
-   - **解决**：  
+   - **现象**：Supervisor报错`FATAL Exited too quickly`
+   - **原因**：
+     - PHP脚本路径错误 → 触发退出码`127`
+     - 文件权限问题 → 触发退出码`126`（如用户无权执行脚本）
+     - 脚本包含`exit(1)`（例如初始化失败后主动退出）
+   - **解决**：
      - 检查路径：`command`配置使用**绝对路径**（如`/usr/bin/php /app/script.php`）
      - 验证权限：`chmod +x script.php` 并确认执行用户权限
      - 日志定位：查看`stderr_logfile`中的PHP错误输出
 #### 2. 误重启（业务正常结束被重启）
-   - **场景**：脚本正常结束（应返`0`），但误返非`0`导致Supervisor重启  
-   - **解决**：  
-	1. 显式指定退出码：脚本结束时调用`exit(0)`  
-	2. 捕获异常统一处理：  
+   - **场景**：脚本正常结束（应返`0`），但误返非`0`导致Supervisor重启
+   - **解决**：
+	1. 显式指定退出码：脚本结束时调用`exit(0)`
+	2. 捕获异常统一处理：
 ```php
 try {
     // 业务逻辑

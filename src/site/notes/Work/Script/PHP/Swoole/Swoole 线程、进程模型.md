@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Swoole 线程、进程模型/","title":"Swoole 线程、进程模型","tags":["flashcards"],"noteIcon":"","created":"2025-06-05T13:03:00.360+08:00","updated":"2026-03-24T17:50:13.000+08:00","dg-note-properties":{"title":"Swoole 线程、进程模型","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Swoole/Swoole 线程、进程模型/","title":"Swoole 线程、进程模型","tags":["flashcards"],"noteIcon":"","created":"2025-06-05T13:03:00.360+08:00","updated":"2026-11-02T14:45:01.099+08:00","dg-note-properties":{"title":"Swoole 线程、进程模型","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 1. Swoole 的多线程支持
@@ -40,6 +40,7 @@ echo "end\n";
   - **Worker 进程**：处理业务逻辑（执行 PHP 回调），以多进程模式运行。
   - **TaskWorker 进程**：处理异步任务（如数据库写入、文件操作），以多进程模式运行。
   - **Manager 进程**：管理 `Worker` 和 `TaskWorker` 的生命周期（创建/回收）。
+- **WebSocket 落地**：Reactor 接收网络事件，Worker 执行 `open`、`message`、`close` 等 PHP 回调；完整实现见 [[Work/Script/PHP/Swoole/利用Swoole实现PHP+websocket直播、及时通讯#Swoole WebSocket 运行模型\|Swoole WebSocket 事件生命周期与广播示例]]。
 ## 2.2 多进程 vs 多线程
 | **特性**      | **多进程**          | **多线程**          |
 | ----------- | ---------------- | ---------------- |
@@ -63,11 +64,9 @@ $server->start(); // 启动后会自动创建多个 Worker 进程
 1. **Swoole v6+ 是“真正的多线程”**：
    - 基于 ZTS 实现线程安全，支持在单个进程中创建多个线程。
    - 线程间共享内存，适合高并发和资源共享场景。
-
 2. **Swoole v6 之前的版本是多进程模型**：
    - 默认使用多进程（Worker/TaskWorker）处理并发，进程间隔离性强。
    - 通过 IPC（如管道、共享内存）实现进程间通信。
-
 3. **用户态协程与线程的区别**：
    - **协程**：用户态的轻量级线程，由 Swoole 调度器管理，适合 I/O 密集型任务。
    - **线程**：操作系统级别的线程，适合 CPU 密集型任务。
@@ -76,12 +75,10 @@ $server->start(); // 启动后会自动创建多个 Worker 进程
   - 需要高性能、低延迟（如实时通信、高频交易）。
   - 任务间需要共享内存（如缓存、计数器）。
   - 服务器硬件资源充足（如多核 CPU）。
-
 - **优先使用多进程**：
   - 业务逻辑隔离性强（如微服务、独立模块）。
   - 对稳定性要求高（避免线程崩溃影响整体）。
   - 使用 Swoole v5.x 及以下版本。
-
 - **协程 + 多线程/多进程组合**：
   - 协程处理 I/O 密集型任务（如 HTTP 请求、数据库查询）。
   - 多线程/多进程处理 CPU 密集型任务（如图像处理、计算）。

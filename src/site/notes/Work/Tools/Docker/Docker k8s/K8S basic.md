@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Docker/Docker k8s/K8S basic/","title":"K8S basic","tags":["flashcards"],"noteIcon":"","created":"2026-05-05T16:17:29.000+08:00","updated":"2026-05-05T16:17:29.000+08:00","dg-note-properties":{"title":"K8S basic","tags":["flashcards"],"reference linking":"[k8s详细教程(一)](https://znunwm.top/archives/k8s-xiang-xi-jiao-cheng)","reference linking2":"[k8s详细教程(二)](https://znunwm.top/archives/121212)","reference linking3":"[https://pan.baidu.com/s/1wXLaziqn2BKq1mN0gMXJcg?pwd=crhm](https://pan.baidu.com/s/1wXLaziqn2BKq1mN0gMXJcg?pwd=crhm)","reference linking4":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Docker/Docker k8s/K8S basic/","title":"K8S basic","tags":["flashcards"],"noteIcon":"","created":"2026-05-05T16:17:29.000+08:00","updated":"2026-11-11T18:22:56.869+08:00","dg-note-properties":{"title":"K8S basic","tags":["flashcards"],"reference linking":"[k8s详细教程(一)](https://znunwm.top/archives/k8s-xiang-xi-jiao-cheng)","reference linking2":"[k8s详细教程(二)](https://znunwm.top/archives/121212)","reference linking3":"[https://pan.baidu.com/s/1wXLaziqn2BKq1mN0gMXJcg?pwd=crhm](https://pan.baidu.com/s/1wXLaziqn2BKq1mN0gMXJcg?pwd=crhm)","reference linking4":null}}
 ---
 
  https://pan.baidu.com/s/15MCgIFW9vrOdNycBReEpig?pwd=3dnm 提取码: 3dnm
@@ -7082,7 +7082,140 @@ kubectl config use-context kubernetes-admin@kubernetes
 - PodSecurityPolicy：这个插件用于在创建或修改Pod时决定是否根据Pod的security context和可用的PodSecurityPolicy对Pod的安全策略进行控制
 
 # 10.Kubernetes 可视化界面
-## 10.1 Kubernetes Dashboard
+## 10.0 选型对比
+| **界面 / 推荐指数** | **定位** | **优势** | **局限** | **适用场景** |
+| --- | --- | --- | --- | --- |
+| Rancher<br>⭐⭐⭐⭐⭐ | **多集群管理平台** | **跨云纳管、统一认证、集群全生命周期** | **管理面较复杂**，需单独保障高可用 | 多云、混合云和大规模多集群 |
+| KubeSphere<br>⭐⭐⭐⭐ | **容器平台** | **DevOps、可观测性、多租户** 能力完整 | **组件多、资源占用较高** | 企业私有云和研发平台 |
+| Kuboard<br>⭐⭐⭐⭐ | **多集群运维面板** | **中文友好、部署简单、日常操作高效** | **平台工程生态较弱** | 中小团队和存量集群运维 |
+| Kubernetes Dashboard<br>⭐⭐⭐ | **官方基础面板** | **轻量**，贴近原生资源 | **多集群与平台治理能力弱** | 学习、开发和单集群排障 |
+| Otomi / App Platform<br>⭐⭐⭐ | **开发者自助平台** | **GitOps、应用目录、安全与可观测性集成** | **预置组件多、平台维护成本较高** | 平台工程和内部开发者平台 |
+| KubeCube<br>⭐⭐ | **多租户容器平台** | **多集群、多租户、配额与可观测性** | **生态和活跃度有限** | 需要租户隔离的私有化平台 |
+| KubeOperator<br>⭐ | **集群交付工具** | **离线部署、自动建集群、全生命周期运维** | **项目已归档**，不宜用于新生产项目 | 学习历史方案或维护存量部署 |
+| KuberLogic<br>⭐ | **SaaS 交付平台** | **租户实例、备份、域名与计费集成** | **项目已归档**，且不是通用 K8s 管理面板 | 研究单租户应用 SaaS 化方案 |
+- **轻量查看资源：** 优先选择 Kubernetes Dashboard 或 Kuboard。
+- **统一管理多个集群：** 优先评估 Rancher。
+- **建设完整研发平台：** 对比 KubeSphere 与 Otomi / App Platform。
+- **新生产项目：** 不建议选择已归档的 KubeOperator、KuberLogic。
+## 10.1 Rancher
+[Rancher](https://www.rancher.com/) 是面向企业的 **Kubernetes 多集群管理平台**，重点不是替代 Kubernetes，而是统一管理位于数据中心、公有云和边缘环境中的集群。
+- **集群全生命周期：** 创建、导入、升级和维护 RKE2、K3s 及其他符合规范的 Kubernetes 集群。
+- **统一访问入口：** 集中管理用户、用户组、认证源、项目、命名空间和 RBAC 权限。
+- **多集群治理：** 在统一界面查看集群状态，并为不同集群应用一致的安全与运维策略。
+- **应用交付：** 通过应用商店和 Helm Chart 安装、升级及回滚应用。
+- **持续交付：** Fleet 使用 GitOps 将配置或应用批量发布到目标集群。
+- **可观测性：** 可集成监控、告警、日志和审计能力，统一定位多集群问题。
+- **生态集成：** 可配合 Longhorn、NeuVector、Harvester、Kubewarden 等组件扩展存储、安全和虚拟化能力。
+- **适用场景：** Rancher 适合多集群治理。
+- **成本边界：** 只有一个小型学习集群时，部署和维护成本可能高于收益。
+### Rancher 管理层级
+| **层级** | **主要职责** |
+| --- | --- |
+| Rancher Server | 提供统一控制台、API、认证和全局管理能力 |
+| Cluster | 对应一个被创建或导入的 Kubernetes 集群 |
+| Project | 对多个 Namespace 分组，并统一配置成员权限和资源策略 |
+| Namespace | 承载具体工作负载，实现 Kubernetes 原生资源隔离 |
+
+> **高可用要点：**
+> - **管理集群：** 生产环境应将 Rancher Server 部署在独立的高可用 Kubernetes 集群中。
+> - **业务连续性：** 业务集群短时失去 Rancher 连接时，已有工作负载仍由各自的 Kubernetes 控制平面运行。
+## 10.2 KubeSphere
+[在 Kubernetes 上最小化安装 KubeSphere](https://kubesphere.io/zh/docs/v3.3/quick-start/minimal-kubesphere-on-k8s/)
+创建目录「以下操作均在该目录进行」
+```shell
+mkdir -p /opt/k8s/kubesphere/
+```
+### 本地存储动态 PVC
+常见第三方开源存储系统
+- [Ceph CSI](https://github.com/ceph/ceph-csi)
+- [GlusterFS](https://docs.gluster.org/en/latest/)
+- [OpenEBS](https://openebs.io/)
+- [Longhorn](https://longhorn.io/)
+
+总结
+- 如果需要大规模、统一的存储解决方案，Ceph CSI是最佳选择。
+- 如果需要简单的分布式文件系统，GlusterFS是一个不错的选择。
+- 如果需要在Kubernetes环境中提供灵活的存储方案，OpenEBS是一个很好的选择。
+- 如果需要在Kubernetes环境中，轻量级的块存储，Longhorn是一个很好的选择。
+```shell
+# 在所有节点安装 iSCSI 协议客户端（OpenEBS 需要该协议提供存储支持）
+yum install iscsi-initiator-utils -y
+# 设置开机启动
+systemctl enable --now iscsid
+# 启动服务
+systemctl start iscsid
+# 查看服务状态
+systemctl status iscsid
+# 安装 OpenEBS
+kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml
+# 查看状态（下载镜像可能需要一些时间）
+watch -n 1 kubectl get all -n openebs
+```
+创建`default-storage-class.yaml`
+```yml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: default
+  annotations:
+    cas.openebs.io/config: |
+      - name: StorageType
+        value: "hostpath"
+      - name: BasePath
+        value: "/var/openebs/local/"
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{"cas.openebs.io/config":"-
+      name: StorageType\n  value: \"hostpath\"\n- name: BasePath\n  value:
+      \"/var/openebs/local/\"\n","openebs.io/cas-type":"local","storageclass.beta.kubernetes.io/is-default-class":"true","storageclass.kubesphere.io/supported-access-modes":"[\"ReadWriteOnce\"]"},"name":"local"},"provisioner":"openebs.io/local","reclaimPolicy":"Delete","volumeBindingMode":"WaitForFirstConsumer"}
+    openebs.io/cas-type: local
+    storageclass.beta.kubernetes.io/is-default-class: 'true'
+    storageclass.kubesphere.io/supported-access-modes: '["ReadWriteOnce"]'
+provisioner: openebs.io/local
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+```
+执行命令
+```shell
+# 在主节点创建本地 storage class
+kubectl apply -f /opt/k8s/kubesphere/default-storage-class.yaml
+```
+### 安装
+```shell
+# 切换目录
+cd /opt/k8s/kubesphere
+# 下载
+wget https://github.com/kubesphere/ks-installer/releases/download/v3.3.1/kubesphere-installer.yaml
+wget https://github.com/kubesphere/ks-installer/releases/download/v3.3.1/cluster-configuration.yaml
+
+# 安装
+kubectl apply -f kubesphere-installer.yaml
+kubectl apply -f cluster-configuration.yaml
+# 查看 pod 是否启动
+kubectl get po,svc -n kubesphere-system -o wide
+# pod 是否启动完成后，检查安装日志
+kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app in (ks-install, ks-installer)' -o jsonpath='{.items[0].metadata.name}') -f
+# 查看端口
+kubectl get svc/ks-console -n kubesphere-system
+# 卸载
+sh kubesphere-delete.sh
+```
+### 访问
+[KubeSphere](http://10.0.0.101:30880/dashboard)
+默认端口是 30880，如果是云服务商，或开启了防火墙，记得要开放该端口
+登录控制台访问，账号密码：`admin/P@88w0rd`
+
+### 启用可插拔组件
+[KubeSphere DevOps 系统](https://kubesphere.io/zh/docs/v3.3/pluggable-components/devops/)
+[启用可插拔组件](https://kubesphere.io/zh/docs/v3.3/pluggable-components/)
+## 10.3 Kuboard
+[Kuboard](https://www.kuboard.cn/) 是偏运维场景的中文 Kubernetes 管理界面，强调快速部署和低学习成本。
+- **多集群管理：** 在一个控制台中纳管并切换多个 Kubernetes 集群。
+- **资源运维：** 可视化管理工作负载、网络、配置、存储和自定义资源。
+- **故障排查：** 集中提供日志、事件、容器终端和 YAML 编辑入口。
+- **安全控制：** 提供用户授权、操作审计和多因素认证等能力。
+- **检索效率：** 通过本地缓存完成跨集群、跨命名空间资源查询。
+- **适用边界：** 适合日常运维和中文团队，但不等同于完整的 DevOps 或开发者平台。
+## 10.4 Kubernetes Dashboard
 之前在kubernetes中完成的所有操作都是通过命令行工具kubectl完成的。其实，为了提供更丰富的用户体验，kubernetes还开发了一个基于web的用户界面（Dashboard）。用户可以使用Dashboard部署容器化的应用，还可以监控应用的状态，执行故障排查以及管理kubernetes中各种资源。
 创建目录「以下操作均在该目录进行」
 ```shell
@@ -7160,116 +7293,58 @@ kubectl describe secrets dashboard-admin-token-5crbd -n kubernetes-dashboard
 ```
 ### 通过浏览器访问Dashboard的UI
 在登录页面上输入上面的token
-![image-20200520144548997](https://weichengjun2.dpdns.org/i/2025/02/15/67b0098c39bda.png) 
+![image-20200520144548997](https://weichengjun2.dpdns.org/i/2025/02/15/67b0098c39bda.png)
 
 出现下面的页面代表成功
-![image-20200520144959353](https://weichengjun2.dpdns.org/i/2025/02/15/67b0098cb505a.png) 
+![image-20200520144959353](https://weichengjun2.dpdns.org/i/2025/02/15/67b0098cb505a.png)
 ### 使用DashBoard
 本章节以Deployment为例演示DashBoard的使用
-#### 查看 
+#### 查看
 选择指定的命名空间 `dev` ，然后点击 `Deployments` ，查看dev空间下的所有deployment
-![img](https://weichengjun2.dpdns.org/i/2025/02/15/67b0098d2a97f.png) 
-#### 扩缩容 
+![img](https://weichengjun2.dpdns.org/i/2025/02/15/67b0098d2a97f.png)
+#### 扩缩容
 在 `Deployment` 上点击 `规模` ，然后指定 `目标副本数量` ，点击确定
-![img](https://weichengjun2.dpdns.org/i/2025/02/15/67b0098db056a.png) 
-#### 编辑 
+![img](https://weichengjun2.dpdns.org/i/2025/02/15/67b0098db056a.png)
+#### 编辑
 在 `Deployment` 上点击 `编辑` ，然后修改 `yaml文件` ，点击确定
-![image-20200520163253644](https://weichengjun2.dpdns.org/i/2025/02/15/67b0098e06438.png) 
-#### 查看Pod 
+![image-20200520163253644](https://weichengjun2.dpdns.org/i/2025/02/15/67b0098e06438.png)
+#### 查看Pod
 点击 `Pods` , 查看pods列表
-![img](https://weichengjun2.dpdns.org/i/2025/02/15/67b0098e80beb.png) 
-#### 操作Pod 
+![img](https://weichengjun2.dpdns.org/i/2025/02/15/67b0098e80beb.png)
+#### 操作Pod
 选中某个Pod，可以对其执行日志（logs）、进入执行（exec）、编辑、删除操作
 > Dashboard提供了kubectl的绝大部分功能，这里不再一一演示
 
-## 10.2 kubesphere
-[在 Kubernetes 上最小化安装 KubeSphere](https://kubesphere.io/zh/docs/v3.3/quick-start/minimal-kubesphere-on-k8s/)
-创建目录「以下操作均在该目录进行」
-```shell
-mkdir -p /opt/k8s/kubesphere/
-```
-### 本地存储动态 PVC
-常见第三方开源存储系统
-- [Ceph CSI](https://github.com/ceph/ceph-csi)
-- [GlusterFS](https://docs.gluster.org/en/latest/)
-- [OpenEBS](https://openebs.io/)
-- [Longhorn](https://longhorn.io/)
-总结
-- 如果需要大规模、统一的存储解决方案，Ceph CSI是最佳选择。
-- 如果需要简单的分布式文件系统，GlusterFS是一个不错的选择。
-- 如果需要在Kubernetes环境中提供灵活的存储方案，OpenEBS是一个很好的选择。
-- 如果需要在Kubernetes环境中，轻量级的块存储，Longhorn是一个很好的选择。
-```shell
-# 在所有节点安装 iSCSI 协议客户端（OpenEBS 需要该协议提供存储支持）
-yum install iscsi-initiator-utils -y
-# 设置开机启动
-systemctl enable --now iscsid
-# 启动服务
-systemctl start iscsid
-# 查看服务状态
-systemctl status iscsid
-# 安装 OpenEBS
-kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml
-# 查看状态（下载镜像可能需要一些时间）
-watch -n 1 kubectl get all -n openebs
-```
-创建`default-storage-class.yaml`
-```yml
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: default
-  annotations:
-    cas.openebs.io/config: |
-      - name: StorageType
-        value: "hostpath"
-      - name: BasePath
-        value: "/var/openebs/local/"
-    kubectl.kubernetes.io/last-applied-configuration: >
-      {"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{"cas.openebs.io/config":"-
-      name: StorageType\n  value: \"hostpath\"\n- name: BasePath\n  value:
-      \"/var/openebs/local/\"\n","openebs.io/cas-type":"local","storageclass.beta.kubernetes.io/is-default-class":"true","storageclass.kubesphere.io/supported-access-modes":"[\"ReadWriteOnce\"]"},"name":"local"},"provisioner":"openebs.io/local","reclaimPolicy":"Delete","volumeBindingMode":"WaitForFirstConsumer"}
-    openebs.io/cas-type: local
-    storageclass.beta.kubernetes.io/is-default-class: 'true'
-    storageclass.kubesphere.io/supported-access-modes: '["ReadWriteOnce"]'
-provisioner: openebs.io/local
-reclaimPolicy: Delete
-volumeBindingMode: WaitForFirstConsumer
-```
-执行命令
-```shell
-# 在主节点创建本地 storage class
-kubectl apply -f /opt/k8s/kubesphere/default-storage-class.yaml
-```
-### 安装
-```shell
-# 切换目录
-cd /opt/k8s/kubesphere
-# 下载
-wget https://github.com/kubesphere/ks-installer/releases/download/v3.3.1/kubesphere-installer.yaml
-wget https://github.com/kubesphere/ks-installer/releases/download/v3.3.1/cluster-configuration.yaml
-
-# 安装
-kubectl apply -f kubesphere-installer.yaml
-kubectl apply -f cluster-configuration.yaml
-# 查看 pod 是否启动
-kubectl get po,svc -n kubesphere-system -o wide
-# pod 是否启动完成后，检查安装日志
-kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app in (ks-install, ks-installer)' -o jsonpath='{.items[0].metadata.name}') -f
-# 查看端口
-kubectl get svc/ks-console -n kubesphere-system
-# 卸载
-sh kubesphere-delete.sh
-```
-### 访问
-[KubeSphere](http://10.0.0.101:30880/dashboard)
-默认端口是 30880，如果是云服务商，或开启了防火墙，记得要开放该端口
-登录控制台访问，账号密码：`admin/P@88w0rd`
-
-### 启用可插拔组件
-[KubeSphere DevOps 系统](https://kubesphere.io/zh/docs/v3.3/pluggable-components/devops/)
-[启用可插拔组件](https://kubesphere.io/zh/docs/v3.3/pluggable-components/)
-## 10.3 Rancher
-[多云混合云集群 | 容器云平台PaaS | 企业级Kubernetes 解决方案 | Rancher](https://www.rancher.cn/)
-## 10.4 Kuboard
-[Kuboard\_Kubernetes教程\_K8S安装\_管理界面](https://www.kuboard.cn/)
+## 10.5 Otomi / App Platform
+[Otomi](https://github.com/redkubes/otomi-core) 后续演进为 Akamai 的 [App Platform](https://techdocs.akamai.com/app-platform/docs)，定位是基于 Kubernetes 的 **内部开发者平台**。
+- **开发者自助：** 通过门户构建镜像、部署应用、暴露服务和管理密钥。
+- **黄金路径：** 使用 Helm Chart 应用目录提供可复用、受控的交付模板。
+- **GitOps 管理：** 通过配置即代码维护平台状态和应用期望状态。
+- **平台能力：** 预集成 CI/CD、镜像仓库、日志、指标、链路追踪和安全策略。
+- **多租户治理：** 支持团队入驻、资源隔离、网络策略和集中治理。
+- **适用场景：** 适合希望提供自助交付能力的平台团队。
+- **不适用场景：** 只需要查看 Pod 状态的小型集群。
+## 10.6 KubeCube
+[KubeCube](https://github.com/kubecube-io/KubeCube) 是面向企业私有化场景的 **多集群、多租户容器平台**。
+- **多租户模型：** 通过租户、项目、空间组织资源，并配置配额、隔离和权限。
+- **多集群纳管：** 导入标准 Kubernetes 集群，统一认证和扩展原生 RBAC。
+- **应用管理：** 可视化部署工作负载并管理应用生命周期。
+- **可观测性：** 集成监控、告警、日志查询和操作审计。
+- **开放接口：** 同时提供 OpenAPI、WebConsole、CloudShell 和 Kubernetes 原生 API。
+- **适用边界：** 适合强调租户隔离的容器云，选型前应核实版本兼容性与社区活跃度。
+## 10.7 KubeOperator
+[KubeOperator](https://github.com/KubeOperator/KubeOperator) 以 **Kubernetes 集群交付和生命周期管理** 为核心，而不是只展示已有集群中的资源。
+- **基础设施编排：** 通过 Terraform 在 VMware、OpenStack 等平台创建虚拟机。
+- **集群部署：** 通过 Ansible 自动安装生产级 Kubernetes 集群。
+- **生命周期管理：** 支持节点伸缩、版本升级、补丁和故障节点重建。
+- **离线交付：** 支持无法访问公网的私有化环境。
+- **运维能力：** 集成事件、监控、告警和日志方案。
+- **项目状态：** GitHub 仓库已于 2024 年 7 月归档，只适合维护存量环境或研究历史方案。
+## 10.8 KuberLogic
+[KuberLogic](https://github.com/kuberlogic/kuberlogic) 的目标是把 **单租户容器应用转换为 SaaS 服务**，并非通用的 Kubernetes 集群管理界面。
+- **租户编排：** 为每个客户创建、修改、升级或删除独立的应用实例。
+- **数据保护：** 支持即时备份和定时备份。
+- **访问能力：** 为租户实例配置自定义域名和 TLS。
+- **商业集成：** 通过 Webhook 对接计费系统，并提供 REST API 与 CLI。
+- **隔离模型：** 每个客户运行独立应用栈，减少改造为共享式多租户架构的成本。
+- **项目状态：** GitHub 仓库已于 2025 年 3 月归档，不建议用于新的生产系统。

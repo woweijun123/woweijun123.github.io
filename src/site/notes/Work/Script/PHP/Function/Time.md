@@ -1,10 +1,14 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Time/","title":"Time","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:25:38.000+08:00","updated":"2026-03-24T17:37:48.000+08:00","dg-note-properties":{"title":"Time","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Time/","title":"Time","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:25:38.000+08:00","updated":"2026-09-20T15:01:56.854+08:00","dg-note-properties":{"title":"Time","tags":["flashcards"],"reference linking":null}}
 ---
 
 # hrtime
 获取系统的高精度时间**纳秒数**
 从任意时间点开始统计，返回系统的高精度时间（**h**igh **r**esolution **time**）。 获取的时间戳为单调时间，无法被用户调整。
+>返回单调时钟，从**系统启动**或**某个任意起点**开始计时，**不代表真实日期**
+- 获取当前时间戳：`microtime(true)`
+- 获取高精度耗时：`hrtime(true)`
+- 不要把 `hrtime()` 当 Unix 时间戳使用。
 ### 返回值 [¶](https://www.php.net/manual/zh/function.hrtime.php#refsect1-function.hrtime-returnvalues)
 参数 `as_number` 为 false 时，返回的整型数组格式为 `[seconds, nanoseconds]`。否则会以 [int](https://www.php.net/manual/zh/language.types.integer.php) （64 位平台）或 [float](https://www.php.net/manual/zh/language.types.float.php) （32 位平台）返回奈秒（nanoseconds）。失败时返回 false。
 ```php

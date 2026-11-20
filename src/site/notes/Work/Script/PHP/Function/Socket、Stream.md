@@ -1,1032 +1,757 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Socket、Stream/","title":"Socket、Stream","tags":["flashcards","#select","#epoll","#kqueue"],"noteIcon":"","created":"2026-03-10T22:33:54.000+08:00","updated":"2026-03-24T17:35:21.000+08:00","dg-note-properties":{"title":"Socket、Stream","tags":["flashcards","#select","#epoll","#kqueue"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Socket、Stream/","title":"Socket、Stream","tags":["flashcards","select","epoll","kqueue"],"noteIcon":"","created":"2026-11-02T15:26:25.897+08:00","updated":"2026-11-04T15:27:18.809+08:00","dg-note-properties":{"title":"Socket、Stream","tags":["flashcards","select","epoll","kqueue"],"reference linking":null}}
 ---
 
-# Stream vs Socket
-## Socket（套接字）
-Socket 是操作系统提供的一种**通信机制**。它位于传输层和应用层之间，是网络通信的**底层接口**。
-- **定义：** 一种抽象的通信终端，允许应用程序通过网络发送和接收数据。
-- **层次：** 网络层/传输层（底层）。
-- **通信类型：** 明确区分协议和类型，例如：
-    - `AF_INET` (IPv4) + `SOCK_STREAM` (TCP)
-    - `AF_INET` (IPv4) + `SOCK_DGRAM` (UDP)
-- **PHP 实现：** 通过 `socket_*` 系列函数（例如 `socket_create`, `socket_bind`, `socket_connect`）直接操作底层套接字。
-- **用途：** 需要对网络通信的底层细节（如绑定、监听、连接建立、错误处理）进行**细粒度控制**时使用。
-## Stream（流）
-Stream 是 PHP 引入的一种**统一的 I/O 抽象接口**。它将文件、网络连接、压缩文件、内存等各种不同的 I/O 源都统一为可以通过一组相同函数（如 `fread`, `fwrite`）来操作的接口。
-- **定义：** 一种资源，代表了一个可读、可写或双向的 I/O 通道。
-- **层次：** 应用层（高层抽象）。
-- **通信类型：** 抽象了底层细节，通过 **包装器（Wrapper）** 来处理不同的 I/O 源。例如：
-    - `file://` (本地文件)
-    - `http://` (HTTP 请求)
-    - `ftp://` (FTP 连接)
-    - `tcp://` 或 `udp://` (网络 Socket)
-- **PHP 实现：** 通过 `stream_socket_*` 系列函数或高层文件 I/O 函数（例如 `fopen`, `fsockopen`）创建和操作。
-- **用途：** 进行**简单、便捷**的 I/O 操作，无需关心底层是文件、HTTP 请求还是网络连接。
-## 核心对比
-| **特性**   | **Socket (套接字)**                                        | **Stream (流)**                                               |
-| -------- | ------------------------------------------------------- | ------------------------------------------------------------ |
-| **抽象级别** | **底层** (OS 通信机制)                                        | **高层** (PHP I/O 抽象)                                          |
-| **主要用途** | **网络通信**：精确控制协议、生命周期和底层细节。                              | **统一 I/O**：提供对**所有 I/O** (文件、网络等) 的通用读写接口。                   |
-| **实现方式** | `socket_*` 系列函数。                                        | `file_get_contents`、`fopen`、`fsockopen`、`stream_socket_*` 等。 |
-| **协议处理** | 需要显式设置协议类型 (如 `SOCK_STREAM` / `SOCK_DGRAM`)。            | 通过**包装器** (Wrapper) 抽象 (如 `tcp://`, `http://`, `file://`)。   |
-| **易用性**  | **复杂**，多步创建，适用于底层控制。                                    | **简单快捷**，通常一步创建，更符合 PHP 的开发习惯。                               |
-| **典型应用** | **高性能/异步网络服务** (如 Swoole/ReactPHP 的核心)。                 | **日常客户端连接、文件读写、简单的服务端**。                                     |
-| **创建示例** | `socket_create()` + `socket_bind()` + `socket_listen()` | `stream_socket_client('tcp://...')`                          |
-## 核心关联
-**Socket** 是操作系统提供的**底层网络通信机制**。
-**Stream** 是 PHP 对 I/O 操作提供的**统一抽象接口**。
-**结论：** Stream 是一种更高级的接口，它利用包装器（如 `tcp://`）在底层封装和操作实际的 Socket 资源。
+# Socket vs Stream
+## 核心区别
+| **维度**      | **Socket**                   | **Stream**                               |
+| ----------- | ---------------------------- | ---------------------------------------- |
+| **定义**      | 操作系统提供的**通信端点抽象**            | PHP 提供的**统一 I/O 抽象**                     |
+| **对象范围**    | TCP、UDP、Unix Domain Socket 等 | 文件、内存、管道、压缩数据和网络连接等                      |
+| **PHP API** | `socket_*`                   | `fread()`、`fwrite()`、`stream_socket_*` 等 |
+| **控制能力**    | 直接控制地址族、Socket 类型、协议、选项和收发标志 | 统一使用读写函数、wrapper、context、filter 和超时设置    |
+| **优先场景**    | 需要精细控制底层 Socket 行为           | 需要通用 I/O 接口或快速创建网络连接                     |
+- **Socket 不是协议层**：它是应用程序使用内核通信能力的 API 和端点对象；底层对象、文件描述符与收发缓冲区见 [[Work/Linux/Network/Socket-到底是什么？\|Socket 的内核结构]]。
+- **Stream 不等于 Socket**：网络 Stream 通常由 Socket 支撑，但文件、内存和进程管道 Stream 并不是 Socket。
+- **两套 API 可转换**：`socket_import_stream()` 可导入底层由 Socket 支撑的 Stream；`socket_export_stream()` 将 `Socket` 导出为 Stream。
+- **IPC 入口**：Socket 与管道、消息队列和共享内存的选型边界见 [[Work/Script/PHP/Function/Process/IPC#7. Socket：同机和跨机的双向通信\|IPC：Socket]]。
+## Wrapper、Transport 与底层对象
+| **名称** | **职责** | **示例** |
+| --- | --- | --- |
+| **Wrapper** | 解释 URL，并创建对应 Stream | `file://`、`http://`、`ftp://`、`php://` |
+| **Socket transport** | 指定网络传输方式 | `tcp://`、`udp://`、`unix://`、`ssl://` |
+| **Stream resource** | 暴露统一读写接口 | `fread()`、`fwrite()`、`fgets()` |
+| **底层对象** | 承担实际文件或网络 I/O | 文件描述符、Socket、管道等 |
 # Socket
-**PHP操作MySQL数据库**也是通过**Socket**进行的，这正是由于Socket屏蔽了底层的协议，使得网络服务之间的互联互通变得简单。
-## 常用函数
-- [socket_accept](https://www.php.net/manual/zh/function.socket-accept.php) — **接受套接字上的连接**
-- [socket_addrinfo_bind](https://www.php.net/manual/zh/function.socket-addrinfo-bind.php) — 从给定的 addrinfo 创建并绑定一个套接字
-- [socket_addrinfo_connect](https://www.php.net/manual/zh/function.socket-addrinfo-connect.php) — 指定 addrinfo 创建并连接套接字
-- [socket_addrinfo_explain](https://www.php.net/manual/zh/function.socket-addrinfo-explain.php) — 获取有关 addrinfo 的信息
-- [socket_addrinfo_lookup](https://www.php.net/manual/zh/function.socket-addrinfo-lookup.php) — 获取数组，包含有关给定主机名的 getaddrinfo 内容
-- [socket_atmark](https://www.php.net/manual/zh/function.socket-atmark.php) — 确认 socket 是否处于带外数据标记
-- [socket_bind](https://www.php.net/manual/zh/function.socket-bind.php) — **给套接字绑定名字**
-- [socket_clear_error](https://www.php.net/manual/zh/function.socket-clear-error.php) — 清除套接字或者最后的错误代码上的错误
-- [socket_close](https://www.php.net/manual/zh/function.socket-close.php) — **关闭 Socket 实例**
-- [socket_cmsg_space](https://www.php.net/manual/zh/function.socket-cmsg-space.php) — Calculate message buffer size
-- [socket_connect](https://www.php.net/manual/zh/function.socket-connect.php) — 开启一个套接字连接
-- [socket_create](https://www.php.net/manual/zh/function.socket-create.php) — **创建一个套接字（通讯节点）**
-- [socket_create_listen](https://www.php.net/manual/zh/function.socket-create-listen.php) — 在端口上打开一个套接字以接受连接
-- [socket_create_pair](https://www.php.net/manual/zh/function.socket-create-pair.php) — **创建一对彼此连接的套接字，并用数组存储**
-- [socket_export_stream](https://www.php.net/manual/zh/function.socket-export-stream.php) — Export a socket into a stream that encapsulates a socket
-- [socket_get_option](https://www.php.net/manual/zh/function.socket-get-option.php) — 获取套接字的套接字选项
-- [socket_getopt](https://www.php.net/manual/zh/function.socket-getopt.php) — 别名 socket_get_option
-- [socket_getpeername](https://www.php.net/manual/zh/function.socket-getpeername.php) — 获取套接字远端名字
-- [socket_getsockname](https://www.php.net/manual/zh/function.socket-getsockname.php) — 获取套接字本地端的名字，返回主机名和端口号或是 Unix 文件系统路径，具体取决于套接字类型
-- [socket_import_stream](https://www.php.net/manual/zh/function.socket-import-stream.php) — 导入 stream
-- [socket_last_error](https://www.php.net/manual/zh/function.socket-last-error.php) — 返回套接字上的最后一个错误
-- [socket_listen](https://www.php.net/manual/zh/function.socket-listen.php) — **监听套接字的连接**
-- [socket_read](https://www.php.net/manual/zh/function.socket-read.php) — **从套接字中读取最大长度的数据**
-- [socket_recv](https://www.php.net/manual/zh/function.socket-recv.php) — 从已连接的 socket 接收数据
-- [socket_recvfrom](https://www.php.net/manual/zh/function.socket-recvfrom.php) — 从套接字接收数据，无论它是否是面向连接的
-- [socket_recvmsg](https://www.php.net/manual/zh/function.socket-recvmsg.php) — Read a message
-- [socket_select](https://www.php.net/manual/zh/function.socket-select.php) — 从给定套接字数组运行带指定超时时间的 select() 系统调用
-- [socket_send](https://www.php.net/manual/zh/function.socket-send.php) — 向已连接的套接字发送数据
-- [socket_sendmsg](https://www.php.net/manual/zh/function.socket-sendmsg.php) — Send a message
-- [socket_sendto](https://www.php.net/manual/zh/function.socket-sendto.php) — 向套接字发送消息，无论它是否已建立连接
-- [socket_set_block](https://www.php.net/manual/zh/function.socket-set-block.php) — **设置套接字为阻塞模式**
-- [socket_set_nonblock](https://www.php.net/manual/zh/function.socket-set-nonblock.php) — 设置套接字为非阻塞模式
-- [socket_set_option](https://www.php.net/manual/zh/function.socket-set-option.php) — 为套接字设置套接字选项
-- [socket_setopt](https://www.php.net/manual/zh/function.socket-setopt.php) — 别名 socket_set_option
-- [socket_shutdown](https://www.php.net/manual/zh/function.socket-shutdown.php) — 关闭套接字接收或发送，或两者都关闭
-- [socket_strerror](https://www.php.net/manual/zh/function.socket-strerror.php) — 返回描述套接字错误的字符串
-- [socket_write](https://www.php.net/manual/zh/function.socket-write.php) — **向套接字写数据**
-- [socket_wsaprotocol_info_export](https://www.php.net/manual/zh/function.socket-wsaprotocol-info-export.php) — 导出 WSAPROTOCOL_INFO 结构体
-- [socket_wsaprotocol_info_import](https://www.php.net/manual/zh/function.socket-wsaprotocol-info-import.php) — 从另一个进程导入套接字
-- [socket_wsaprotocol_info_release](https://www.php.net/manual/zh/function.socket-wsaprotocol-info-release.php) — 释放已导出的 WSAPROTOCOL_INFO 结构体
-## 实例
+[PHP：Sockets 扩展](https://www.php.net/manual/zh/book.sockets.php)
+## 函数索引
+以下按用途覆盖 Sockets 扩展函数；别名和平台特定函数单独标注。
+- **创建与生命周期**
+    - [socket_create](https://www.php.net/manual/zh/function.socket-create.php) — 按地址族、类型和协议创建 Socket。
+    - [socket_create_listen](https://www.php.net/manual/zh/function.socket-create-listen.php) — 创建、绑定并监听指定 TCP 端口，适合快速建立服务端监听 Socket。
+    - [socket_create_pair](https://www.php.net/manual/zh/function.socket-create-pair.php) — 创建一对已连接的 Socket，常用于本机双向 IPC。
+    - [socket_close](https://www.php.net/manual/zh/function.socket-close.php) — 关闭 Socket 并释放其资源。
+    - [socket_shutdown](https://www.php.net/manual/zh/function.socket-shutdown.php) — 停止接收、发送或双向传输，但不立即销毁 Socket 对象。
+- **服务端流程**
+    - [socket_bind](https://www.php.net/manual/zh/function.socket-bind.php) — 把 Socket 绑定到本地地址和端口。
+    - [socket_listen](https://www.php.net/manual/zh/function.socket-listen.php) — 将面向连接的 Socket 切换为监听状态，并设置等待连接队列。
+    - [socket_accept](https://www.php.net/manual/zh/function.socket-accept.php) — 接受一个待处理连接，返回用于通信的新 Socket。
+- **客户端连接**
+    - [socket_connect](https://www.php.net/manual/zh/function.socket-connect.php) — 向远端地址和端口发起连接。
+- **基础 I/O**
+    - [socket_read](https://www.php.net/manual/zh/function.socket-read.php) — 从 Socket 读取指定上限的字节，可选择二进制或按行读取模式。
+    - [socket_write](https://www.php.net/manual/zh/function.socket-write.php) — 向 Socket 写入数据，返回实际写入字节数，可能发生短写。
+    - [socket_recv](https://www.php.net/manual/zh/function.socket-recv.php) — 按标志位接收数据，并把结果写入引用缓冲区。
+    - [socket_send](https://www.php.net/manual/zh/function.socket-send.php) — 按标志位发送指定长度的数据。
+    - [socket_recvfrom](https://www.php.net/manual/zh/function.socket-recvfrom.php) — 接收数据报，并取得发送端地址和端口。
+    - [socket_sendto](https://www.php.net/manual/zh/function.socket-sendto.php) — 把数据报发送到指定地址和端口。
+- **消息与控制信息**
+    - [socket_recvmsg](https://www.php.net/manual/zh/function.socket-recvmsg.php) — 接收消息及地址、辅助数据等控制信息。
+    - [socket_sendmsg](https://www.php.net/manual/zh/function.socket-sendmsg.php) — 发送由消息头描述的数据、地址和辅助数据。
+    - [socket_cmsg_space](https://www.php.net/manual/zh/function.socket-cmsg-space.php) — 计算某类辅助数据所需的控制消息缓冲区大小。
+    - [socket_atmark](https://www.php.net/manual/zh/function.socket-atmark.php) — 判断流式 Socket 是否位于带外数据标记处。
+- **多路复用与模式**
+    - [socket_select](https://www.php.net/manual/zh/function.socket-select.php) — 等待一组 Socket 进入可读、可写或异常就绪状态，并原地筛选数组。
+    - [socket_set_block](https://www.php.net/manual/zh/function.socket-set-block.php) — 把 Socket 设置为阻塞模式。
+    - [socket_set_nonblock](https://www.php.net/manual/zh/function.socket-set-nonblock.php) — 把 Socket 设置为非阻塞模式。
+- **地址解析**
+    - [socket_addrinfo_lookup](https://www.php.net/manual/zh/function.socket-addrinfo-lookup.php) — 按主机名、服务名和提示条件解析地址候选列表。
+    - [socket_addrinfo_explain](https://www.php.net/manual/zh/function.socket-addrinfo-explain.php) — 把地址候选展开为地址族、协议和地址等可读信息。
+    - [socket_addrinfo_bind](https://www.php.net/manual/zh/function.socket-addrinfo-bind.php) — 根据地址候选创建并绑定 Socket。
+    - [socket_addrinfo_connect](https://www.php.net/manual/zh/function.socket-addrinfo-connect.php) — 根据地址候选创建 Socket 并建立连接。
+- **端点信息**
+    - [socket_getpeername](https://www.php.net/manual/zh/function.socket-getpeername.php) — 取得已连接对端的地址和端口。
+    - [socket_getsockname](https://www.php.net/manual/zh/function.socket-getsockname.php) — 取得本地 Socket 的地址和端口。
+- **选项**
+    - [socket_get_option](https://www.php.net/manual/zh/function.socket-get-option.php) — 读取指定层级的 Socket 选项值。
+    - [socket_set_option](https://www.php.net/manual/zh/function.socket-set-option.php) — 设置指定层级的 Socket 选项值。
+    - [socket_getopt](https://www.php.net/manual/zh/function.socket-getopt.php) — `socket_get_option()` 的别名。
+    - [socket_setopt](https://www.php.net/manual/zh/function.socket-setopt.php) — `socket_set_option()` 的别名。
+- **错误处理**
+    - [socket_last_error](https://www.php.net/manual/zh/function.socket-last-error.php) — 取得指定 Socket 或最近一次全局 Socket 操作的错误码。
+    - [socket_clear_error](https://www.php.net/manual/zh/function.socket-clear-error.php) — 清除指定 Socket 或全局保存的错误码。
+    - [socket_strerror](https://www.php.net/manual/zh/function.socket-strerror.php) — 把 Socket 错误码转换为可读错误信息。
+- **Stream 互操作**
+    - [socket_import_stream](https://www.php.net/manual/zh/function.socket-import-stream.php) — 把底层由 Socket 支撑的 Stream 导入为 `Socket` 对象。
+    - [socket_export_stream](https://www.php.net/manual/zh/function.socket-export-stream.php) — 把 `Socket` 导出为可用 Stream 函数操作的资源。
+- **Windows 专用**
+    - [socket_wsaprotocol_info_export](https://www.php.net/manual/zh/function.socket-wsaprotocol-info-export.php) — 导出可供目标 Windows 进程复制 Socket 的协议描述信息。
+    - [socket_wsaprotocol_info_import](https://www.php.net/manual/zh/function.socket-wsaprotocol-info-import.php) — 在 Windows 目标进程中根据协议描述信息导入 Socket。
+    - [socket_wsaprotocol_info_release](https://www.php.net/manual/zh/function.socket-wsaprotocol-info-release.php) — 释放此前导出的 Windows Socket 协议描述信息。
+## 最小单连接回显流程
+`SOCK_STREAM` 提供**字节流**，不保留发送端的消息边界。示例使用换行符分包，并循环处理短写；完整服务器还需增加并发、超时、请求上限和优雅退出。
 ```php
-// 配置服务器地址和端口
-$host = "127.0.0.1";
-$port = 8080;
-// 设置脚本执行时间无限制（推荐在 CLI 模式下运行）
-set_time_limit(0);
-// 1. 创建 Socket
-$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP) or die("Could not create socket\n");
-// 2. 绑定 Socket 到指定地址和端口
-$result = socket_bind($socket, $host, $port) or die("Could not bind to socket\n");
-// 3. 开始监听连接 (设置等待队列长度为 3)
-$result = socket_listen($socket, 3) or die("Could not set up socket listener\n");
-// 4. 接受连接请求
-// 接收连接，并用一个新的子 Socket ($spawn) 来处理客户端通信
-$spawn = socket_accept($socket) or die("Could not accept incoming connection\n");
-// 5. 读取客户端输入
-// 从客户端 Socket 读取最多 1024 字节的数据
-$input = socket_read($spawn, 1024) or die("Could not read input\n");
-// 6. 清理和处理数据
-$input = trim($input); // 清理输入字符串两端的空白
-// 将客户端输入数据反转，准备作为输出
-$output = strrev($input) . "\n";
-// 7. 返回数据给客户端
-// 将反转后的字符串写入客户端 Socket
-socket_write($spawn, $output, strlen($output)) or die("Could not write output\n");
-// 8. 关闭 sockets
-// 先关闭用于客户端通信的子 Socket
-socket_close($spawn);
-// 最后关闭用于监听的主 Socket
-socket_close($socket);
-```
-## fsockopen
-打开 Internet 或者 Unix 套接字连接
-[PHP: fsockopen - Manual](https://www.php.net/manual/zh/function.fsockopen.php)
-fsockopen()函数的好处是**把Socket连接绑定到一个流上**，然后使用**各种操作流的函数操作这个Socket连接**。
-```php
-function request($url, $param = [])
+function socketWriteAll($socket, string $data): void
 {
-    $urlInfo = parse_url($url);
-    $host  = $urlInfo['host'];
-    $path  = $urlInfo['path'];
-    // 将关联数组转换为 URL 编码的查询字符串
-    $data = isset($param) ? http_build_query($param) : '';
-    try {
-        // 1.建立 Socket 连接「连接目标服务器的 88 端口，超时时间为 5 秒」
-        $fp = @fsockopen($host, 88, $errno, $errstr, 5);
-        // 检查连接是否成功
-        if (!$fp) {
-            // 连接失败，输出错误信息
-            die("Connection Error: [$errno] $errstr" . PHP_EOL);
+    // Socket 可能短写，按实际写入字节数截断并继续发送。
+    while ($data !== '') {
+        $written = socket_write($socket, $data, strlen($data));
+        if ($written === false || $written === 0) {
+            throw new RuntimeException(socket_strerror(socket_last_error($socket)));
         }
-        stream_set_blocking($fp, 0); // 开启非阻塞模式
-        stream_set_timeout($fp, 1);  // 设置超时时间, 单位秒
-        // 2.构造完整的 HTTP GET 请求报文
-        $out = "GET {$path} HTTP/1.1\r\n";
-        $out .= "Host: {$host}\r\n";
-        // 模拟 User-Agent
-        $out .= "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-CN; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13\r\n";
-        // 声明请求体的数据类型
-        $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
-        // 模拟 Referer
-        $out .= "Referer: http://{$host}/archives/54/\r\n";
-        // 携带 PHPSESSID，如果需要模拟登录或特定会话
-        $out .= "PHPSESSID=082b0cc33cc7e6df1f87502c456c3eb0\r\n";
-        // 关键字段：声明请求体的数据长度
-        $out .= "Content-Length: " . strlen($data) . "\r\n";
-        // 通知服务器处理完请求后关闭连接
-        $out .= "Connection: Close\r\n";
-        // 必须有两个 \r\n 才能结束头部，开始请求体
-        $out .= "\r\n";
-        // 附加请求体数据
-        $out .= $data . "\r\n";
-        // 3.发送请求
-        fwrite($fp, $out);
-        // 4.读取服务器响应
-        $response = '';
-        while (!feof($fp)) {
-            // 每次读取 1280 字节数据
-            $response .= fgets($fp, 1280);
-        }
-        // 5.关闭连接
-        fclose($fp);
-        return $response;
-    } catch (Exception $e) {
-        echo $e->getMessage(), PHP_EOL;
+        $data = substr($data, $written);
     }
 }
-$response = request('https://weichengjun2.dpdns.org/i/2025/11/19/691d5aaa9c83e.png');
-// 输出完整的 HTTP 响应
-echo "--- Server Response ---" . PHP_EOL;
-echo $response . PHP_EOL;
-echo "-----------------------" . PHP_EOL;
-```
-## pfsockopen
-[PHP: pfsockopen - Manual](https://www.php.net/manual/zh/function.pfsockopen.php)
-打开**持久的** Internet 或 Unix 套接字连接
-这个函数的作用与 [fsockopen()](https://www.php.net/manual/zh/function.fsockopen.php) 完全一样，不同的地方在于当在脚本执行完后，连接一直不会关闭。可以说它是 [fsockopen()](https://www.php.net/manual/zh/function.fsockopen.php) 的**长连接**版本。
-# Stream
-[PHP: Stream 函数 - Manual](https://www.php.net/manual/zh/ref.stream.php)
-## stream_socket_pair
-创建**一对完全一样**的**网络套接字连接**，这个函数通常会被用在进程间通信（Inter-Process Communication）。
-```php
-// stream_socket_pair 创建了两个连接的套接字，可以双向通信
-// $sockets[0] 和 $sockets[1]
-$sockets = stream_socket_pair(STREAM_PF_UNIX, STREAM_SOCK_STREAM, STREAM_IPPROTO_IP);
-$pid     = pcntl_fork();
 
-if ($pid) {
-    /* 父进程 */
-    // 因为父进程只使用 $sockets[1] 来通信，所以关闭 $sockets[0]
-    fclose($sockets[0]);
-
-    // 父进程向子进程发送消息（通过 $sockets[1]）
-    fwrite($sockets[1], "child PID: $pid\n");
-    // 父进程从子进程读取消息（通过 $sockets[1]）
-    echo 'parent: ' . fgets($sockets[1]);
-
-    fclose($sockets[1]);
-} elseif ($pid == 0) {
-    /* 子进程 */
-    // 因为子进程只使用 $sockets[0] 来通信，所以关闭 $sockets[1]
-    fclose($sockets[1]);
-
-    // 子进程向父进程发送消息（通过 $sockets[0]）
-    fwrite($sockets[0], "message from child\n");
-    // 子进程从父进程读取消息（通过 $sockets[0]）
-    echo 'child: ' . fgets($sockets[0]);
-
-    fclose($sockets[0]);
-} else {
-    die('could not fork');
+// 创建 IPv4 TCP 监听 Socket，并允许服务重启后快速复用地址。
+$server = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+if ($server === false) {
+    throw new RuntimeException(socket_strerror(socket_last_error()));
 }
-```
-### 父子进程通信解析
-#### 1. 通道创建
-* `stream_socket_pair()`：在 `pcntl_fork()` **前**创建。
-* **结果**：一个**双向**通信管道，有 `$sockets[0]` 和 `$sockets[1]` 两个端点。
-#### 2. 进程分叉
-* `pcntl_fork()`：创建子进程。
-* **结果**：父进程和子进程都**各自继承**了这两个端点 (`$sockets[0]` 和 `$sockets[1]`) 的文件描述符。
-#### 3. 通信策略
-* 为了避免混乱，父子进程各自只使用**一个**端点。
-* **父进程**：使用 `$sockets[1]`，**关闭** `$sockets[0]`。
-* **子进程**：使用 `$sockets[0]`，**关闭** `$sockets[1]`。
-#### 4. 通信流程
-* **发送**：`fwrite()` 写入各自持有的套接字。
-* **接收**：`fgets()` 读取各自持有的套接字。
-#### 5. 核心原理
-* **`父进程的$sockets[1]`** 始终与 **`子进程的$sockets[0]`** 连接。
-* 这是**全双工**通信，父子双方都可以同时发送和接收消息。
-### 总结
-`stream_socket_pair` 创建了一个共享的管道，父子进程通过各自关闭一端、使用另一端的方式，实现高效、清晰的双向通信。
-## stream_set_blocking
-为资源流设置阻塞或者阻塞模式
-该参数的设置将会影响到像 `fgets()` 和 `fread()` 这样的函数从资源流里读取数据。
-- 阻塞模式：将会一直等到从资源流里面获取到数据才能返回。
-- 非阻塞模式：调用 fgets() 总是会立即返回；
-```php
-/*
-1.$mode=0, 资源流将会被转换为非阻塞模式；
-2.$mode=1, 资源流将会被转换为阻塞模式。
-*/ 
-stream_set_blocking($stream, $mode);
-stream_set_blocking($fp, 0); // 开启非阻塞模式
-```
-## stream_socket_server
-创建一个Internet或Unix域服务器socket
-## stream_socket_client
-开放的互联网或Unix域socket连接
-```php
-$fp = stream_socket_client("tcp://www.example.com:80", $errno, $errMsg, 30);
-if (!$fp) {
-    echo "$errMsg ($errno)", PHP_EOL;
-} else {
-    fwrite($fp, "GET / HTTP/1.0\r\nHost: www.example.com\r\nAccept: */*\r\n\r\n");
-    while (!feof($fp)) {
-        echo fgets($fp, 1024);
-    }
-    fclose($fp);
-}
-```
->[GitHub - php-amqplib/php-amqplib: The most widely used PHP client for RabbitMQ](https://github.com/php-amqplib/php-amqplib) 
->用到 stream_socket_client 实现 AMQP 协议连接
-```php
-...省略其他代码
+
+$client = null;
 try {
-	$this->sock = stream_socket_client(
-		$remote,
-		$errno,
-		$errstr,
-		$this->connection_timeout,
-		STREAM_CLIENT_CONNECT,
-		$context
-	);
-	$this->throwOnError();
-} catch (\ErrorException $e) {
-	throw new AMQPIOException($e->getMessage(), $e->getCode(), $e->getPrevious());
-} finally {
-	$this->restoreErrorHandler();
-}
-...
-```
-## stream_socket_accept
-接受由 [stream_socket_server()](https://www.php.net/manual/zh/function.stream-socket-server.php) 创建的套接字连接
-[¶参数](https://www.php.net/manual/zh/function.stream-socket-accept.php#refsect1-function.stream-socket-accept-parameters)
-`socket`
-需要接受的服务器创建的套接字连接。
-`timeout`
-覆盖默认的套接字接受的**超时时限**。输入的时间需以秒为单位。默认情况下，使用 [default_socket_timeout](https://www.php.net/manual/zh/filesystem.configuration.php#ini.default-socket-timeout) 作为超时时限。
-- 0 表示**非阻塞模式**，即使socket本身是阻塞的
-- 如果**使用 -1 或省略**，则会**阻塞**等待
-`peer_name`
-如果已选的传输器存在且有效的已连接客户端，则将该值设置为已连接客户端名称（地址）。
-> **注意**:
-> 也可以之后通过 [stream_socket_get_name()](https://www.php.net/manual/zh/function.stream-socket-get-name.php) 来确定。
+    socket_set_option($server, SOL_SOCKET, SO_REUSEADDR, 1);
+    if (!socket_bind($server, '127.0.0.1', 8080) || !socket_listen($server, 16)) {
+        throw new RuntimeException(socket_strerror(socket_last_error($server)));
+    }
 
-[¶返回值](https://www.php.net/manual/zh/function.stream-socket-accept.php#refsect1-function.stream-socket-accept-returnvalues)
-返回接受套接之后的**资源流** 或者在失败时返回 **false**。
-## stream_select「多路复用 I/O」
-### 1. 原理
-`stream_select` 是 PHP 中实现**多路复用 I/O**（I/O Multiplexing）的核心函数，其**底层依赖**于操作**系统的 `select`** 系统调用。
-它允许程序**同时监听多个文件描述符**（如 socket、管道等）的可读、可写或异常事件，并在任意一个事件就绪时触发回调。
-#### (1) 位图（Bitmask）与文件描述符集合
-`select` 的核心是通过 **位图**（bitmap）管理文件描述符（fd）。每个位图对应一个文件描述符的状态：
-- **读集合（readfds）**：监听文件描述符是否有数据可读。
-- **写集合（writefds）**：监听文件描述符是否可写。
-- **异常集合（exceptfds）**：监听文件描述符是否有异常（如 TCP 错误）。
-位图的本质是一个整数数组，每个位（bit）代表一个文件描述符的状态。
-例如，`fd_set` 在 Linux 中通常是一个 `1024` 位的数组（最大支持 1024 个 fd，默认可通过 `FD_SETSIZE` 扩展）。
-#### (2) 用户态与内核态的交互
-`select` 的执行分为 **用户态** 和 **内核态** 两阶段：
-1. **用户态准备**：
-   - 将需要监听的文件描述符集合（`readfds`、`writefds`、`exceptfds`）从用户空间复制到内核空间。
-   - 设置超时时间（`timeout`）。
-2. **内核态处理**：
-   - 内核轮询所有文件描述符，检查是否有事件就绪。
-   - 如果事件未就绪，进程进入休眠状态（阻塞），等待事件触发。
-   - 事件触发后，内核修改位图并返回就绪的文件描述符数量。
-#### (3) 轮询机制
-`select` 的核心逻辑是 **轮询**（Polling）：
-- 内核需要**遍历**所有传入的文件**描述符**，逐个**检查其状态**。
-- 如果没有就绪事件，进程会阻塞直到超时或事件发生。
-- 返回时，内核将修改后的位图复制回用户空间，用户程序通过遍历位图确定哪些文件描述符就绪。
-### 2. 实现
-[PHP: stream\_select - Manual](https://www.php.net/manual/zh/function.stream-select.php)
-PHP 的 `stream_select` 函数是对 `select` 系统调用的封装，其关键特性如下：
-#### (1) 参数解析
-```php
-int stream_select(array &$read, array &$write, array &$except, int $tv_sec, int $tv_usec)
+    // 阻塞等待一个客户端，再按换行符读取一条业务消息。
+    $client = socket_accept($server);
+    if ($client === false) {
+        throw new RuntimeException(socket_strerror(socket_last_error($server)));
+    }
+
+    $line = socket_read($client, 1024, PHP_NORMAL_READ);
+    if ($line === false) {
+        throw new RuntimeException(socket_strerror(socket_last_error($client)));
+    }
+
+    // 回写时重新补上换行符，保持请求与响应使用相同的分包规则。
+    socketWriteAll($client, 'echo: ' . rtrim($line, "\r\n") . "\n");
+} finally {
+    // 无论正常返回还是抛出异常，都关闭已创建的 Socket。
+    if ($client !== null && $client !== false) {
+        socket_close($client);
+    }
+    socket_close($server);
+}
 ```
-- **`$read`、`$write`、`$except`**：需监听的流数组（如 socket 资源）。
-- **`$tv_sec`、`$tv_usec`**：超时时间（秒和微秒）。
-##### 关键点
-- **`stream_select()` 会在流准备就绪时立即返回**，而不会等到超时时间耗尽。
-- **超时时间**是一个**最大等待时长**。
-- 将超时值设为 `0` 会立即返回，这在循环中使用会**大量消耗 CPU**，不推荐。通常建议设置一个几秒或至少 `200000` 微秒的超时值来降低 CPU 占用。
-##### 返回值
-Stream Select 函数返回修改后的流资源数量。
-- 有I/O活动时返回 > 0
-- 超时后返回 0
-- 出错时返回 false
-#### (2) 非阻塞模式
-PHP 流默认是阻塞的，需通过 `stream_set_blocking($stream, 0)` 将流设置为非阻塞模式，以避免 `fread()`/`fwrite()` 阻塞整个程序。
-#### (3) 事件驱动模型
-PHP 通过 `stream_select` 实现事件驱动模型：
-1. **注册监听**：将流加入 `$read`/`$write`/`$except` 数组。
-2. **等待事件**：调用 `stream_select` 阻塞等待事件。
-3. **处理事件**：遍历返回的就绪流，调用回调函数处理（如读取数据、发送响应）。
-### 3. 核心流程
-#### 关键点解析
-- **流复制**：每次调用 `stream_select` 前需复制数组（`$readCopy`），因为 `stream_select` 会修改原数组。
-- **事件处理**：通过遍历 `$readCopy` 确定哪些流有数据可读。
-- **非阻塞操作**：`stream_set_blocking($stream, 0)` 避免 `fread()`/`fwrite()` 阻塞。
-### 4. 优缺点分析
-#### (1) 优点
-- **并发处理**：单线程监听多个流，避免线程切换开销。
-- **简单易用**：PHP 提供的封装函数（`stream_select`）易于实现基本的异步 I/O。
-- **跨平台**：兼容 Windows 和 Unix 系统。
-#### (2) 缺点
-- **性能瓶颈**：
-	- **位图复制开销**：每次调用 `select` 需将文件描述符集合从**用户态复制到内核态**，且**内核需轮询所有 fd**。
-	- **文件描述符限制**：默认最大支持 1024 个 fd（可通过 `FD_SETSIZE` 扩展，但受内存限制）。
-- **事件通知延迟**：`select` 是**轮询机制**，无法实时通知事件（如 `epoll` 的边缘触发模式）。
-- **不适用于高并发场景**：在连接数超过数千时，性能显著下降。
-### 5. `select`/`epoll`/`kqueue` 的对比
-| **特性**        | **select / poll (通用)**                          | **epoll (Linux 专有)**               | **kqueue (BSD/macOS 专有)**     |
-| ------------- | ----------------------------------------------- | ---------------------------------- | ----------------------------- |
-| **底层原理**      | **位图 (select)** / **链表 (poll)** 轮询              | **红黑树 + 双向链表**                     | **内核事件过滤器** (基于事件链表)          |
-| **最大 FD 数量**  | **`select`:** 默认 1024 (受限)<br>**`poll`:** 无硬性限制 | **无限制** (仅受系统资源限制)                 | **无限制** (仅受系统资源限制)            |
-| **事件注册**      | **临时注册**：每次调用都需要传递整个 FD 集合                      | **持久注册**：FD 集合一次性注册到内核             | **持久注册**：事件一次性注册到内核           |
-| **性能复杂度**     | **$O(N)$** (每次调用都需要遍历所有监听的 FD 集合)               | **$O(1)$** (直接从就绪链表返回事件)           | **$O(1)$** (直接从事件队列返回事件)      |
-| **用户态/内核态交互** | **高**：每次调用复制**整个** FD 集合                        | **低**：一次性注册 FD，后续仅传递**就绪事件**       | **低**：一次性注册事件，后续仅传递**就绪事件**   |
-| **通知机制**      | **水平触发 (LT)**：会反复通知 FD 上的数据**存在**。              | 默认 **LT**，可选 **边缘触发 (ET)**。        | 默认 **ET** (某些事件可配置为 LT)。      |
-| **数据回调模型**    | **轮询 (Polling)**：用户需要遍历 FD 集合查找就绪者。             | **通知/回调**：内核直接返回就绪事件列表。            | **通知/事件驱动**：内核直接返回就绪事件列表。     |
-| **适用场景**      | **通用性强**、**小规模并发** (<1000 连接)。                  | **高性能**、**大规模并发** (高并发 Web/游戏服务器)。 | **高性能**、**大规模并发** (跨平台兼容性更好)。 |
-#### 示例 1: 性能瓶颈（$O(N)$ vs $O(1)$）
-假设一个 Web 服务器有 **10,000 个** 活跃连接 (FD)。
-##### 使用 `stream_select` (或 `select`/`poll`)
-1.  **用户空间到内核空间：** 每次调用 `select()`，服务器需要将包含 10,000 个 FD 的整个集合拷贝给内核。
-2.  **内核遍历：** 内核需要 **遍历这 10,000 个 FD** 来检查哪些是就绪的。
-3.  **结果拷贝：** 内核将就绪的 FD 集合（假设只有 5 个）拷贝回用户空间。
-4.  **用户空间遍历：** 服务器程序再次 **遍历这 10,000 个 FD** 集合，找出那 5 个就绪的 FD，并处理它们。
-**结论：** 即使只有极少数连接就绪，程序和内核都要付出检查 **10,000 个 FD** 的代价（$O(N)$）。
-##### 使用 `epoll`
-1.  **注册 FD (一次性)：** 服务器程序启动时，通过 `epoll_ctl` 将这 10,000 个 FD **一次性** 注册到内核的 epoll 实例中。
-2.  **等待就绪：** 调用 `epoll_wait`。
-3.  **内核就绪列表：** 当有数据到达时，内核会将就绪的 FD 挂载到 **就绪列表** 中。
-4.  **返回结果：** `epoll_wait` **直接返回** 包含 5 个就绪 FD 的列表。
-**结论：** 程序和内核只需要关注那 5 个就绪的 FD。FD 数量对性能的影响极小（接近 $O(1)$）。在高并发场景下，`epoll` 具有压倒性的性能优势。
-#### 示例 2: 通知模式（LT vs ET）
-**情景：** 客户端发送了 500 字节数据，但服务器程序只从 socket 中读取了 100 字节。
-##### 水平触发 (Level Triggered, LT) - `select` 默认及 `epoll` 默认
-1.  **第一次通知：** `select/epoll_wait` 返回，通知该 FD 就绪。
-2.  **处理 100 字节：** 服务器读取了 100 字节，还有 400 字节留在内核缓冲区。
-3.  **循环：** 服务器再次进入 `select/epoll_wait` 等待。
-4.  **第二次通知：** 因为内核缓冲区中 **仍有 400 字节数据存在**，`select/epoll` **会再次立即返回**，通知该 FD 仍然就绪。
-5.  **反复通知：** 只要缓冲区中还有数据，它就会**反复被通知**。
-**优点：** 简单安全，不会丢失事件，但可能导致服务器重复唤醒，降低效率。
-##### 边缘触发 (Edge Triggered, ET) - `epoll` 特有
-1.  **第一次通知：** `epoll_wait` 返回，通知该 FD **状态发生了变化**（从不就绪到就绪）。
-2.  **处理 100 字节：** 服务器读取了 100 字节，还有 400 字节留在内核缓冲区。
-3.  **循环：** 服务器再次进入 `epoll_wait` 等待。
-4.  **第二次通知：** **不会立即返回**。因为自从第一次通知后，该 FD 的就绪状态**没有再次发生改变**（没有新的数据包到达）。
-5.  **处理：** 如果服务器不读完剩下的 400 字节，它就永远不会再收到通知，可能导致数据滞留。
-**优点：** 效率极高，避免了重复唤醒，但要求程序必须**一次性读/写完所有数据**（或读到 EAGAIN/EWOULDBLOCK 为止），编程复杂度更高。高性能框架如 Swoole 通常在协程模型下利用 `epoll` 的 ET 模式来达到极致性能。
-### 6. PHP 中的替代方案
-####  Swoole 协程
-- 提供协程支持，通过 `go()` 函数实现非阻塞 I/O。
-- 底层使用 `epoll`/`kqueue` 实现高性能并发。
-- 示例：
+- **读取边界**：一次 `socket_read()` 不保证得到一条完整业务消息；这里仅因协议明确使用换行符，才可按行读取。
+- **写入边界**：`socket_write()` 可能只写入部分数据，因此必须根据返回字节数继续写。
+- **MySQL 联想**：PHP MySQL 驱动可通过 TCP 或 Unix Domain Socket 通信；Socket 只提供字节传输，握手、认证、查询和结果集仍由驱动按 MySQL 协议处理。
+# Stream
+[PHP：Stream 函数](https://www.php.net/manual/zh/ref.stream.php)
+Stream 将不同 I/O 来源统一成可读、可写或双向的资源，并提供相同的读写、超时、过滤和多路复用接口。
+## 函数索引
+- **Bucket**
+    - [stream_bucket_append](https://www.php.net/manual/zh/function.stream-bucket-append.php) — 把 Bucket 追加到 Bucket Brigade 尾部。
+    - [stream_bucket_make_writeable](https://www.php.net/manual/zh/function.stream-bucket-make-writeable.php) — 从 Brigade 取出一个可修改的 Bucket。
+    - [stream_bucket_new](https://www.php.net/manual/zh/function.stream-bucket-new.php) — 为指定 Stream 创建包含给定数据的新 Bucket。
+    - [stream_bucket_prepend](https://www.php.net/manual/zh/function.stream-bucket-prepend.php) — 把 Bucket 插入 Bucket Brigade 头部。
+- **Context**
+    - [stream_context_create](https://www.php.net/manual/zh/function.stream-context-create.php) — 使用 wrapper 选项和通知参数创建 Stream context。
+    - [stream_context_get_default](https://www.php.net/manual/zh/function.stream-context-get-default.php) — 取得默认 Stream context，并可合并新的默认选项。
+    - [stream_context_get_options](https://www.php.net/manual/zh/function.stream-context-get-options.php) — 读取 context 中按 wrapper 分组的选项。
+    - [stream_context_get_params](https://www.php.net/manual/zh/function.stream-context-get-params.php) — 读取 context 的选项和通知回调等参数。
+    - [stream_context_set_default](https://www.php.net/manual/zh/function.stream-context-set-default.php) — 设置默认 context 选项，并返回默认 context。
+    - [stream_context_set_option](https://www.php.net/manual/zh/function.stream-context-set-option.php) — 设置一个或一组 context wrapper 选项。
+    - [stream_context_set_options](https://www.php.net/manual/zh/function.stream-context-set-options.php) — 批量合并 context wrapper 选项。
+    - [stream_context_set_params](https://www.php.net/manual/zh/function.stream-context-set-params.php) — 设置 context 的通知回调等参数。
+- **复制与过滤**
+    - [stream_copy_to_stream](https://www.php.net/manual/zh/function.stream-copy-to-stream.php) — 从当前游标开始，把一个 Stream 的数据复制到另一个 Stream。
+    - [stream_filter_append](https://www.php.net/manual/zh/function.stream-filter-append.php) — 把 Filter 追加到 Stream 的过滤链尾部。
+    - [stream_filter_prepend](https://www.php.net/manual/zh/function.stream-filter-prepend.php) — 把 Filter 插入 Stream 的过滤链头部。
+    - [stream_filter_register](https://www.php.net/manual/zh/function.stream-filter-register.php) — 注册自定义 Filter 名称与实现类。
+    - [stream_filter_remove](https://www.php.net/manual/zh/function.stream-filter-remove.php) — 从 Stream 过滤链移除指定 Filter，并触发剩余数据冲刷。
+- **读取与元数据**
+    - [stream_get_contents](https://www.php.net/manual/zh/function.stream-get-contents.php) — 从当前游标读取剩余内容或指定长度的数据。
+    - [stream_get_filters](https://www.php.net/manual/zh/function.stream-get-filters.php) — 列出当前环境已注册的 Filter 名称。
+    - [stream_get_line](https://www.php.net/manual/zh/function.stream-get-line.php) — 读取到指定结束分隔符或长度上限，但不包含分隔符。
+    - [stream_get_meta_data](https://www.php.net/manual/zh/function.stream-get-meta-data.php) — 取得阻塞、超时、EOF、URI 和 wrapper 等运行状态。
+    - [stream_get_transports](https://www.php.net/manual/zh/function.stream-get-transports.php) — 列出当前环境支持的 Socket transport。
+    - [stream_get_wrappers](https://www.php.net/manual/zh/function.stream-get-wrappers.php) — 列出当前环境已注册的 Stream wrapper。
+- **判断与路径**
+    - [stream_is_local](https://www.php.net/manual/zh/function.stream-is-local.php) — 判断 Stream 或 URL 是否属于本地资源。
+    - [stream_isatty](https://www.php.net/manual/zh/function.stream-isatty.php) — 判断 Stream 是否连接到交互式终端。
+    - [stream_resolve_include_path](https://www.php.net/manual/zh/function.stream-resolve-include-path.php) — 按 `include_path` 解析文件并返回实际路径。
+- **通知回调签名**
+    - [stream_notification_callback](https://www.php.net/manual/zh/function.stream-notification-callback.php) — PHP 手册用于描述通知回调参数的占位名称，不是可直接调用的内置函数；实际回调通过 context 的 `notification` 参数注册。
+- **多路复用与配置**
+    - [stream_select](https://www.php.net/manual/zh/function.stream-select.php) — 等待多组 Stream 可读、可写或异常就绪，并原地筛选数组。
+    - [stream_set_blocking](https://www.php.net/manual/zh/function.stream-set-blocking.php) — 切换 Stream 的阻塞或非阻塞模式。
+    - [stream_set_chunk_size](https://www.php.net/manual/zh/function.stream-set-chunk-size.php) — 设置 Stream 每次底层读写使用的块大小。
+    - [stream_set_read_buffer](https://www.php.net/manual/zh/function.stream-set-read-buffer.php) — 设置 Stream 的读取缓冲策略和大小。
+    - [stream_set_timeout](https://www.php.net/manual/zh/function.stream-set-timeout.php) — 设置阻塞 Stream 的读取超时。
+    - [stream_set_write_buffer](https://www.php.net/manual/zh/function.stream-set-write-buffer.php) — 设置 Stream 的写入缓冲大小。
+- **Socket Stream**
+    - [stream_socket_accept](https://www.php.net/manual/zh/function.stream-socket-accept.php) — 接受监听流上的连接并返回客户端 Stream。
+    - [stream_socket_client](https://www.php.net/manual/zh/function.stream-socket-client.php) — 创建客户端 Socket Stream，并支持 context、持久连接和异步连接标志。
+    - [stream_socket_enable_crypto](https://www.php.net/manual/zh/function.stream-socket-enable-crypto.php) — 在已连接 Stream 上启用、协商或关闭 TLS 加密。
+    - [stream_socket_get_name](https://www.php.net/manual/zh/function.stream-socket-get-name.php) — 取得 Socket Stream 的本地或对端地址。
+    - [stream_socket_pair](https://www.php.net/manual/zh/function.stream-socket-pair.php) — 创建一对已连接的 Socket Stream，常用于本机 IPC。
+    - [stream_socket_recvfrom](https://www.php.net/manual/zh/function.stream-socket-recvfrom.php) — 从 Socket Stream 接收数据，并可取得发送端地址。
+    - [stream_socket_sendto](https://www.php.net/manual/zh/function.stream-socket-sendto.php) — 向已连接对端或指定地址发送数据。
+    - [stream_socket_server](https://www.php.net/manual/zh/function.stream-socket-server.php) — 创建 TCP、UDP 或 Unix Domain Socket 服务端 Stream。
+    - [stream_socket_shutdown](https://www.php.net/manual/zh/function.stream-socket-shutdown.php) — 关闭 Socket Stream 的读取、写入或双向通道。
+- **锁支持**
+    - [stream_supports_lock](https://www.php.net/manual/zh/function.stream-supports-lock.php) — 判断 Stream 是否支持 `flock()` 文件锁。
+- **Wrapper 管理**
+    - [stream_wrapper_register](https://www.php.net/manual/zh/function.stream-wrapper-register.php) — 为协议名注册自定义 Stream wrapper 类。
+    - [stream_register_wrapper](https://www.php.net/manual/zh/function.stream-register-wrapper.php) — `stream_wrapper_register()` 的别名。
+    - [stream_wrapper_restore](https://www.php.net/manual/zh/function.stream-wrapper-restore.php) — 恢复被注销或覆盖的内置 wrapper。
+    - [stream_wrapper_unregister](https://www.php.net/manual/zh/function.stream-wrapper-unregister.php) — 注销指定协议的 Stream wrapper。
+## 可创建或操作 Stream 的相关函数
+以下函数来自 Filesystem、Network 等不同扩展，但都能创建或操作 Stream。
+- **创建**
+    - [fopen](https://www.php.net/manual/zh/function.fopen.php) — 按模式打开文件或 URL，并返回 Stream。
+    - [fsockopen](https://www.php.net/manual/zh/function.fsockopen.php) — 建立 Internet 或 Unix Domain Socket 连接并返回 Stream。
+    - [pfsockopen](https://www.php.net/manual/zh/function.pfsockopen.php) — 建立可由同一 PHP Worker 后续请求复用的持久 Socket Stream。
+    - [popen](https://www.php.net/manual/zh/function.popen.php) — 启动进程并打开连接其标准输入或输出的单向管道。
+    - [tmpfile](https://www.php.net/manual/zh/function.tmpfile.php) — 创建关闭时自动删除的临时文件 Stream。
+- **关闭**
+    - [fclose](https://www.php.net/manual/zh/function.fclose.php) — 关闭 Stream 并冲刷待写数据。
+    - [pclose](https://www.php.net/manual/zh/function.pclose.php) — 关闭 `popen()` 管道，等待子进程并返回其退出状态。
+- **读取**
+    - [feof](https://www.php.net/manual/zh/function.feof.php) — 判断 Stream 是否已经到达 EOF。
+    - [fgetc](https://www.php.net/manual/zh/function.fgetc.php) — 从 Stream 读取一个字节。
+    - [fgets](https://www.php.net/manual/zh/function.fgets.php) — 读取一行，遇到换行符、EOF 或长度上限时结束。
+    - [fgetcsv](https://www.php.net/manual/zh/function.fgetcsv.php) — 读取一行并按 CSV 规则解析为字段数组。
+    - [fread](https://www.php.net/manual/zh/function.fread.php) — 从 Stream 最多读取指定字节数。
+    - [fscanf](https://www.php.net/manual/zh/function.fscanf.php) — 按格式字符串解析 Stream 中的一行输入。
+    - [fpassthru](https://www.php.net/manual/zh/function.fpassthru.php) — 把当前游标后的剩余内容直接输出，并返回输出字节数。
+- **写入**
+    - [fwrite](https://www.php.net/manual/zh/function.fwrite.php) — 向 Stream 写入数据并返回实际写入字节数。
+    - [fputs](https://www.php.net/manual/zh/function.fputs.php) — `fwrite()` 的别名。
+    - [fputcsv](https://www.php.net/manual/zh/function.fputcsv.php) — 把字段数组编码为 CSV 记录并写入 Stream。
+    - [fflush](https://www.php.net/manual/zh/function.fflush.php) — 把 PHP 写缓冲中的数据冲刷到底层资源。
+- **游标**
+    - [fseek](https://www.php.net/manual/zh/function.fseek.php) — 按起点和偏移量移动可定位 Stream 的游标。
+    - [ftell](https://www.php.net/manual/zh/function.ftell.php) — 返回当前 Stream 游标位置。
+    - [rewind](https://www.php.net/manual/zh/function.rewind.php) — 把 Stream 游标移动到开头，并清除 EOF 状态。
+- **状态与文件操作**
+    - [fstat](https://www.php.net/manual/zh/function.fstat.php) — 取得 Stream 对应资源的文件状态信息。
+    - [ftruncate](https://www.php.net/manual/zh/function.ftruncate.php) — 把文件 Stream 截断或扩展到指定长度。
+    - [flock](https://www.php.net/manual/zh/function.flock.php) — 对支持锁的 Stream 获取或释放咨询式文件锁。
+- **别名**
+    - [set_file_buffer](https://www.php.net/manual/zh/function.set-file-buffer.php) — `stream_set_write_buffer()` 的别名，用于设置写缓冲大小。
+# 网络 Stream
+## `fsockopen()`
+`fsockopen()` 创建 Internet 或 Unix Domain Socket 连接，并返回 Stream。连接建立超时由 `$timeout` 控制；阻塞读取超时需另用 `stream_set_timeout()`。
+以下代码仅演示在 TCP Stream 上发送**原始 HTTP/1.0 文本**。它依靠 `Connection: close` 和对端关闭连接确定响应结束，不是完整 HTTP 客户端；生产代码应使用 cURL、Guzzle 等成熟实现处理 TLS、重定向、分块编码和协议边界。
 ```php
-go(function () {
-	$socket = new Swoole\Coroutine\Socket(AF_INET, SOCK_STREAM);
-	$socket->bind('127.0.0.1', 8000);
-	$socket->listen();
-	
-	while (true) {
-		$client = $socket->accept();
-			go(function () use ($client) {
-				$data = $client->recv();
-				$client->send("Echo: $data");
-				$client->close();
-			});
-	}
+// 连接超时只约束建立 TCP 连接，不约束后续阻塞读取。
+$fp = fsockopen('example.com', 80, $errno, $errorMessage, 5);
+if ($fp === false) {
+    throw new RuntimeException("connect failed: {$errorMessage} ({$errno})");
+}
+
+// 单独设置读取超时，并构造依靠连接关闭结束响应的 HTTP/1.0 请求。
+stream_set_timeout($fp, 5);
+$request = "GET / HTTP/1.0\r\n"
+    . "Host: example.com\r\n"
+    . "Connection: close\r\n\r\n";
+
+// fwrite() 可能短写，必须发送完完整请求头。
+while ($request !== '') {
+    $written = fwrite($fp, $request);
+    if ($written === false || $written === 0) {
+        fclose($fp);
+        throw new RuntimeException('write failed');
+    }
+    $request = substr($request, $written);
+}
+
+// HTTP/1.0 + Connection: close：持续读取到对端关闭连接。
+while (!feof($fp)) {
+    $chunk = fread($fp, 8192);
+    if ($chunk === false) {
+        break;
+    }
+    echo $chunk;
+}
+
+// 关闭前取得元数据，用于区分正常 EOF 与读取超时。
+$meta = stream_get_meta_data($fp);
+fclose($fp);
+if ($meta['timed_out']) {
+    throw new RuntimeException('read timed out');
+}
+```
+## `pfsockopen()`
+`pfsockopen()` 是 `fsockopen()` 的**持久连接**版本。
+- **生命周期**：连接可在当前请求结束后保留，并由同一 PHP Worker 的后续请求复用。
+- **不是连接池**：连接不会自动跨所有进程共享。
+- **复用条件**：上层协议必须允许安全复用，并处理残留数据、失效连接和服务端连接数限制。
+## `stream_socket_client()`
+`stream_socket_client()` 支持更多连接标志、Stream context、异步连接和 TLS 配置，通常比 `fsockopen()` 更适合网络客户端。
+```php
+// stream_socket_client() 可进一步接收 context 和连接标志。
+$fp = stream_socket_client('tcp://example.com:80', $errno, $errorMessage, 5);
+if ($fp === false) {
+    throw new RuntimeException("connect failed: {$errorMessage} ({$errno})");
+}
+
+// 读取超时与连接超时独立设置。
+stream_set_timeout($fp, 5);
+$request = "GET / HTTP/1.0\r\nHost: example.com\r\nConnection: close\r\n\r\n";
+// 循环处理短写，确保请求完整到达对端。
+while ($request !== '') {
+    $written = fwrite($fp, $request);
+    if ($written === false || $written === 0) {
+        fclose($fp);
+        throw new RuntimeException('write failed');
+    }
+    $request = substr($request, $written);
+}
+// 按行读取仅适合这个文本协议示例，不代表 TCP 自带行边界。
+while (($line = fgets($fp)) !== false) {
+    echo $line;
+}
+
+$meta = stream_get_meta_data($fp);
+fclose($fp);
+if ($meta['timed_out']) {
+    throw new RuntimeException('read timed out');
+}
+```
+php-amqplib 使用 `stream_socket_client()` 建立 AMQP 传输连接，并在库内补充 context、超时和错误转换；其等待 Socket 就绪的实现也会使用 `stream_select()`。
+## `stream_socket_server()` 与 `stream_socket_accept()`
+- **创建监听端点**：`stream_socket_server()` 返回服务器 Stream。
+- **等待连接**：`stream_socket_accept()` 返回已连接的客户端 Stream；失败或超时时返回 `false`。
+- **默认超时**：省略 `$timeout` 或传 `null` 时使用 `default_socket_timeout`，不代表无限等待。
+- **立即尝试**：事件循环通常先用 `stream_select()` 等待监听流可读，再调用 `stream_socket_accept($server, 0)`。
+- **UDP 边界**：UDP 不使用 `stream_socket_accept()`，应调用 `stream_socket_recvfrom()` 和 `stream_socket_sendto()`。
+```php
+// 创建 TCP 监听流；失败时错误号与错误文本由引用参数返回。
+$server = stream_socket_server('tcp://127.0.0.1:32100', $errno, $errorMessage);
+if ($server === false) {
+    throw new RuntimeException("listen failed: {$errorMessage} ({$errno})");
+}
+
+// 最多等待 30 秒，并取得客户端地址。
+$client = stream_socket_accept($server, 30, $peerName);
+if ($client !== false) {
+    $request = fgets($client);
+    if ($request !== false) {
+        $response = 'echo: ' . rtrim($request, "\r\n") . "\n";
+        // 网络流同样可能短写，按返回长度继续发送。
+        while ($response !== '') {
+            $written = fwrite($client, $response);
+            if ($written === false || $written === 0) {
+                break;
+            }
+            $response = substr($response, $written);
+        }
+    }
+    fclose($client);
+}
+fclose($server);
+```
+## `stream_socket_pair()`
+`stream_socket_pair()` 创建两个**已互连、地位对等**的 Socket Stream，常用于本机 IPC。`STREAM_PF_UNIX + STREAM_SOCK_STREAM` 得到全双工 Unix Domain Socket pair，不是匿名管道，也不经过外部网络。
+以下示例依赖 PCNTL，适用于安装 PCNTL 的 Unix-like CLI 环境。
+```php
+function streamWriteAll($stream, string $data): void
+{
+    // 循环处理短写，保证一条应用层消息完整发送。
+    while ($data !== '') {
+        $written = fwrite($stream, $data);
+        if ($written === false || $written === 0) {
+            throw new RuntimeException('stream write failed');
+        }
+        $data = substr($data, $written);
+    }
+}
+
+// fork 前创建一对已连接的本地全双工 Stream。
+$pair = stream_socket_pair(STREAM_PF_UNIX, STREAM_SOCK_STREAM, STREAM_IPPROTO_IP);
+if ($pair === false) {
+    throw new RuntimeException('stream_socket_pair failed');
+}
+
+$pid = pcntl_fork();
+if ($pid === -1) {
+    fclose($pair[0]);
+    fclose($pair[1]);
+    throw new RuntimeException('pcntl_fork failed');
+}
+
+if ($pid > 0) {
+    // 父进程关闭不用的端点，发送一行请求后等待一行响应。
+    fclose($pair[0]);
+    streamWriteAll($pair[1], "ping\n");
+    echo 'parent received: ' . fgets($pair[1]);
+    fclose($pair[1]);
+    pcntl_waitpid($pid, $status);
+} else {
+    // 子进程只保留另一端；换行符是本例的消息边界。
+    fclose($pair[1]);
+    $request = fgets($pair[0]);
+    if ($request !== false) {
+        echo 'child received: ' . $request;
+        streamWriteAll($pair[0], "pong\n");
+    }
+    fclose($pair[0]);
+    exit(0);
+}
+```
+- **创建时机**：在 `pcntl_fork()` 前创建 pair，fork 后父子进程都会继承两个端点。
+- **端点管理**：父子进程分别关闭不用的一端，只通过保留端点通信。
+- **通信语义**：两个保留端点组成全双工字节流；消息边界仍需由应用协议定义。
+- **进程回收**：父进程调用 `pcntl_waitpid()`，避免子进程成为僵尸进程。
+- **完整 IPC 场景**：进程关系和其他 IPC 方案见 [[Work/Script/PHP/Function/Process/IPC#socket.php：UDS socketpair 双向请求／响应\|UDS socketpair 请求／响应]]。
+# Stream I/O 边界
+## `fgets()` vs `stream_get_contents()`
+| **函数**                                  | **读取边界**                         | **适合场景**         | **关键风险**                       |
+| --------------------------------------- | -------------------------------- | ---------------- | ------------------------------ |
+| `fgets($stream, $length)`               | **换行符**、EOF，或最多 `$length - 1` 字节 | 明确使用**换行符分包**的协议 | 返回值包含换行符；一行可能被长度上限拆开           |
+| `stream_get_contents($stream, $length)` | 当前游标后的剩余内容，或最多 `$length` 字节      | 文件、已知长度或确定会结束的输入 | 不识别协议边界；**可能等待 EOF、短读或占用大量内存** |
+- **socketpair 为何用 `fgets()`**：`"ping\n"` 提供明确行边界，双方读完一条消息后即可继续响应，不必先关闭连接。
+- **直接替换的风险**：
+    - **等待 EOF**：不指定长度的 `stream_get_contents()` 会持续读取到 EOF。
+    - **互等阻塞**：双方都等待读完后再响应和关闭，因而无法产生 EOF；应使用换行符、固定长度或长度前缀分包。
+- **进程管道实例**：`proc_open()` 中 `stream_select()` 已返回、无界读取仍等待 EOF 的实测见 [[Work/Script/PHP/Function/Process/PHP Process Management#stream_get_contents() 等待 EOF\|进程管道的 EOF 阻塞实验]]。
+- **读取上限**：`$length` 只限制最多读取多少字节，单次调用仍可能少读。
+- **非阻塞流**：读取可能只返回当前可用字节，也可能暂时没有数据。
+- **消息边界**：一次读取、指定长度或当前可用字节，都不代表自动得到一条完整业务消息。
+- **游标联想**：有限响应体读到 EOF 后，游标停在末尾；日志先读取而未复位时，业务再次读取可能得到空字符串，详见 [[Work/Script/PHP/Learn/Guzzle/Guzzle Stream 与 fopen 映射#游标语义对照\|Guzzle Stream 的游标与 EOF 语义]]。
+## 阻塞、非阻塞与超时
+- **阻塞模式**：`stream_set_blocking($stream, true)`；读取会等待数据、EOF、超时或错误。
+- **非阻塞模式**：`stream_set_blocking($stream, false)`；读取立即返回，暂时无数据不代表连接关闭。
+- **读取超时**：`stream_set_timeout()` 主要设置阻塞读取超时；发生后检查 `stream_get_meta_data($stream)['timed_out']`。
+- **推荐组合**：事件循环中的 Socket Stream 通常设为非阻塞，并配合 `stream_select()`，避免忙轮询。
+```php
+// 阻塞读取最多等待 1 秒；超时后须检查流元数据。
+stream_set_blocking($stream, true);
+stream_set_timeout($stream, 1);
+
+$data = fread($stream, 8192);
+$meta = stream_get_meta_data($stream);
+if ($meta['timed_out']) {
+    // 处理读取超时
+}
+```
+# `stream_select()`
+`stream_select()` 提供与 `select()` 类似的**流就绪等待**语义。它同步返回就绪 Stream，由调用方自行分发处理，不会直接触发回调。
+底层事件机制与 Reactor／Proactor 的进一步区别见 [[Work/Linux/Core/IO 并发模型#epoll、io_uring 原理\|I/O 并发模型]]。
+## 调用语义
+```text
+stream_select(
+    ?array &$read,
+    ?array &$write,
+    ?array &$except,
+    ?int $seconds,
+    ?int $microseconds = null
+): int|false
+```
+- **`$read`**：读取不会阻塞的 Stream；到达 EOF 的 Stream 也会被报告为可读。
+- **`$write`**：当前可执行部分写入的 Stream，不保证一次写完全部数据。
+- **`$except`**：高优先级异常条件，典型是 TCP 带外数据，不是通用错误队列。
+- **原地修改**：返回时三个数组只保留就绪 Stream，原始键会被保留；循环中必须重新构造或复制监听数组。
+- **返回值**：就绪总数为正整数；超时返回 `0`；失败返回 `false`，必须使用 `=== false` 判断。
+- **无限等待**：`$seconds === null` 时可一直等待，直到事件发生或被信号中断。
+- **即时轮询**：`0, 0` 会立即返回；在紧密循环中使用会持续占用 CPU。
+- **短读短写**：就绪只保证当前至少可执行部分 I/O，实际可能只处理一个字节。
+- **PHP 缓冲**：若 PHP 层已缓存可读数据，函数可能不咨询操作系统就返回，并清空未检查的 `$write`／`$except` 数组。
+## `select`、`poll`、`epoll`、`kqueue`
+| **特性** | **`select`** | **`poll`** | **`epoll`** | **`kqueue`** |
+| --- | --- | --- | --- | --- |
+| **平台** | 广泛支持 | POSIX 系统广泛支持 | Linux | BSD、macOS 等 |
+| **监听集合** | 每轮传入 `fd_set` | 每轮传入 `pollfd[]` | 持久注册 interest list | 持久注册 kevent |
+| **FD 边界** | FD 数值受 `FD_SETSIZE` 限制 | 不受 `FD_SETSIZE` 限制 | 受系统资源限制 | 受系统资源限制 |
+| **等待成本** | 通常随监听范围 `O(N)` | 通常随传入数量 `O(N)` | 主要随就绪事件数 `K` 增长 | 随变更数和就绪事件数增长 |
+| **触发语义** | 类似 LT | 类似 LT | 默认 LT，可选 ET | 依 filter 和 flags；`EV_CLEAR` 可提供 edge-like 行为 |
+| **返回方式** | 修改传入集合 | 设置 `revents` | 返回就绪事件数组 | 返回就绪事件数组 |
+- **不是无限 FD**：`poll`、`epoll`、`kqueue` 仍受 `RLIMIT_NOFILE`、内核内存和进程资源限制。
+- **不是回调 API**：`epoll_wait()` 和 `kevent()` 返回事件列表，上层事件循环再调用业务回调。
+- **跨平台方案**：Swoole、libevent、libuv 或事件扩展负责在不同系统选择合适后端；ReactPHP 未安装额外事件扩展时仍可能使用 `stream_select()`。
+## LT vs ET
+假设客户端写入 **500 字节**，应用第一次只读取 **100 字节**：
+
+| **阶段** | **LT** | **ET** |
+| --- | --- | --- |
+| **第一次通知** | FD 可读，返回就绪 | 状态由不可读变为可读，返回就绪 |
+| **读取后剩余** | 内核缓冲区仍有 **400 字节** | 内核缓冲区仍有 **400 字节** |
+| **再次等待** | 条件仍满足，会继续报告 | 状态未重新变化，可能不再报告 |
+| **处理要求** | 可分多轮读取，但可能重复唤醒 | 使用非阻塞 FD，持续读取到 `EAGAIN`／`EWOULDBLOCK` |
+- **LT 优点**：只要就绪条件仍成立，下一轮仍可收到通知，编程更直接。
+- **ET 优点**：减少重复通知，但必须正确排空当前可用数据，并兼顾单连接处理预算，避免其他连接饥饿。
+## 最小事件循环
+示例使用换行符分包、每连接读缓冲和写缓冲，展示 `stream_select()` 的核心结构。它是教学版，未包含 TLS、认证、限流和生产级异常恢复。
+```php
+// 监听流和客户端流都设为非阻塞，避免单个连接卡住事件循环。
+$server = stream_socket_server('tcp://127.0.0.1:32100', $errno, $errorMessage);
+if ($server === false) {
+    throw new RuntimeException("listen failed: {$errorMessage} ({$errno})");
+}
+stream_set_blocking($server, false);
+
+// 每个连接分别维护未组成完整行的读缓冲、待发送数据和半关闭状态。
+$clients = [];
+$readBuffers = [];
+$writeBuffers = [];
+$readClosed = [];
+$maxBuffer = 64 * 1024;
+$maxWriteBuffer = 64 * 1024;
+
+while (true) {
+    // stream_select() 会原地改写数组，因此每轮都重新构造监听集合。
+    $read = [$server];
+    $write = [];
+    foreach ($clients as $id => $client) {
+        if (!$readClosed[$id]) {
+            $read[] = $client;
+        }
+        if ($writeBuffers[$id] !== '') {
+            $write[] = $client;
+        }
+    }
+    $except = null;
+
+    // 最多等待 1 秒；返回后数组中只保留已就绪的流。
+    $ready = stream_select($read, $write, $except, 1);
+    if ($ready === false) {
+        break;
+    }
+
+    foreach ($read as $stream) {
+        if ($stream === $server) {
+            // 监听流可读时接受连接；超时为 0，避免 accept 再次阻塞。
+            $client = stream_socket_accept($server, 0);
+            if ($client !== false) {
+                stream_set_blocking($client, false);
+                $id = (int) $client;
+                $clients[$id] = $client;
+                $readBuffers[$id] = '';
+                $writeBuffers[$id] = "connected\n";
+                $readClosed[$id] = false;
+            }
+            continue;
+        }
+
+        $id = (int) $stream;
+        // 非阻塞读取可能短读，也可能暂时返回空字符串。
+        $chunk = fread($stream, 8192);
+        if ($chunk === false) {
+            fclose($stream);
+            unset($clients[$id], $readBuffers[$id], $writeBuffers[$id], $readClosed[$id]);
+            continue;
+        }
+        if ($chunk === '' && feof($stream)) {
+            // 对端停止发送后，先冲刷已有写缓冲，再关闭连接。
+            $readClosed[$id] = true;
+            if ($writeBuffers[$id] === '') {
+                fclose($stream);
+                unset($clients[$id], $readBuffers[$id], $writeBuffers[$id], $readClosed[$id]);
+            }
+            continue;
+        }
+        if ($chunk === '') {
+            continue;
+        }
+
+        // 未收到换行符的连接不得无限占用内存。
+        $readBuffers[$id] .= $chunk;
+        if (strlen($readBuffers[$id]) > $maxBuffer) {
+            fclose($stream);
+            unset($clients[$id], $readBuffers[$id], $writeBuffers[$id], $readClosed[$id]);
+            continue;
+        }
+
+        // 一次读取可能包含多行，也可能只包含半行。
+        while (($pos = strpos($readBuffers[$id], "\n")) !== false) {
+            $line = substr($readBuffers[$id], 0, $pos);
+            $readBuffers[$id] = substr($readBuffers[$id], $pos + 1);
+            $writeBuffers[$id] .= 'echo: ' . rtrim($line, "\r") . "\n";
+            if (strlen($writeBuffers[$id]) > $maxWriteBuffer) {
+                fclose($stream);
+                unset($clients[$id], $readBuffers[$id], $writeBuffers[$id], $readClosed[$id]);
+                break;
+            }
+        }
+    }
+
+    foreach ($write as $stream) {
+        $id = (int) $stream;
+        if (!isset($clients[$id])) {
+            continue;
+        }
+        // 只移除本次实际写出的字节，剩余数据留到下一轮。
+        $written = fwrite($stream, $writeBuffers[$id]);
+        if ($written === false) {
+            fclose($stream);
+            unset($clients[$id], $readBuffers[$id], $writeBuffers[$id], $readClosed[$id]);
+            continue;
+        }
+        $writeBuffers[$id] = substr($writeBuffers[$id], $written);
+        if ($writeBuffers[$id] === '' && $readClosed[$id]) {
+            fclose($stream);
+            unset($clients[$id], $readBuffers[$id], $writeBuffers[$id], $readClosed[$id]);
+        }
+    }
+}
+
+// 事件循环退出后统一释放仍存活的客户端和监听流。
+foreach ($clients as $client) {
+    fclose($client);
+}
+fclose($server);
+```
+- **监听流可读**：通常表示有连接等待 `accept`。
+- **客户端可读**：可能有数据，也可能已到 EOF。
+- **写缓冲**：只把有待发送数据的客户端放入 `$write`，并根据实际写入字节数截短缓冲区。
+- **缓冲上限**：读写缓冲都设置上限，防止不发送换行符或不读取响应的客户端无限占用内存。
+- **升级路径**：连接规模增大时，可由 Swoole 基于平台事件后端管理 Reactor，并在 Socket 长连接上实现 [[Work/Script/PHP/Swoole/利用Swoole实现PHP+websocket直播、及时通讯#WebSocket 原理\|WebSocket 握手、分帧与消息广播]]。
+# Stream Filter
+Stream Filter 在数据经过 Stream 时按块转换。配合 `fread()`、`fgets()` 或 `stream_copy_to_stream()` 可增量处理；若最终调用 `file_get_contents()`，结果仍会整体进入内存。
+## 内置 Filter
+| **类别** | **示例** | **作用** |
+| --- | --- | --- |
+| **字符串** | `string.toupper`、`string.tolower`、`string.rot13` | 字符转换 |
+| **编码** | `convert.base64-encode`、`convert.base64-decode` | Base64 编解码 |
+| **压缩** | `zlib.deflate`、`zlib.inflate`、`bzip2.compress` | 流式压缩与解压；取决于已安装扩展 |
+- **环境核对**：使用 `stream_get_filters()` 查看当前 PHP 实际支持的 Filter。
+- **加密边界**：历史 `mcrypt.*` 已淘汰；现代代码使用 TLS context 或经过认证的加密 API，不假设存在通用 `openssl.*` Filter。
+```php
+// 读取 log.txt 时由内置 Filter 将内容转换为大写。
+$input = fopen('php://filter/read=string.toupper/resource=log.txt', 'r');
+if ($input === false) {
+    throw new RuntimeException('open failed');
+}
+stream_copy_to_stream($input, STDOUT);
+fclose($input);
+```
+## 自定义 Filter
+`php_user_filter::filter()` 接收输入与输出 bucket brigade，并返回：
+- **`PSFS_PASS_ON`**：已产生输出，可传给下一个 Filter。
+- **`PSFS_FEED_ME`**：暂时没有输出，需要更多输入。
+- **`PSFS_ERR_FATAL`**：发生不可恢复错误。
+Bucket 边界不等于行边界或业务记录边界。下例通过 `$pending` 保留跨 bucket 的残片，再对完整日志行编号并脱敏手机号。
+```php
+class LogLineFilter extends php_user_filter
+{
+    private string $pending = '';
+    private int $lineNumber = 1;
+
+    public function filter($in, $out, &$consumed, $closing): int
+    {
+        $emitted = false;
+
+        while ($bucket = stream_bucket_make_writeable($in)) {
+            // $consumed 统计原始输入字节；残片跨 bucket 保存在 $pending。
+            $consumed += $bucket->datalen;
+            $this->pending .= $bucket->data;
+
+            // 只处理以换行符结束的完整日志行。
+            while (($pos = strpos($this->pending, "\n")) !== false) {
+                $line = substr($this->pending, 0, $pos + 1);
+                $this->pending = substr($this->pending, $pos + 1);
+                if (!$this->appendLine($out, $line)) {
+                    return PSFS_ERR_FATAL;
+                }
+                $emitted = true;
+            }
+        }
+
+        if ($closing && $this->pending !== '') {
+            // 流关闭时输出最后一行，即使它没有换行符。
+            if (!$this->appendLine($out, $this->pending)) {
+                return PSFS_ERR_FATAL;
+            }
+            $this->pending = '';
+            $emitted = true;
+        }
+
+        return $emitted ? PSFS_PASS_ON : PSFS_FEED_ME;
+    }
+
+    private function appendLine($out, string $line): bool
+    {
+        // 保留手机号前三位和后四位，中间四位脱敏。
+        $masked = preg_replace(
+            '/(?<!\d)(1[3-9]\d)\d{4}(\d{4})(?!\d)/',
+            '$1****$2',
+            $line
+        );
+        if ($masked === null) {
+            return false;
+        }
+
+        $data = '[' . $this->lineNumber++ . '] ' . $masked;
+        $bucket = stream_bucket_new($this->stream, $data);
+        stream_bucket_append($out, $bucket);
+
+        return true;
+    }
+}
+
+// 注册写过滤器；同一进程中重复注册相同名称会失败。
+if (!stream_filter_register('log.line', LogLineFilter::class)) {
+    throw new RuntimeException('filter registration failed');
+}
+
+$fp = fopen('access_log.txt', 'w'); // w 会覆盖文件；追加写入使用 a
+if ($fp === false) {
+    throw new RuntimeException('open failed');
+}
+
+// 写入数据先经过编号与脱敏，再进入目标文件。
+$filter = stream_filter_append($fp, 'log.line', STREAM_FILTER_WRITE);
+if ($filter === false) {
+    fclose($fp);
+    throw new RuntimeException('filter append failed');
+}
+
+foreach ([
+    "user=1 phone=13812345678\n",
+    "user=2 phone=13987654321\n",
+] as $line) {
+    while ($line !== '') {
+        $written = fwrite($fp, $line);
+        if ($written === false || $written === 0) {
+            fclose($fp);
+            throw new RuntimeException('write failed');
+        }
+        $line = substr($line, $written);
+    }
+}
+fclose($fp);
+```
+- **`$consumed`**：累计 Filter 已读取的原始输入字节数。
+- **`$closing`**：最后一轮处理时为 `true`，用于输出尚未以换行符结尾的残片。
+- **执行顺序**：`stream_filter_append()` 追加到链尾；`stream_filter_prepend()` 插入链首。
+- **作用方向**：显式传入 `STREAM_FILTER_READ` 或 `STREAM_FILTER_WRITE`，避免依赖打开模式推断。
+# 脚本生命周期补充
+以下函数不属于 Stream，但常与常驻 Socket 脚本的退出和清理一起出现，因此保留边界说明。
+## `register_shutdown_function()`
+在当前请求或脚本进入 PHP shutdown 阶段时执行回调。
+- **通常执行**：主脚本自然结束、调用 `exit()`，以及进入 PHP shutdown 阶段的多数未捕获异常或致命错误。
+- **不保证执行**：进程被 `SIGKILL`、未处理的 `SIGTERM`、段错误或 OOM killer 直接终止。
+- **执行顺序**：多个回调按**注册顺序**执行；某个回调调用 `exit()` 后，后续回调不会执行。
+- **FPM 语义**：Worker 可处理多个请求；shutdown 回调在每个请求结束阶段执行，不要求 Worker 进程退出。
+- **职责边界**：优先用 `try/finally` 完成关键释放；shutdown 回调用于错误记录、临时文件清理和幂等兜底，不能承担必须成功的业务事务。
+```php
+register_shutdown_function(static function (): void {
+    // shutdown 阶段记录最后一个 PHP 错误，便于补充异常日志。
+    $error = error_get_last();
+    if ($error !== null) {
+        error_log(json_encode($error, JSON_UNESCAPED_UNICODE));
+    }
 });
 ```
-### 7. 实际应用场景
-#### (1) 异步消息队列（AMQP）
-- PHP 使用 `php-amqplib` 时，通过 `stream_select` 实现异步发布确认：
+## `set_time_limit()`
+`set_time_limit($seconds)` 设置 PHP 自身的执行时间限制，每次调用都会从零重新计时。
+- **`0` 的含义**：取消 PHP 自身的执行时间限制，不代表进程可以永久运行。
+- **其他限制**：FPM、Web Server、反向代理、容器、进程管理器、内存限制和外部信号仍可终止脚本。
+- **平台差异**：Unix-like 系统与 Windows 对外部 I/O 等待时间的计时语义可能不同。
 ```php
-// PhpAmqpLib/Wire/IO/StreamIO.php:364
-protected function do_select(?int $sec, int $usec)
-{
-	if ($this->sock === null || !is_resource($this->sock)) {
-		$this->sock = null;
-		throw new AMQPConnectionClosedException('Broken pipe or closed connection', 0);
-	}
-
-	$read = array($this->sock);
-	$write = null;
-	$except = null;
-
-	if ($sec === null && PHP_VERSION_ID >= 80100) {
-		$usec = 0;
-	}
-
-	return stream_select($read, $write, $except, $sec, $usec);
-}
+set_time_limit(0);  // 取消 PHP 自身限制，其他基础设施限制仍有效
+set_time_limit(20); // 从本次调用起重新计算约 20 秒
 ```
-#### (2) WebSocket 服务器
-- 使用 `stream_select` 监听多个客户端连接，实现单进程多客户端通信。
-#### (3) 实时日志监控
-- 同时监听多个日志文件，实时推送更新内容。
-### 8. 总结
-- `stream_select` 的核心原理是基于 `select` 系统调用的位图轮询机制，通过用户态与内核态的交互实现多路复用 I/O。尽管其性能受限于轮询和文件描述符数量，但在**小规模并发场景**中仍具有实用价值。
-- 对于**高性能需求**，建议使用 `epoll`/`kqueue` 基础的替代方案（如 `ReactPHP` 或 `Swoole`）。理解其底层原理有助于优化 PHP 程序的并发能力和资源管理。
-## stream_socket... 实例
-### 同步阻塞
-#### 服务端
+## `ignore_user_abort()`
+`ignore_user_abort(true)` 只表示客户端断开后允许当前脚本继续执行。
+- **检测时机**：PHP 通常在尝试向客户端发送数据时才发现断开；输出缓冲和代理会影响检测。
+- **不等于后台任务**：它不会取消执行超时，也无法抵抗进程终止和崩溃。
+- **适合场景**：短时间、幂等的收尾工作。
+- **不适合场景**：常驻循环、计划任务和订单／支付／消息投递等关键作业；这些任务应交给队列 Worker、cron 或进程管理器。
 ```php
-// 服务端 接收消息
-function receive_message($ip, $port, $timeout)
-{
-    // 创建socket
-    $socket = stream_socket_server("tcp://$ip:$port", $errno, $errMsg);
-    if (!$socket) {
-        echo "$errMsg ($errno)", PHP_EOL; // 如果创建socket失败输出内容
-    }
-    // 如果创建成功则接受socket连接并获取信息, 连接在$timeout秒内没有收到消息则断开
-    while ($conn = stream_socket_accept($socket, $timeout)) {
-        if ($conn) {
-            $clientName = stream_socket_get_name($conn, true);
-
-            $message = fread($conn, 1024);
-            echo "客户端 $clientName: ", $message, PHP_EOL;
-            fclose($conn);
-        } else {
-            echo $timeout, '秒未收到消息, 自动断开', PHP_EOL;
-        }
-    }
-}
-// 服务端,接收消息,直到CTRL-C
-receive_message('127.0.0.1', '32100', 30); // 持续接收消息
+ignore_user_abort(true); // 客户端断开后，当前脚本仍可继续执行
 ```
-#### 客户端
-```php
-// 客户端 发送消息
-function send_message($ip, $port)
-{
-    while (true) {
-        $fp         = stream_socket_client("tcp://$ip:$port", $errno, $errMsg);
-        $clientName = stream_socket_get_name($fp, true);
-        if (!$fp) {
-            echo "ERREUR : $errno - $errMsg", PHP_EOL;
-        }
-        echo '请输入消息:', PHP_EOL;
-        // 发送消息
-        fwrite($fp, fgets(fopen('php://stdin', 'r')));
-        $message = fread($fp, 1024);
-        echo "服务端 $clientName: ", $message, PHP_EOL;
-        fclose($fp); // 关闭socket连接
-    }
-}
-
-// 客户端, 发送一个消息,并读取响应…
-send_message('127.0.0.1', '32100');
-```
-### 同步非阻塞
-#### 服务端
-```php
-class StreamSelectServer
-{
-    private $socket;
-    private $clients   = [];
-    private $isRunning = true;
-    private $ip;
-    private $port;
-
-    public function __construct($ip = '127.0.0.1', $port = 32100)
-    {
-        $this->ip   = $ip;
-        $this->port = $port;
-
-        // 注册信号处理器
-        pcntl_async_signals(true);
-        pcntl_signal(SIGINT, [$this, 'shutdown']);
-        pcntl_signal(SIGTERM, [$this, 'shutdown']);
-    }
-
-    public function start()
-    {
-        // 创建服务器socket
-        $address      = "tcp://$this->ip:$this->port";
-        $this->socket = stream_socket_server($address, $errno, $errorMessage, STREAM_SERVER_BIND | STREAM_SERVER_LISTEN);
-        if (!$this->socket) {
-            echo "创建服务器失败: $errorMessage ($errno)" . PHP_EOL;
-
-            return;
-        }
-        echo "服务器启动成功，监听 $this->ip:$this->port" . PHP_EOL;
-        echo "按 Ctrl+C 停止服务器" . PHP_EOL;
-        echo "========================================" . PHP_EOL;
-        // 主事件循环
-        while ($this->isRunning) {
-            // 准备读取数组
-            $read = [$this->socket];
-            foreach ($this->clients as $client) {
-                $read[] = $client['socket'];
-            }
-            $write  = null;
-            $except = null;
-            // 使用 stream_select 等待I/O事件
-            $ready = stream_select($read, $write, $except, 1); // 1秒超时
-            if ($ready === false) {
-                echo "stream_select 错误" . PHP_EOL;
-                break;
-            }
-            if ($ready > 0) {
-                // 处理可读的sockets
-                foreach ($read as $socket) {
-                    // 新的客户端连接「当新的客户端连接时，stream_select检测到IO活动,且活动的事件内容=服务器的socket,从而可以区分出是否为新的客户端连接」
-                    if ($socket === $this->socket) {
-                        $this->handleNewConnection();
-                    } else {
-                        // 已连接客户端有数据「stream_select检测到IO活动，且活动的事件内容=客户端的socket」
-                        $this->handleClientData($socket);
-                    }
-                }
-            }
-            // 清理已断开的连接
-            $this->cleanupDisconnectedClients();
-        }
-        $this->stop();
-    }
-
-    private function handleNewConnection()
-    {
-        $conn = stream_socket_accept($this->socket, 0); // 非阻塞接受
-        if ($conn) {
-            $clientId   = (int)$conn;
-            $clientName = stream_socket_get_name($conn, true);
-
-            $this->clients[$clientId] = [
-                'socket'        => $conn,
-                'name'          => $clientName,
-                'connected_at'  => time(),
-                'buffer'        => '',
-                'last_activity' => time(),
-            ];
-
-            echo "[连接] 客户端 $clientName 已连接 (ID: $clientId)" . PHP_EOL;
-
-            // 发送欢迎消息
-            $welcomeMessage = "欢迎连接到服务器！当前时间: " . date('Y-m-d H:i:s') . "\n";
-            fwrite($conn, $welcomeMessage);
-        }
-    }
-
-    private function handleClientData($socket)
-    {
-        $clientId   = (int)$socket;
-        $clientName = $this->clients[$clientId]['name'] ?? 'Unknown';
-
-        // 读取数据
-        $data = fread($socket, 1024);
-
-        if ($data === false || strlen($data) === 0) {
-            // 客户端断开连接
-            echo "[断开] 客户端 {$clientName} 断开连接" . PHP_EOL;
-            $this->disconnectClient($clientId);
-
-            return;
-        }
-
-        // 更新最后活动时间
-        $this->clients[$clientId]['last_activity'] = time();
-        $this->clients[$clientId]['buffer']        .= $data;
-
-        // 处理完整的消息（以换行符结尾）
-        while (($pos = strpos($this->clients[$clientId]['buffer'], "\n")) !== false) {
-            $message                            = substr($this->clients[$clientId]['buffer'], 0, $pos);
-            $this->clients[$clientId]['buffer'] = substr($this->clients[$clientId]['buffer'], $pos + 1);
-
-            $this->processMessage($clientId, $message);
-        }
-    }
-
-    private function processMessage($clientId, $message)
-    {
-        $client     = $this->clients[$clientId];
-        $clientName = $client['name'];
-
-        echo "[消息] 来自 {$clientName}: $message" . PHP_EOL;
-
-        // 处理特殊命令
-        if (strtolower(trim($message)) === ':q') {
-            echo "[退出] 客户端 {$clientName} 请求退出" . PHP_EOL;
-            $this->disconnectClient($clientId);
-
-            return;
-        }
-
-        if (strtolower(trim($message)) === ':clients') {
-            // 显示当前连接的客户端列表
-            $clientList = "当前在线客户端:\n";
-            foreach ($this->clients as $id => $c) {
-                $clientList .= "  - {$c['name']} (ID: $id, 连接时间: " . date('H:i:s', $c['connected_at']) . ")\n";
-            }
-            fwrite($client['socket'], $clientList);
-
-            return;
-        }
-
-        if (strtolower(substr(trim($message), 0, 5)) === ':echo') {
-            // 回显消息
-            $echoMessage = substr(trim($message), 5);
-            fwrite($client['socket'], "回显: $echoMessage\n");
-
-            return;
-        }
-
-        // 广播消息给所有客户端
-        $broadcastMessage = "[广播] {$clientName}: $message\n";
-        $this->broadcastMessage($broadcastMessage, $clientId);
-
-        // 给发送者单独回复
-        $response = "服务器确认收到: $message (" . date('H:i:s') . ")\n";
-        fwrite($client['socket'], $response);
-    }
-
-    private function broadcastMessage($message, $excludeClientId = null)
-    {
-        foreach ($this->clients as $clientId => $client) {
-            if ($excludeClientId !== null && $clientId === $excludeClientId) {
-                continue;
-            }
-
-            $result = @fwrite($client['socket'], $message);
-            if ($result === false) {
-                // 发送失败，标记为断开连接
-                $this->disconnectClient($clientId);
-            }
-        }
-    }
-
-    private function disconnectClient($clientId)
-    {
-        if (isset($this->clients[$clientId])) {
-            $clientName = $this->clients[$clientId]['name'];
-            fclose($this->clients[$clientId]['socket']);
-            unset($this->clients[$clientId]);
-            echo "[清理] 已清理客户端 $clientName 的连接" . PHP_EOL;
-        }
-    }
-
-    private function cleanupDisconnectedClients()
-    {
-        $currentTime = time();
-        $timeout     = 300; // 5分钟超时
-
-        foreach ($this->clients as $clientId => $client) {
-            if (($currentTime - $client['last_activity']) > $timeout) {
-                echo "[超时] 客户端 {$client['name']} 连接超时，自动断开" . PHP_EOL;
-                $this->disconnectClient($clientId);
-            }
-        }
-    }
-
-    public function shutdown()
-    {
-        echo PHP_EOL . "正在关闭服务器..." . PHP_EOL;
-        $this->isRunning = false;
-    }
-
-    private function stop()
-    {
-        // 关闭所有客户端连接
-        foreach ($this->clients as $clientId => $client) {
-            fclose($client['socket']);
-        }
-        $this->clients = [];
-
-        // 关闭服务器socket
-        if ($this->socket) {
-            fclose($this->socket);
-        }
-
-        echo "服务器已停止" . PHP_EOL;
-    }
-}
-
-// 启动服务器
-$server = new StreamSelectServer('127.0.0.1', 32100);
-$server->start();
-
-```
-#### 客户端
-```php
-class StreamlinedClient
-{
-    private $socket;
-    private $isRunning = true;
-    private $clientName;
-
-    public function __construct($clientName = 'Client')
-    {
-        $this->clientName = $clientName;
-
-        // 注册信号处理器以实现优雅退出
-        pcntl_async_signals(true);
-        pcntl_signal(SIGINT, [$this, 'shutdown']);
-        pcntl_signal(SIGTERM, [$this, 'shutdown']);
-    }
-
-    public function start($serverIp, $serverPort)
-    {
-        $address      = "tcp://$serverIp:$serverPort";
-        $this->socket = stream_socket_client($address, $errno, $errorMessage, 30);
-
-        if (!$this->socket) {
-            echo "连接服务器失败: $errorMessage ($errno)" . PHP_EOL;
-
-            return;
-        }
-
-        echo "已连接到服务器 $serverIp:$serverPort" . PHP_EOL;
-        echo "客户端名称: {$this->clientName}" . PHP_EOL;
-        echo "输入消息并按回车发送，输入 ':q' 退出" . PHP_EOL;
-        echo "========================================" . PHP_EOL;
-
-        $readSockets = [$this->socket, STDIN];
-
-        while ($this->isRunning) {
-            $readyToRead = $readSockets;
-            $write       = null;
-            $except      = null;
-
-            // 同时监听socket和STDIN
-            if (stream_select($readyToRead, $write, $except, 1) === false) {
-                echo "stream_select 错误" . PHP_EOL;
-                break;
-            }
-
-            if (in_array($this->socket, $readyToRead)) {
-                // 读取服务器消息
-                $message = fread($this->socket, 1024);
-                if ($message === false || $message === '') {
-                    echo "服务器断开连接" . PHP_EOL;
-                    $this->isRunning = false;
-                } else {
-                    echo $message;
-                }
-            }
-
-            if (in_array(STDIN, $readyToRead)) {
-                // 读取用户输入
-                $input = trim(fgets(STDIN));
-                if ($input === ':q') {
-                    $this->isRunning = false;
-                } else {
-                    $this->sendToServer($input);
-                }
-            }
-        }
-
-        $this->disconnect();
-    }
-
-    private function sendToServer($message)
-    {
-        if (!empty($message)) {
-            $result = @fwrite($this->socket, $message . "\n");
-            if ($result === false) {
-                echo "发送消息失败" . PHP_EOL;
-                $this->isRunning = false;
-            }
-        }
-    }
-
-    public function shutdown()
-    {
-        echo PHP_EOL . "正在关闭客户端..." . PHP_EOL;
-        $this->isRunning = false;
-    }
-
-    private function disconnect()
-    {
-        if ($this->socket) {
-            fclose($this->socket);
-        }
-        echo "客户端已断开连接" . PHP_EOL;
-    }
-}
-
-// 启动客户端
-$serverIp   = $argv[1] ?? '127.0.0.1';
-$serverPort = $argv[2] ?? 32100;
-$clientName = $argv[3] ?? 'Client_' . getmypid();
-$client     = new StreamlinedClient($clientName);
-$client->start($serverIp, $serverPort);
-
-```
-## PHP 行过滤器 (Stream Filters)
-PHP 流过滤器是一种**中继加工机制**，允许在数据从源（文件、网络、内存）流向目的地时，在不一次性加载全部内容的情况下，对数据进行分块实时处理。
-### 核心优势
-* **低内存占用**：采用“分块处理”模式，处理 GB 级大文件时内存始终保持在极低水平。
-* **高解耦性**：处理逻辑（过滤器）与输入源（文件或网络）完全分离。
-* **实时性**：数据在读写的瞬间即完成转换。
-### 常用操作
-#### 伪协议使用
-| 分类      | 示例名称                               | 功能         |
-| ------- | ---------------------------------- | ---------- |
-| **字符串** | `string.toupper` / `tolower`       | 大小写转换      |
-| **转换**  | `convert.base64-encode` / `decode` | Base64 编解码 |
-| **压缩**  | `zlib.deflate` / `bzip2.compress`  | 实时压缩数据流    |
-| **加密**  | `mcrypt.*` (已废弃) / `openssl.*`     | 读写时加解密     |
-```php
-// 读取文件并自动转为大写
-$content = file_get_contents("php://filter/read=string.toupper/resource=log.txt");
-// 读取文件并自动转为base64
-$content = file_get_contents("php://filter/read=convert.base64-encode/resource=log.txt");
-```
-#### 自定义过滤器模板
-##### 给文件添加行号
-编写自定义过滤器必须继承 `php_user_filter` 并重写 `filter` 方法。
-```php
-class LineFilter extends php_user_filter
-{
-    // 记录行号的内部状态，在流的生命周期内保持
-    private $lineNumber = 1;
-
-    /**
-     * 核心过滤方法
-     * $in: 输入数据桶（源数据）
-     * $out: 输出数据桶（加工后的数据）
-     * $consumed: 引用参数，记录已处理的字节数
-     * $closing: 布尔值，标识是否为流的最后一个数据块
-     */
-    public function filter($in, $out, &$consumed, $closing): int
-    {
-        // 循环从输入队列中提取可写的“桶”（数据块）
-        while ($bucket = stream_bucket_make_writeable($in)) {
-            // 将当前桶内的字符串按换行符拆分为数组
-            $lines = explode(PHP_EOL, $bucket->data);
-            foreach ($lines as &$line) {
-                // 仅对非空行进行处理
-                if (!empty($line)) {
-                    // 核心逻辑：在行首拼接自增行号
-                    $line = "[" . ($this->lineNumber++) . "] " . $line;
-                }
-            }
-            // 将处理后的数组重新合并回字符串并存入桶中
-            $bucket->data = implode(PHP_EOL, $lines);
-            // 更新已消耗的字节计数（必须包含原始数据的长度）
-            $consumed += $bucket->datalen;
-            // 将加工完的桶推送到输出队列，供下游读取
-            stream_bucket_append($out, $bucket);
-        }
-
-        // 返回常量：通知系统处理完毕，数据可传递给下一个过滤器或应用层
-        return PSFS_PASS_ON;
-    }
-}
-
-// 1. 将自定义类注册为逻辑名称 "line_processor"
-stream_filter_register("line_processor", "LineFilter");
-// 2. 以只读模式打开目标文件句柄
-$fp = fopen("log.txt", "r");
-// 3. 将注册好的过滤器挂载到该文件流上
-stream_filter_append($fp, "line_processor");
-// 4. 循环读取：此时 fgets 触发过滤器逻辑，获取到的是带行号的数据
-while (!feof($fp)) {
-    echo fgets($fp);
-}
-// 5. 关闭句柄，过滤器随之销毁
-fclose($fp);
-```
-##### 大文件写入并自动脱敏手机号
-```php
-class SensitiveDataFilter extends php_user_filter
-{
-    public function filter($in, $out, &$consumed, $closing): int
-    {
-        while ($bucket = stream_bucket_make_writeable($in)) {
-            // 逻辑：使用正则匹配手机号，并替换为 138****8888 格式
-            // 匹配模式：(前3位)(中间4位)(后4位)
-            $pattern      = '/(1[3-9]\d)(\d{4})(\d{4})/';
-            $replacement  = '$1****$3';
-            $bucket->data = preg_replace($pattern, $replacement, $bucket->data);
-            // 更新处理字节数
-            $consumed += $bucket->datalen;
-            // 将处理后的数据推送到下行（存入磁盘）
-            stream_bucket_append($out, $bucket);
-        }
-
-        return PSFS_PASS_ON;
-    }
-}
-
-// 1. 注册过滤器
-stream_filter_register("mask_sensitive", "SensitiveDataFilter");
-// 2. 以追加写入模式打开日志文件
-$fp = fopen("access_log.txt", "w");
-// 3. 附加过滤器到写入流 (stream_filter_append 的默认模式包含写入)
-stream_filter_append($fp, "mask_sensitive");
-// 4. 模拟百次数据写入
-for ($i = 0; $i < 100; $i++) {
-    // 原始数据包含明文手机号
-    $logEntry = "User_ID: {$i} | Phone: 13812345678 | Time: " . date('Y-m-d H:i:s') . PHP_EOL;
-    // 写入时，数据会自动经过 SensitiveDataFilter 处理后再落盘
-    fwrite($fp, $logEntry);
-}
-fclose($fp);
-```
-### 注意事项
-* **执行顺序**：`append` 按添加顺序执行，`prepend` 优先执行。
-* **作用域**：一旦附加，所有后续的 `fread` 或 `fwrite` 都会经过该过滤器。
-* **关闭**：随文件句柄关闭自动释放。
-# register_shutdown_function
-`register_shutdown_function` 是 PHP 中用于注册 **脚本执行结束后** 自动调用的函数。其关闭时机与 PHP 脚本的生命周期紧密相关，具体如下：
-### 1. 触发时机
-`register_shutdown_function` 注册的函数会在以下 **所有情况下** 被调用（除非 PHP 进程异常终止）：
-#### (1) 脚本正常执行完毕
-- 当脚本代码全部执行完毕（包括所有 `return`、`include/require` 等）后，PHP 会进入关闭阶段，调用所有通过 `register_shutdown_function` 注册的函数。
-#### (2) 脚本通过 `exit()` 或 `die()` 退出
-- 即使脚本通过 `exit()` 或 `die()` 提前终止，`register_shutdown_function` 注册的函数仍会执行。  
-```php
-register_shutdown_function(fn() => print 'shutdown!!!');
-exit(); // 脚本提前退出，但 shutdownFunc 仍会被调用
-```
-#### (3) 抛出未捕获的异常
-- 如果脚本中抛出了未被捕获的异常（包括 `Error` 和 `Exception`），PHP 会先处理异常，然后进入关闭阶段并调用 `register_shutdown_function` 注册的函数。  
-  **注意**：定义 register_shutdown_function 函数必须在抛出异常之前「越早越好」
-```php
-register_shutdown_function(fn() => print 'shutdown!!!');
-throw new Exception('致命错误'); // 未捕获的异常，但 shutdownFunc 仍会被调用
-```
-#### (4) PHP-FPM 的请求处理结束
-- 在 PHP-FPM 环境中，每个请求由一个独立的 PHP 子进程处理。当请求处理完成后（无论成功或失败），该子进程会进入关闭阶段，调用所有注册的 `shutdown` 函数。  
-  **注意**：如果 PHP-FPM 配置了 `pm = dynamic` 或 `pm = ondemand`，子进程可能被保留以处理后续请求，但 `shutdown` 函数仅在当前请求处理结束时调用一次。
-### 2. 不触发的情况
-- **PHP 进程崩溃**：如果 PHP 进程因**内存溢出**、**段错误**（Segmentation Fault）等异常崩溃，`register_shutdown_function` 不会被调用。
-- **`fastcgi_finish_request()`**：在 FPM 模式下，如果使用了 `fastcgi_finish_request()` 提前结束响应，`shutdown` 函数仍会在脚本完全执行完毕后调用（不依赖于 HTTP 响应是否已发送）。
-### 3. 执行顺序
-- `register_shutdown_function` 注册的函数会按照 **后进先出（LIFO）** 的顺序执行。  
-  **示例**：
-```php
-register_shutdown_function('funcA'); // 先注册
-register_shutdown_function('funcB'); // 后注册
-// 执行顺序：funcB -> funcA
-```
-### 4. 在 PHP-FPM 中的应用
-- **资源释放的可靠性**：  
-  在 PHP-FPM 环境中，`register_shutdown_function` 是释放资源（如 AMQP 连接、数据库连接）的常用手段之一，尤其适合处理 **单次请求内多次操作资源** 的场景。  
-  **示例**：
-```php
-$connection = new AMQPConnection($config);
-register_shutdown_function([$connection, 'close']); // 请求结束时自动关闭连接
-```
-- **注意事项**：
-  1. **避免依赖 `__destruct`**：  
-     如果仅依赖对象的 `__destruct` 方法关闭资源，可能因垃圾回收机制延迟而导致资源泄露。结合 `register_shutdown_function` 可提升可靠性。
-  2. **极端情况下的健壮性**：  
-     如果 PHP 进程因异常崩溃，`register_shutdown_function` 不会执行。此时需通过 PHP-FPM 的 `pm.max_requests` 参数控制子进程生命周期，强制重启进程以释放资源。
-### 5. 总结
-| 场景                         | 是否触发 `register_shutdown_function` |
-| -------------------------- | --------------------------------- |
-| 脚本正常执行完毕                   | ✅                                 |
-| `exit()` / `die()`         | ✅                                 |
-| 未捕获的异常                     | ✅                                 |
-| PHP 进程崩溃                   | ❌                                 |
-| `fastcgi_finish_request()` | ✅（脚本仍需执行完毕）                       |
-**推荐用法**：  
-在 PHP-FPM 环境中，使用 `register_shutdown_function` 作为统一的资源释放机制，结合显式关闭逻辑（如 `try-finally`），可确保资源在请求结束时及时释放，避免内存泄漏。
-# set_time_limit()
-设置允许脚本运行的时间，单位为秒。如果超过了此设置，脚本返回一个致命的错误。默认值为30秒
-或者是在php.ini的max_execution_time被定义的值，如果此值存在。
-```php
-set_time_limit(0); // 允许脚本运行无时间限制
-set_time_limit(20); // 允许脚本运行的时间为20秒
-```
-# ignore_user_abort()
-设置客户端断开连接时是否中断脚本的执行
-```php
-// 默认情况下是设置为 FALSE，与客户机断开会导致脚本停止运行
-// 如果设置为 TRUE，则忽略与用户的断开(脚本将继续运行)
-ignore_user_abort(true); // 忽略用户中止并允许脚本永久运行
-```
-
+# 参考资料
+- [PHP：Sockets 扩展](https://www.php.net/manual/zh/book.sockets.php)
+- [PHP：Stream 函数](https://www.php.net/manual/zh/ref.stream.php)
+- [PHP：stream_select](https://www.php.net/manual/zh/function.stream-select.php)
+- [PHP：stream_socket_accept](https://www.php.net/manual/zh/function.stream-socket-accept.php)
+- [PHP：php_user_filter::filter](https://www.php.net/manual/zh/php-user-filter.filter.php)
+- [PHP：register_shutdown_function](https://www.php.net/manual/zh/function.register-shutdown-function.php)

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Tools/Composer/Composer basic/","title":"Composer basic","tags":["flashcards"],"noteIcon":"","created":"2026-06-09T12:06:18.000+08:00","updated":"2026-06-09T12:06:18.000+08:00","dg-note-properties":{"title":"Composer basic","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Tools/Composer/Composer basic/","title":"Composer basic","tags":["flashcards"],"noteIcon":"","created":"2026-05-11T23:45:07.000+08:00","updated":"2026-06-09T12:06:18.263+08:00","dg-note-properties":{"title":"Composer basic","tags":["flashcards"],"reference linking":null}}
 ---
 
 文档: [作曲家 - Composer 包管理器](https://composer.php.ac.cn/doc/)

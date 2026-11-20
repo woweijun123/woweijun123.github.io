@@ -1,16 +1,18 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/SHMOP/","title":"SHMOP","tags":["flashcards"],"noteIcon":"","created":"2025-09-04T13:45:46.717+08:00","updated":"2026-03-24T17:36:51.000+08:00","dg-note-properties":{"title":"SHMOP","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/SHMOP/","title":"SHMOP","tags":["flashcards"],"noteIcon":"","created":"2025-09-04T13:45:46.717+08:00","updated":"2026-11-10T12:20:52.350+08:00","dg-note-properties":{"title":"SHMOP","tags":["flashcards"],"reference linking":null}}
 ---
 
 # PHP 主子进程共享内存
+- **先分机制与接口**：为什么 fork 后普通变量不能回传、何时选共享段，见 [[Work/Script/PHP/Function/Process/IPC#4. 共享内存：共享数据，不经过反复收发\|IPC：共享内存]] 与 [[Work/Script/PHP/Function/Process/PCNTL#3. 写时复制（Copy-on-Write）\|PCNTL：COW]]。
+- **再选抽象层**：本篇 `shmop_*` 管原始字节与偏移；`shm_*` 管变量；只需共享键值缓存时，比较 [[Work/Script/PHP/Function/Process/Apcu#`shmop VS apcu VS shm_attach`\|APCu／SysV／shmop]]，并先确认运行实例的共享范围。
 - [shmop_open](https://www.php.net/manual/zh/function.shmop-open.php) — 创建或打开共享内存块
 	- key
 		- 共享内存块的系统 ID。可以作为十进制或十六进制传递。
 	- mode
-		- **`a`** 表示访问（为 shmat 设置 SHM_RDONLY）当您需要**打开现有共享内存段**进行**只读**时，请使用此标志
-		- **`c`** 表示创建（IPC_CREATE 集）当您需要创建**新的共享内存段**时，或者如果存在具有相同键的段，请尝试打开它进行读写时使用此标志
-		- **`w`** 表示读写访问，当需要**读取和写入**共享内存段时使用此标志，在大多数情况下使用此标志。
-		- **`n`** 创建一个新的内存段（设置 IPC_CREATE|IPC_EXCL） 当您想要创建一个**新的共享内存段**时使用此标志，但如果已经存在**具有相同标志的共享内存段，则失败**。这对于**安全**目的很有用，使用它可以防止竞争条件漏洞利用。
+		- **`a`** 表示访问（为 shmat 设置 SHM_RDONLY）当您需要**打开现有共享内存段** 进行**只读** 时，请使用此标志
+		- **`c`** 表示创建（IPC_CREATE 集）当您需要创建**新的共享内存段** 时，或者如果存在具有相同键的段，请尝试打开它进行读写时使用此标志
+		- **`w`** 表示读写访问，当需要**读取和写入** 共享内存段时使用此标志，在大多数情况下使用此标志。
+		- **`n`** 创建一个新的内存段（设置 IPC_CREATE|IPC_EXCL） 当您想要创建一个**新的共享内存段** 时使用此标志，但如果已经存在**具有相同标志的共享内存段，则失败**。这对于**安全** 目的很有用，使用它可以防止竞争条件漏洞利用。
 	- permissions
 		- 您希望分配给内存段的权限与文件的权限相同。权限需要以八进制形式传递，例如 `0644`
 	- size
@@ -95,6 +97,7 @@ function readData(Shmop $shmId): mixed
 }
 ```
 ## 多进程共享内存数据竞争问题
+- **联想问题**：共享段只让数据可访问，不保证“读 → 加一 → 写回”整体原子；对应 [[Work/Script/PHP/Function/Process/IPC#4. 共享内存：共享数据，不经过反复收发\|IPC 的共享与同步分界]]。下例 `3 × 100` 期望 `300`，无锁时实际值不固定。
 ```php
 $shmId = shmop_open(ftok(__FILE__, 't'), 'c', 0644, 4);
 shmop_write($shmId, pack('L', 0), 0);
@@ -106,7 +109,7 @@ for ($i = 0; $i < 3; $i++) {
             usleep(rand(1, 100));
             shmop_write($shmId, pack('L', $value + 1), 0);
         }
-        exit;
+        exit; // 子进程必须在此退出，否则会继续执行后面的父进程代码，可能导致意想不到的问题
     }
 }
 
@@ -124,6 +127,7 @@ shmop_delete($shmId);
 期望: 300, 实际: 116
 ```
 ### 解决方案：使用信号量互斥锁
+- **联想组合**：[[Work/Script/PHP/Function/Process/IPC#5. 信号量：控制多少进程能进入临界区\|共享内存存数据，信号量协调访问]]；锁应覆盖完整读改写。若使用 APCu，[[Work/Script/PHP/Function/Process/Apcu#C. 计数器与锁（简单场景）\|原子自增／CAS]] 也不同于普通 `fetch` 后再 `store`。
 [PHP: sem\_acquire - Manual](https://www.php.net/manual/zh/function.sem-acquire.php)
 ```php
 $key   = ftok(__FILE__, 't');
@@ -151,7 +155,7 @@ for ($i = 0; $i < 3; $i++) {
         } finally {
             sem_release($semId); // 释放信号量（退出临界区）
         }
-        exit;
+        exit; // 子进程必须在此退出，否则会继续执行后面的父进程代码，可能导致意想不到的问题
     }
 }
 
@@ -186,7 +190,7 @@ while (time() - $startTime < $timeout) {
         $acquired = true;
         break;
     }
-    
+
     // 等待一段时间再重试
     usleep(100000); // 100ms
 }
@@ -228,7 +232,7 @@ try {
     if (sem_acquire($semId)) {
         // 取消警报，因为已经成功获取
         pcntl_alarm(0);
-        
+
         echo "成功获取信号量锁\n";
         // 执行临界区代码
         // ...
@@ -239,7 +243,7 @@ try {
 } finally {
     // 确保取消警报
     pcntl_alarm(0);
-    
+
     // 如果成功获取了信号量，则释放
     if (sem_release($semId)) {
         echo "释放信号量锁\n";
@@ -255,13 +259,13 @@ class TimeoutSemaphore
 {
     private $semId;
     private $key;
-    
+
     public function __construct($key, $maxAcquire = 1)
     {
         $this->key = $key;
         $this->semId = sem_get($this->key, $maxAcquire);
     }
-    
+
     /**
      * 尝试获取信号量锁，支持超时
      */
@@ -271,27 +275,27 @@ class TimeoutSemaphore
             // 无限等待
             return sem_acquire($this->semId);
         }
-        
+
         $startTime = microtime(true);
         $timeoutMs = $timeout * 1000000; // 转换为微秒
-        
+
         while (true) {
             // 非阻塞尝试
             if (sem_acquire($this->semId, true)) {
                 return true;
             }
-            
+
             // 检查是否超时
             $elapsed = (microtime(true) - $startTime) * 1000000;
             if ($elapsed >= $timeoutMs) {
                 return false;
             }
-            
+
             // 等待一段时间再重试
             usleep(min(100000, $timeoutMs - $elapsed)); // 最多等待100ms
         }
     }
-    
+
     /**
      * 释放信号量锁
      */
@@ -299,7 +303,7 @@ class TimeoutSemaphore
     {
         return sem_release($this->semId);
     }
-    
+
     /**
      * 删除信号量
      */
@@ -307,7 +311,7 @@ class TimeoutSemaphore
     {
         return sem_remove($this->semId);
     }
-    
+
     /**
      * 使用锁执行代码（带超时）
      */
@@ -316,7 +320,7 @@ class TimeoutSemaphore
         if (!$this->acquire($timeout)) {
             throw new RuntimeException("获取锁超时");
         }
-        
+
         try {
             return call_user_func($callback);
         } finally {
@@ -335,7 +339,7 @@ try {
         sleep(2); // 模拟耗时操作
         return "操作完成";
     }, 5); // 5秒超时
-    
+
     echo "结果: " . $result . "\n";
 } catch (RuntimeException $e) {
     echo "错误: " . $e->getMessage() . "\n";
@@ -348,15 +352,17 @@ try {
 3. **可控性强**：可以灵活调整重试间隔和超时时间
 4. **资源友好**：避免了信号处理可能带来的复杂性
 # 信号量的原理
+- **模型边界**：下文负计数是教材中的抽象模型；PHP 使用的 System V 信号量 `semval` 非负，等待者另行计数，不能直接把负数理解为实际内核值。用途速记见 [[Work/Script/PHP/Function/Process/IPC#5. 信号量：控制多少进程能进入临界区\|IPC：信号量]]。
 对这个计数器的操作不是随意的，只能通过两个标准的、保证原子性的操作「P、V」来进行，它们最初由荷兰计算机科学家 Dijkstra 提出
 -  **本质：** 信号量是一个**整数计数器**，代表当前**可用资源的数量**。
 -  **目的：** 实现对共享资源的**同步访问**，确保同一时间只有允许数量的进程访问资源。
 
 | 操作                           | 对应 PHP (System V) | 动作 (试图做什么)                   | 逻辑 (导致什么结果)                                 |
 | :--------------------------- | :---------------- | :--------------------------- | :------------------------------------------ |
-| **P()** Proberen (Wait/尝试)   | `sem_acquire()`   | **获取**资源（计数器 $\mathbf{-1}$）。 | 计数 $\ge 0$：获取成功，继续执行。**计数 $< 0$：进程被阻塞。**    |
-| **V()** Verhogen (Signal/增加) | `sem_release()`   | **释放**资源（计数器 $\mathbf{+1}$）。 | 计数 $\le 0$：唤醒一个等待中的阻塞进程。**计数 $> 0$：** 释放完成。 |
-**重要记忆点：** 信号量为**负数**时，其**绝对值**等于当前**等待资源的进程数量**。
+| **P()** Proberen (Wait/尝试)   | `sem_acquire()`   | **获取** 资源（计数器 $\mathbf{-1}$）。 | 计数 $\ge 0$：获取成功，继续执行。**计数 $< 0$：进程被阻塞。**    |
+| **V()** Verhogen (Signal/增加) | `sem_release()`   | **释放** 资源（计数器 $\mathbf{+1}$）。 | 计数 $\le 0$：唤醒一个等待中的阻塞进程。**计数 $> 0$：** 释放完成。 |
+
+**重要记忆点：** 信号量为**负数** 时，其**绝对值** 等于当前**等待资源的进程数量**。
 ## 为什么可以解决 IPC 通信的锁机制？
 IPC（如共享内存）通信时，最大的问题就是**竞态条件**：多个进程同时读写共享资源，导致数据不一致。
 信号量通过一种 **“互斥”** 和 **“同步”** 的机制来解决这个问题。
@@ -391,17 +397,17 @@ IPC（如共享内存）通信时，最大的问题就是**竞态条件**：多�
 | t4   |                                | `reg_B = reg_B - 1` // `reg_B=0` | 1               |
 | t5   | `sem = reg_A` // **写入 `0`**     |                                | 0               |
 | t6   |                                | `sem = reg_B` // **写入 `0`**     | **0 (错误!)**   |
+
 结果：两个进程都认为自己成功执行了 `P()`，都进入了临界区！信号量失去了保护作用。
 **如何保证原子性？**
 操作系统和硬件底层通过以下方式保证 `P()` 和 `V()` 的原子性：
 1.  **硬件支持**：现代CPU提供了特殊的**原子指令**，如 **Test-and-Set**、**Compare-and-Swap** 等。这些指令在一个不可中断的总线周期内完成“读-修改-写”回内存的操作，从而确保在执行过程中其他处理器无法访问同一块内存。
-2.  **内核实现**：信号量的操作是**系统调用**。当一个进程执行系统调用陷入内核后，在它从内核返回用户空间之前，是**不会被调度器切换掉**的。这就保证了在内核中执行 `P()`/`V()` 操作的完整性和不可中断性。
+2. **内核实现**：System V 信号量通过系统调用，由内核锁、原子操作及等待队列协调检查、修改和睡眠／唤醒；进入内核不代表整个系统调用都不会被抢占或调度。
 **内核态的执行流程可以简化为：**
-*   进入内核，**禁用中断**（防止被时钟中断强行切换）。
-*   执行指令检查并修改信号量值。
-*   如果需要阻塞当前进程，内核会安全地将其放入等待队列并切换进程。
-*   如果需要唤醒其他进程，内核会从等待队列中取出进程。
-*   完成操作，**启用中断**，返回用户态。
+* 在相应同步保护下检查资源与等待条件。
+* 资源充足时原子更新；不足时安全加入等待队列并阻塞。
+* 释放时更新状态，按规则唤醒可继续的等待者。
+* 返回用户态；具体锁与中断处理取决于内核实现，不能概括为全程禁止中断。
 正是这种**硬件和操作系统内核级别的共同保障**，使得信号量操作成为原子操作，从而成为构建可靠并发控制的坚实基础。
 # 信号量的值变化分析「多进程同时获取」
 ## 信号量值的变化规则
@@ -409,7 +415,7 @@ IPC（如共享内存）通信时，最大的问题就是**竞态条件**：多�
 但更准确的理解是：
 - 每个成功的 `P()` 操作会使信号量值减 1
 - 每个因资源不足而阻塞的 `P()` 操作也会使信号量值减 1，但此时值为负
-- 负值的**绝对值**表示正在**等待**该资源的**进程数量**
+- 负值的**绝对值** 表示正在**等待** 该资源的**进程数量**
 ## 3个进程同时获取信号量的场景分析
 假设有一个初始值为 `N` 的信号量，3个进程同时尝试执行 `P()` 操作：
 ### 情况1: N ≥ 3 (充足资源)
@@ -444,8 +450,8 @@ IPC（如共享内存）通信时，最大的问题就是**竞态条件**：多�
 - 表示总共有 (K+3) 个进程在等待
 ## 关键点：原子性的重要性
 这种值变化行为之所以可靠，完全依赖于 `P()` 操作的**原子性**。原子性确保了：
-1. **值的读取、修改和写入**是一个不可中断的单一操作
-2. **进程的阻塞决策**与值的修改是原子性的
+1. **值的读取、修改和写入** 是一个不可中断的单一操作
+2. **进程的阻塞决策** 与值的修改是原子性的
 3. 即使多个进程同时尝试获取，**操作系统也会序列化这些请求**
 如果没有原子性，就会出现竞态条件，导致：
 - 多个进程可能看到相同的信号量值

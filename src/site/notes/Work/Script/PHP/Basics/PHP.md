@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-04-04T23:19:08.000+08:00","updated":"2026-11-13T18:17:19.766+08:00","dg-note-properties":{"title":"PHP","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-04-04T23:19:08.000+08:00","updated":"2026-11-20T14:34:08.016+08:00","dg-note-properties":{"title":"PHP","tags":["flashcards"]}}
 ---
 
 # 基本语法 [¶](https://www.php.net/manual/zh/language.basic-syntax.php#language.basic-syntax)
@@ -4657,7 +4657,6 @@ $resource = fopen('none.txt', 'r+');
 | **触发方式** | 系统自动触发或 `trigger_error` | 必须由 `throw` 手动抛出   |
 | **处理方式** | `set_error_handler` 接管  | `try...catch` 捕获   |
 | **性质**   | 传统的程序运行报告               | 面向对象的错误处理逻辑        |
-
 <?e?>
 # 字符处理与编码
 - **通用原理：** 字符、码点、UTF-8 位模式、字节序和 BOM 统一维护在 [[Work/Computer Science/Basics/字符集、Unicode 与 UTF 编码\|字符集、Unicode 与 UTF 编码]]。

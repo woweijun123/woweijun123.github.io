@@ -1,16 +1,17 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/Apcu/","title":"Apcu","tags":["flashcards"],"noteIcon":"","created":"2026-01-09T11:53:19.605+08:00","updated":"2026-03-24T17:36:44.000+08:00","dg-note-properties":{"title":"Apcu","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/Process/Apcu/","title":"Apcu","tags":["flashcards"],"noteIcon":"","created":"2026-01-09T11:53:19.605+08:00","updated":"2026-10-29T15:12:34.427+08:00","dg-note-properties":{"title":"Apcu","tags":["flashcards"],"reference linking":null}}
 ---
 
 APCu（APC User Cache）是一个为 PHP 设计的**内存驻留级键值存储扩展**。它是早期 APC（Alternative PHP Cache）扩展的延续，但剥离了过时的操作码缓存（Opcode Cache）功能，专注于**用户数据缓存**。
 在 PHP 8+ 的现代开发中，Opcode 缓存已由内置的 Opcache 负责，而 APCu 则专门填补了“进程间共享内存数据”的空白。
 # APCu 的核心特性
+- **联想定位**：[[Work/Script/PHP/Function/Process/IPC#4. 共享内存：共享数据，不经过反复收发\|IPC 共享内存]] 是底层机制，APCu 提供键值缓存、TTL 与原子 API；需要按偏移管理原始字节则看 [[Work/Script/PHP/Function/Process/SHMOP#PHP 主子进程共享内存\|SHMOP]]。
 * **内存存储**：数据直接存储在系统的共享内存（RAM）中，读写速度极快。
-* **进程间共享**：在同一个 PHP-FPM 进程池下，所有工作进程（Worker Processes）都可以访问同一份 APCu 缓存数据。
-* **生命周期**：数据的生命周期独立于请求。只要 PHP-FPM 进程不重启，数据就会一直存在（除非达到过期时间或被手动删除）。
-* **轻量化**：相比 Redis 或 Memcached，它不需要网络 IO，没有 TCP 连接开销，是**单机性能最强**的缓存方案。
+* **进程间共享**：共享同一 APCu 内存区的工作进程可访问同一缓存；常见于同一 PHP-FPM 实例的 Worker，不能据此推断同机所有 PHP 进程都互通。
+* **生命周期**：缓存独立于单次请求，但会受 TTL、容量回收、显式清理及共享区生命周期影响；单个 Worker 重启不等于整个缓存必然清空。
+* **轻量化**：无需访问独立缓存服务，没有 TCP 连接开销，适合**低开销本地缓存**；实际性能仍取决于数据规模、序列化与锁竞争。
 # 主要使用场景
-APCu 并非要取代 Redis，它最适合处理**高频读取、低频修改、且仅限单机使用**的数据。
+APCu 并非要取代 Redis，它最适合处理**高频读取、低频修改、且仅限单机使用** 的数据。
 #### A. 配置信息与元数据缓存
 许多框架（如 Symfony）使用 APCu 缓存路由表、注解元数据或翻译文件。
 * **场景**：不再每请求都去解析巨大的 YAML 或 XML 配置文件。
@@ -21,6 +22,7 @@ APCu 并非要取代 Redis，它最适合处理**高频读取、低频修改、�
 * **场景**：对于极其频繁访问的数据（如权限角色列表），先看本地 APCu，没有再去 Redis 取。
 #### C. 计数器与锁（简单场景）
 利用 `apcu_inc()` 和 `apcu_cas()` 等原子操作，可以实现简单的单机计数器或防止并发冲突的锁。
+- **联想并发**：原子 API 保护单次指定操作，不自动保证 `fetch → 修改 → store` 的复合操作；对照 [[Work/Script/PHP/Function/Process/SHMOP#多进程共享内存数据竞争问题\|SHMOP 丢更新实验]] 与 [[Work/Script/PHP/Function/Process/IPC#5. 信号量：控制多少进程能进入临界区\|信号量临界区]] 理解区别。
 # APCu vs. Redis：如何选择？
 | 特性        | APCu      | Redis                      |
 | --------- | --------- | -------------------------- |
@@ -131,7 +133,7 @@ class ApcuExpertDemo
 
         // 清空所有缓存 (谨慎使用)
         // apcu_clear_cache();
-        
+
         return [
             'slots' => $info['num_slots'],
             'free_mem' => $smaInfo['avail_mem']
@@ -166,7 +168,7 @@ function get_system_config() {
             'maintenance_mode' => false,
             'features' => ['login', 'payment', 'search']
         ];
-        
+
         // 存入缓存，有效期 1 小时 (3600秒)
         apcu_store($cacheKey, $config, 3600);
     }
@@ -188,15 +190,15 @@ if ($success && $currentRequests > 100) {
 
 // 第一次请求时设置过期时间，确保每分钟重置
 if ($currentRequests === 1) {
-    apcu_store($rateKey, 1, 60); 
+    apcu_store($rateKey, 1, 60);
 }
 ```
 ### 3. “防击穿”式的数据缓存 (使用 `apcu_entry`)
-`apcu_entry` 是一个非常强大的函数。它能确保在高并发请求同一个 Key 时，如果缓存失效，**只有一个进程**会执行回调函数生成数据，其他进程会等待该结果，防止数据库被瞬间击穿。
+`apcu_entry` 是一个非常强大的函数。它能确保在高并发请求同一个 Key 时，如果缓存失效，**只有一个进程** 会执行回调函数生成数据，其他进程会等待该结果，防止数据库被瞬间击穿。
 ```php
 $data = apcu_entry('heavy_report_data', function($key) {
     // 这里执行非常耗时的操作，例如复杂的 SQL 聚合
-    sleep(2); 
+    sleep(2);
     return [
         'time' => date('Y-m-d H:i:s'),
         'result' => '聚合数据内容'
@@ -218,7 +220,7 @@ class MultiLevelCache {
         $data = $this->redis->get($key);
         if ($data) {
             // 3. 回填到本地 APCu，加速下次访问
-            apcu_store($key, $data, 60); 
+            apcu_store($key, $data, 60);
             return $data;
         }
 
@@ -235,6 +237,7 @@ echo "缓存条目数: " . $info['num_entries'] . "\n";
 echo "内存占用: " . ($info['mem_size'] / 1024 / 1024) . " MB\n";
 ```
 #### 清理缓存
+- **联想共享范围**：[[Work/Script/PHP/Function/Process/IPC#4. 共享内存：共享数据，不经过反复收发\|共享内存]] 不等于所有进程共享同一实例；即使启用 `apc.enable_cli`，独立启动的 CLI 通常也不能借 APCu 互通，更不能据此清理 FPM 缓存。
 * **代码清理**：`apcu_clear_cache();` (清理所有用户缓存)
 * **命令行清理**：由于 CLI 和 FPM 进程通常不共享内存，在终端运行 `php -r "apcu_clear_cache();"` 无法清理网页端的缓存。你需要创建一个 Web 入口或使用 `cachetool` 之类的工具。
 ### 注意事项
@@ -269,6 +272,6 @@ sem_release($sem_id);   // 释放锁
 * **APCu** 和 **SysV** 在存储非字符串数据（如数组、对象）时，会在底层自动调用 `serialize()`。
 * **shmop** 强制你面对原始字节。如果你存的是大数组，手动 `igbinary_serialize()` 配合 `shmop` 有时能获得比 APCu 更极致的控制力，但开发复杂度极高。
 ### 总结建议
-* **95% 的场景**：请直接使用 **APCu**。它在性能、安全性和易用性之间取得了完美的平衡，且支持 TTL 过期。
-* **需要与 C/Go 等其他语言共享内存**：选择 **shmop**。
-* **维护 10 年以上的旧项目**：你可能会看到 **SysV (shm_attach)**，但在新项目中已不推荐使用。
+* **PHP 本地键值缓存**：共享范围符合需求且需要 TTL／原子缓存 API，优先评估 **APCu**；独立 CLI 或跨主机共享不能直接照搬此选择。
+* **原始字节／跨语言共享**：评估 **shmop**，自行约定布局、序列化和同步协议。
+* **按变量 ID 共享 PHP 数据**：可用 **SysV（shm_attach）**；是否选用取决于接口与生命周期需求，而非只看项目新旧。机制对照见 [[Work/Script/PHP/Function/Process/IPC#4. 共享内存：共享数据，不经过反复收发\|IPC：共享内存]]。

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/Reflection与Annotation/","title":"Reflection与Annotation","tags":["#flashcards"],"noteIcon":"","created":"2026-09-10T09:59:12.000+08:00","updated":"2026-09-10T09:59:12.000+08:00","dg-note-properties":{"title":"Reflection与Annotation","tags":["#flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/Reflection与Annotation/","title":"Reflection与Annotation","tags":["#flashcards"],"noteIcon":"","created":"2026-08-29T11:58:03.000+08:00","updated":"2026-10-13T10:43:33.531+08:00","dg-note-properties":{"title":"Reflection与Annotation","tags":["#flashcards"],"reference linking":null}}
 ---
 
 # 为什么需要反射
@@ -165,7 +165,7 @@ $reflection->getMethods();
 - **谨慎使用：** 普通业务代码优先使用明确接口和依赖注入。
 > 写 Hyperf 业务代码时可能很少主动写 `ReflectionClass`，但 Hyperf 底层大量机制都离不开元编程能力。
 > **一句话：** 当"代码本身"也需要成为程序处理的数据时，就需要反射。
-<!--SR:!2026-10-12,32,270-->
+<!--SR:!2027-02-10,120,290-->
 <?e?>
 # 预定义常量 [¶](https://www.php.net/manual/zh/class.attribute.php#attribute.constants)
 ### 预定义常量一览

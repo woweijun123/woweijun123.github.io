@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 嵌套事务/","title":"Laravel 嵌套事务","tags":["flashcards"],"noteIcon":"","created":"2026-08-18T18:54:39.000+08:00","updated":"2026-08-18T18:54:39.000+08:00","dg-note-properties":{"title":"Laravel 嵌套事务","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Laravel/Laravel 嵌套事务/","title":"Laravel 嵌套事务","tags":["flashcards"],"noteIcon":"","created":"2025-07-31T21:40:32.636+08:00","updated":"2026-11-14T12:10:56.816+08:00","dg-note-properties":{"title":"Laravel 嵌套事务","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 核心结论
@@ -103,4 +103,5 @@ public function rollBack($toLevel = null)
 > ```
 >
 > 输出：`begin 1` `2` `3` → `commit 3` `2` `1`
-<!--SR:!2026-10-10,53,250-->
+
+<!--SR:!2027-02-22,132,250-->

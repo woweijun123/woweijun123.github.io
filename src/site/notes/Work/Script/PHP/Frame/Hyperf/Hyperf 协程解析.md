@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 协程解析/","title":"Hyperf 协程解析","tags":["flashcards","#hyperf","#coroutine"],"noteIcon":"","created":"2026-08-08T09:40:15.000+08:00","updated":"2026-08-08T09:40:15.000+08:00","dg-note-properties":{"title":"Hyperf 协程解析","tags":["flashcards","#hyperf","#coroutine"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Frame/Hyperf/Hyperf 协程解析/","title":"Hyperf 协程解析","tags":["flashcards","#hyperf","#coroutine"],"noteIcon":"","created":"2026-11-05T16:24:21.000+08:00","updated":"2026-11-05T18:35:10.105+08:00","dg-note-properties":{"title":"Hyperf 协程解析","tags":["flashcards","#hyperf","#coroutine"],"reference linking":null}}
 ---
 
 ### 一、协程是什么？
@@ -93,45 +93,30 @@ for ($i = 0; $i < 15; ++$i) {
 }
 ```
 ### 四、透传协程上下文
-这是 Hyperf 协程编程中一个**非常重要且容易踩坑的概念**。
-*   **隔离性**：每个协都有自己**独立**的上下文存储空间（一个哈希表）。默认情况下，协程间的上下文是**隔离的**，子协程**不会**自动继承父协程的上下文。
-*   **传递挑战**：在中间件中设置的请求级数据（如用户信息`Context::set('user', $user)`），在新创建的并行子协程中无法直接通过 `Context::get('user')` 获取，因为上下文隔离了。
+- **隔离性：** Hyperf Context 是按协程隔离的请求级键值存储；子协程默认不会自动继承创建者协程的 Context。
+- **传递挑战：** 中间件写入的用户信息、业务请求号 Request ID，或保存当前 Trace ID、Span ID 和采样标志的 SpanContext，在新建子协程中不能直接读取。
+- **追踪应用：** 协程隔离与分布式 Trace 的完整衔接见 [[Work/Tools/Log/分布式日志链路的原理和实践#4.2 Hyperf 子协程上下文\|Hyperf 子协程中的追踪上下文传递]]。
 #### 解决方案
 ##### 显式复制
-在创建子协程时，手动将父协程的上下文复制过去。
+在创建子协程前保存当前协程 ID，再从创建者协程显式复制允许继承的请求级字段：
 ```php
-$cid = SwooleCo::getCid(); // 获取当前协程ID
-$pid = SwooleCo::getPcid($cid); // 获取父协程ID
-Coroutine::create(function () use ($pid) {
-	Context::copy($pid); // 关键：复制父协程上下文
-	// ... 现在可以获取到父协程的上下文数据了
-	$requestId = Context::get(self::TRACE_ID);
+$creatorCoroutineId = \Swoole\Coroutine::getCid();
+
+Coroutine::create(function () use ($creatorCoroutineId): void {
+	// 只复制该任务需要的请求级字段，避免误传无关或敏感数据。
+	Context::copy($creatorCoroutineId, [
+		'user_id',
+		'request_id',
+	]);
+
+	$requestId = Context::get('request_id');
 });
 ```
-##### 链式查找
-通过 `SwooleCo::getPcid($coId)` 获取父协程 ID，然后逐级向上查找需要的上下文数据。
-```php
-/**
- * 获取请求ID
- * @return string
- */
-public static function getRequestId(): string
-{
-	// 获取当前协程ID
-	$currCoId = $coId = SwooleCo::getCid();
-	// 获取当前协程里没有请求ID时，会去查询父协程中的请求ID，直到顶级协程为止
-	do {
-		$requestId = Context::get(self::TRACE_ID, '', $coId);
-	} while (!$requestId && $coId > 0 && ($coId = SwooleCo::getPcid($coId)));
-	// 父子协程共享trace_id
-	if ($requestId && $currCoId != $coId) {
-		Context::set(self::TRACE_ID, $requestId);
-	}
-	// 创建请求ID
-	if (empty($requestId)) {
-		$requestId = IdGenTool::uuidV4();
-		Context::set(LogTool::TRACE_ID, $requestId);
-	}
-	return $requestId;
-}
-```
+##### Request ID 与 Trace ID 边界
+- **Request ID：** 业务请求号可以在入口缺失时自行生成 UUID，并在子协程间复制。
+- **Trace ID：** 必须从当前 OpenTelemetry SpanContext 或合法的 W3C/B3 入站上下文读取。
+- **禁止混用：** 不要把带连字符的 UUID v4 当作 W3C Trace ID；W3C Trace ID 是 32 个十六进制字符。
+##### 不推荐链式查找
+- **能力：** `SwooleCo::getPcid($coId)` 可以沿协程树逐级查找祖先 Context。
+- **局限：** 这种做法依赖运行时协程层级，容易把创建者协程与其父协程混淆。
+- **推荐：** 优先显式保存创建者协程 ID，并只复制任务需要的字段。

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go Modules 完全操作指南/","title":"Go Modules 完全操作指南","tags":["Go","GoModules","依赖管理","flashcards"],"noteIcon":"","created":"2026-09-11T15:10:05.000+08:00","updated":"2026-09-11T15:10:05.000+08:00","dg-note-properties":{"title":"Go Modules 完全操作指南","tags":["Go","GoModules","依赖管理","flashcards"],"created":"2026-09-11","reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go Modules 完全操作指南/","title":"Go Modules 完全操作指南","tags":["Go","GoModules","依赖管理","flashcards"],"noteIcon":"","created":"2026-09-11T22:59:51.000+08:00","updated":"2026-10-09T10:44:51.074+08:00","dg-note-properties":{"title":"Go Modules 完全操作指南","tags":["Go","GoModules","依赖管理","flashcards"],"created":"2026-09-11","reference linking":null}}
 ---
 
 # Go Modules 完全操作指南
@@ -837,7 +837,6 @@ GOWORK=off go test ./...
 | 个人临时跨仓库联调 | 通常不提交，加入本地 ignore |
 | 发布独立库 | 必须用 `GOWORK=off` 验证库脱离本地工作区仍可构建 |
 | CI 单模块任务 | 设置 `GOWORK=off`，避免父目录意外存在 go.work |
-
 **关键风险：** 本地模块会掩盖已发布版本的文件、tag 或 `go.mod` 错误；发布前必须用 `GOWORK=off` 测试。
 # CI/CD 与 Docker
 ## CI 基线
@@ -1161,14 +1160,15 @@ go vet ./...
 10. 在只读模块模式下稳定 CI 构建并缓存依赖。
 11. 诊断 checksum mismatch、unknown revision、路径和 vendor 不一致。
 12. 从二进制读取模块与 VCS 信息，支撑发布审计。
+<?e?>
 # 模块闪卡
-1. Go Modules 于 Go ==1;;1.11== 引入，并在 Go ==1;;1.16== 成为默认依赖管理模式。
-2. 模块由目录树中的 ==1;;go.mod== 文件定义。
-3. `go.mod` 记录模块路径、Go 版本要求和 ==1;;直接==依赖。
-4. `go.sum` 保存依赖模块的 ==1;;加密哈希==，用于校验模块内容。
-5. `go mod init` 用于 ==1;;初始化==模块；`go mod tidy` 用于整理依赖声明。
-6. `go get` 用于 ==1;;添加==或==1;;调整==依赖版本；`go mod download` 只下载依赖到本地缓存。
-7. Go Modules 使用 ==1;;最小版本选择（MVS: Minimum version selection）== 算法确定依赖版本。
+1. Go Modules 于 Go **1.11** 引入，并在 Go **1.16** 成为默认依赖管理模式。
+2. 模块由目录树中的 **go.mod** 文件定义。
+3. `go.mod` 记录模块路径、Go 版本要求和 **直接**依赖。
+4. `go.sum` 保存依赖模块的 **加密哈希**，用于校验模块内容。
+5. `go mod init` 用于 **初始化**模块；`go mod tidy` 用于整理依赖声明。
+6. `go get` 用于 **添加**或**调整**依赖版本；`go mod download` 只下载依赖到本地缓存。
+7. Go Modules 使用 **最小版本选择（MVS: Minimum version selection）** 算法确定依赖版本。
 <?e?>
 # 官方资料
 - [Go Modules Reference](https://go.dev/ref/mod)

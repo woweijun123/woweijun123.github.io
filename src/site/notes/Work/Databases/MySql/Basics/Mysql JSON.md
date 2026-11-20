@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/MySql/Basics/Mysql JSON/","title":"Mysql JSON","tags":["#flashcards"],"noteIcon":"","created":"2026-06-17T14:44:06.000+08:00","updated":"2026-06-17T14:44:06.000+08:00","dg-note-properties":{"title":"Mysql JSON","tags":["#flashcards"],"reference linking":"[(20条消息) MySQL 5.7新增对JSON支持_格子的博客-CSDN博客](https://blog.csdn.net/szxiaohe/article/details/82772881)","reference linking2":"[MySQL · 最佳实践 · 如何索引JSON字段-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/303208)","reference linking3":"[mysql8 json 索引总结 - 郭慕荣 - 博客园](https://www.cnblogs.com/jelly12345/p/17399361.html)"}}
+{"dg-publish":true,"permalink":"/Work/Databases/MySql/Basics/Mysql JSON/","title":"Mysql JSON","tags":["#flashcards"],"noteIcon":"","created":"2024-03-11T11:57:37.000+08:00","updated":"2026-06-17T14:44:06.666+08:00","dg-note-properties":{"title":"Mysql JSON","tags":["#flashcards"],"reference linking":"[(20条消息) MySQL 5.7新增对JSON支持_格子的博客-CSDN博客](https://blog.csdn.net/szxiaohe/article/details/82772881)","reference linking2":"[MySQL · 最佳实践 · 如何索引JSON字段-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/303208)","reference linking3":"[mysql8 json 索引总结 - 郭慕荣 - 博客园](https://www.cnblogs.com/jelly12345/p/17399361.html)"}}
 ---
 
 # 嵌套数组结构字段查询

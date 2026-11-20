@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/SPL/","title":"SPL","tags":["flashcards"],"noteIcon":"","created":"2026-08-12T10:37:23.000+08:00","updated":"2026-08-12T10:37:23.000+08:00","dg-note-properties":{"title":"SPL","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/SPL/","title":"SPL","tags":["flashcards"],"noteIcon":"","created":"2023-10-04T02:26:14.000+08:00","updated":"2026-08-12T10:37:23.476+08:00","dg-note-properties":{"title":"SPL","tags":["flashcards"],"reference linking":null}}
 ---
 
 普通队列、优先级队列的类名分别是什么？

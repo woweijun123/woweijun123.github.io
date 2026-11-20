@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-09-03T09:33:06.000+08:00","updated":"2026-09-03T09:33:06.000+08:00","dg-note-properties":{"title":"PHP","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Basics/PHP/","title":"PHP","tags":["flashcards"],"noteIcon":"","created":"2026-04-04T23:19:08.000+08:00","updated":"2026-11-13T18:17:19.766+08:00","dg-note-properties":{"title":"PHP","tags":["flashcards"]}}
 ---
 
 # 基本语法 [¶](https://www.php.net/manual/zh/language.basic-syntax.php#language.basic-syntax)
@@ -497,7 +497,7 @@ class Test
     }
 }
 
-$t = new test(); // 类名为：Test 
+$t = new test(); // 类名为：Test
 $t->_print(); // 函数名为：_print
 ```
 ### `__TRAIT__`
@@ -545,85 +545,10 @@ namespace MyProject;
 echo '命名空间为："', __NAMESPACE__, '"'; // 命名空间为："MyProject"
 ```
 # 原码、反码、补码
-## 原码 (Sign-Magnitude)
-原码是最直观的表示方法，但现代计算机很少使用。
-* **最高位 (MSB)**：用作符号位（$0$ 为正，$1$ 为负）。
-* **其余位**：表示该数字的**绝对值**。
-#### 原码示例（8 位）：
-* $+5 = \mathbf{0}0000101$
-* $-5 = \mathbf{1}0000101$
-* **缺点：** 存在**两种表示零的方式**（$+0 = 00000000$ 和 $-0 = 10000000$），**且加减运算复杂**。
-## 反码 (One's Complement)
-反码是介于原码和补码之间的方法。
-* **正数：** 与原码相同。
-* **负数：** 正数的二进制表示**所有位取反**（$0$ 变 $1$，$1$ 变 $0$）。
-#### 反码示例（8 位）：
-* $+5 = 00000101$
-* $-5 = 11111010$ (将 $00000101$ 的所有位取反)
-* **缺点：** 与原码一样，存在**两种表示零的方式**（$+0 = 00000000$ 和 $-0 = 11111111$）。
-## 补码 (Two's Complement) - 现代计算机标准
-**在学习计算机科学时，请重点理解和掌握补码。**
-补码是最流行和最高效的方法，它有以下关键特征：
-### 补码的表示方法
-在一个 $N$ 位系统中：
-1.  **最高位 (Most Significant Bit, MSB) 为符号位：**
-    * **0** 代表**正数**或零。
-    * **1** 代表**负数**。
-2.  **正数和零：** **正数的补码**就是它本身的二进制表示。
-    * 例如(8位)：$+5 = 00000101$
-3.  **负数：** **负数的补码**是通过以下三个步骤计算得到的：
-    * **步骤 1：** 找出该数字绝对值（正数）的二进制表示（原码）。
-    * **步骤 2：** 取反码（将所有 $0$ 变成 $1$，所有 $1$ 变成 $0$）。
-    * **步骤 3：** 在反码的基础上**加 $1$**。
-#### 补码示例（以 8 位表示 -5）：
-| 步骤         | 操作                     | 结果                                 |
-| :--------- | :--------------------- | :--------------------------------- |
-| **Step 1** | 找出该数字绝对值（正数）的二进制表示（原码） | $00000101$                         |
-| **Step 2** | 取反码（所有位取反）             | $11111010$                         |
-| **Step 3** | 在反码的基础上**加 $1$**       | $11111010 + 1 = \mathbf{11111011}$ |
-所以，$-5$ 的 8 位补码表示是 $11111011$。
-### 补码的优势
-#### 唯一表示零
-* 只有一种方式表示 $0$ ($000\dots000$）。
-#### 简化加法运算
-* 补码的优点在于**加减法统一** (减法 $A - B$ 可以**直接用 $A + (-B)$ 来实现**)，可以直接使用**二进制加法器**进行计算，**简化了硬件设计**。
-**示例**
-- 因为：$11111111 + 00000001 = 100000000$
-- 在 8 位系统中，最前面的进位（第 9 位）会被截断（溢出），结果就是 **$00000000$**，符合 $-1 + 1 = 0$ 的运算规则。
-这是一个关于补码系统设计原理的优秀问题。这个范围限制 $(\text{Range} = -2^{N-1} \text{ 到 } 2^{N-1} - 1)$ 的出现，完全是由 **补码的性质** 和 **位数的分配** 决定的。
-对于 $N=8$ 位系统，我们有 8 个二进制位来存储数据。
-### 为什么 8 位补码范围是 -128 到 127？
-#### 1. 符号位 (Sign Bit)
-在补码系统中，最高的 1 位被专门用作**符号位 (Sign Bit)**：$\underbrace{X}_{符号}\underbrace{X X X X X X X}_{数值}$
-* $N=8$
-* 符号位占用 1 位。
-* 剩下的 **$N-1 = 7$ 位**用于表示数字的大小。
-#### 2. 正数范围的确定
-正数（包括 $0$）的符号位是 **$0$**。剩下的 7 位用来表示数值。
-* **最小正数:** $0\ \underbrace{0000000}_{7个0}=0$
-* **最大正数:** $0\ \underbrace{1111111}_{7个1}=127$
-最大正数二进制数的值是：$2^{8-1} - 1 = 2^7 - 1 = 127$
-因此，正数的范围是**从 $0$ 到 $127$**。
-#### 3. 负数范围的确定（不对称性）
-负数使用补码表示，符号位是 **$1$**。
-* **最小负数（最大正数绝对值）：** 其补码表示是 $\mathbf{1} \underbrace{0000000}_{7个0} = \mathbf{-2^{N-1}} = -2^{8-1} = -2^7 = -128$
-* **最大负数（最小正数绝对值）：** 其补码表示是 $\mathbf{1} \underbrace{1111111}_{7个1}=-1$
-##### 为什么负数比正数多一个？（不对称性）
-这个范围 $[-128, 127]$ 之所以不对称，是因为 **$0$ 占据了一个正数的位置**：
-1. **正数的数量:** 正数从 $0$ 到 $127$，共有 $128$ 个数字。
-    * 它们使用了 $00000000$ 到 $01111111$ 的 $128$ 个组合。
-2. **负数的数量:** 负数从 $-1$ 到 $-128$，共有 $128$ 个数字。
-    * 它们使用了 $11111111$ 到 $10000000$ 的 $128$ 个组合。
-$$\text{总共的数字数量} = 128 (\text{正数和零}) + 128 (\text{负数}) = 256 = 2^8$$
-如果补码是对称的，它应该表示 $-127$ 到 $127$。
-但由于**补码**系统**消除了原码和反码中 $\pm 0$ 的冗余**，它将 $-0$ 那个编码 ($\mathbf{10000000}$) 重新分配给了多出来的那个负数 $\mathbf{-128}$，从而实现了最大的利用率。
-这就是为什么对于 $N$ 位系统，范围是 $-2^{N-1} \text{ 到 } 2^{N-1} - 1$
-## 总结和重点
-| 表示法    | 正数表示  | 负数表示                                    | $0$ 的表示         | 现代应用              |
-| :----- | :---- | :-------------------------------------- | :-------------- | :---------------- |
-| **补码** | 直接二进制 | 原码 $\rightarrow$ 取反 $\rightarrow$ 加 $1$ | 唯一（$00\dots00$） | **主流**（用于 CPU 运算） |
-| **原码** | 直接二进制 | 符号位为 $1$，其余为绝对值                         | 两种（$+0$ 和 $-0$） | 早期理论/浮点数尾数        |
-| **反码** | 直接二进制 | 所有位取反                                   | 两种（$+0$ 和 $-0$） | 几乎不用              |
+- **通用原理：** 原码、反码、补码的固定宽度解释、取值范围和 8 bit 推导统一维护在 [[Work/Computer Science/Basics/原码、反码、补码\|有符号整数的编码方式]]。
+- **使用场景：** PHP 可以对负整数执行按位运算。
+- **理解依据：** 运算结果取决于整数位宽和补码表示。
+- **运算符入口：** 具体行为见 [[Work/Script/PHP/Basics/PHP#位运算\|PHP 位运算]]。
 # 运算符 [¶](https://www.php.net/manual/zh/language.operators.php#language.operators)
 ## 算术
 `- * / % = += -= *= /= %= ++ -- **`
@@ -842,7 +767,7 @@ array(3) {
   &int(6) // 数组最后一个元素的 $v 引用在 foreach 循环之后仍会保留。这个就是 foreach引用的小尾巴.
 }
  */
- 
+
 foreach ($arr as $k => $v) {
     echo $k, ' => ', $v, PHP_EOL;
 }
@@ -854,7 +779,7 @@ foreach ($arr as $k => $v) {
 /* 解析步骤
 $v = $arr[0] = 2, 此时$arr[2] = 2;
 $v = $arr[1] = 4, 此时$arr[2] = 4;
-$v = $arr[2] = 4, 此时$arr[2] = 4; 
+$v = $arr[2] = 4, 此时$arr[2] = 4;
 */
 ```
 ###### **如何解决**
@@ -878,7 +803,7 @@ foreach ($arr as $k => $v) {
 /*
 0 => 2
 1 => 4
-2 => 6 
+2 => 6
 */
 ```
 ## 位运算
@@ -924,7 +849,18 @@ $c = $a + $b;
 2. 取指定位
 比如取数 `X=1010 1110` 的低4位，只需要另找一个数Y，令Y的低4位为1，其余位为0，即`Y=0000 1111`，然后将X与Y进行按位与运算（`X&Y=0000 1110`）即可得到X的指定位。
 3. 判断奇偶
-只要根据最未位是0还是1来决定，为0就是偶数，为1就是奇数。因此可以用`if ((a & 1) == 0)`代替`if (a % 2 == 0)`来判断a是不是偶数。
+只要根据最低位是0还是1来决定，为0就是偶数，为1就是奇数。对于整数 `$a`，以下两种写法都可以判断是否为偶数：
+```php
+// 按位与：取最低位，结果为0表示偶数
+if (($a & 1) == 0) {
+    // 偶数
+}
+// 取模：除以2的余数为0表示偶数
+if ($a % 2 == 0) {
+    // 偶数
+}
+```
+
 ```php
 $a = [1, 2, 3];
 foreach ($a as $v) {
@@ -1297,12 +1233,12 @@ var_export($b); // 1
 die、exit、sleep、return、include、include_once、require、require_once
 ```
 ### return
-作用: 
+作用:
 1. 在函数里调用程序将会马上结束运行并返回参数
 2. 在`include()、require()`语句包含的文件中被调用，程序执行将会马上返回到调用该文件的程序，而返回值将作为`include()`或者`require()`的返回值。
 3. 在主程序中调用，那么主程序将会马上停止执行
 4. 在循环中调用，那么**会终止此次循环**「视循环的层数，中止时到达的层数不同」
-### include_once问题 
+### include_once问题
 `struct.php`
 ```php
 declare (strict_types=1);
@@ -1439,14 +1375,14 @@ call_user_func_array('foobar', ['one', 'two']);
 // foobar got one and two
 
 // #2 使用两个参数调用Foo类的bar方法
-class foo  
-{  
-    function bar($arg, $arg2)  
-    {  
-        echo __METHOD__, " got $arg and $arg2", PHP_EOL;  
-    }  
-}  
-$foo = new Foo;  
+class foo
+{
+    function bar($arg, $arg2)
+    {
+        echo __METHOD__, " got $arg and $arg2", PHP_EOL;
+    }
+}
+$foo = new Foo;
 call_user_func_array([$foo, 'bar'], ['three', 'four']);
 // foo::bar got three and four
 ```
@@ -1565,26 +1501,26 @@ Array
 #### 作用于对象
 ```php
 // PHP7以前版本
-class A  
-{  
-    private $str = 'hello';  
-}  
-// PHP7之前版本的代码  
-$a = function () {  
-    $this->str = 'world';  
-    echo $this->str;  
-};  
-$b = $a->bindTo(new A(), 'A'); // 中间层闭包,返回closure  
-$b(); // world  
-  
-// PHP7+及更高版本的代码  
-$getX = function ($num) {  
-    $this->str = 'world';  
-    ++$num;  
-    return [$this->str, $num];  
-};  
-// 返回闭包的返回值  
-$ret = $getX->call(new A, 1);  
+class A
+{
+    private $str = 'hello';
+}
+// PHP7之前版本的代码
+$a = function () {
+    $this->str = 'world';
+    echo $this->str;
+};
+$b = $a->bindTo(new A(), 'A'); // 中间层闭包,返回closure
+$b(); // world
+
+// PHP7+及更高版本的代码
+$getX = function ($num) {
+    $this->str = 'world';
+    ++$num;
+    return [$this->str, $num];
+};
+// 返回闭包的返回值
+$ret = $getX->call(new A, 1);
 print_r($ret);
 /*
 Array
@@ -1661,7 +1597,6 @@ function test() {
 var_export(is_callable('test')); // false
 var_export(is_callable('App\Controller\test')); // true
 
-
 function a(){
     echo 'true function'.PHP_EOL;
 }
@@ -1701,7 +1636,7 @@ class RoomService {
 
         // ❌ 报错：static fn 禁止绑定 $this
         // Fatal error: Unbound $this can't be used in a static closure
-        array_map(static fn($r) => $this->prefix . $r['id'], $data); 
+        array_map(static fn($r) => $this->prefix . $r['id'], $data);
     }
 }
 ```
@@ -1866,9 +1801,9 @@ if (password_verify($pwd, $hash)) {
 * **不要用 MD5 存密码**：MD5 秒破，必须用 `password_hash`。
 * **64位系统选 SHA-512**：在 64 位架构下，SHA-512 有时比 SHA-256 还快。
 * **查表法快速选择**：
-    * 查重复/校验 $\rightarrow$ **CRC32 / Murmur**
-    * 签名/指纹 $\rightarrow$ **SHA-256**
-    * 存密码 $\rightarrow$ **Argon2 / BCrypt**
+	* 查重复/校验 $\rightarrow$ **CRC32 / Murmur**
+	* 签名/指纹 $\rightarrow$ **SHA-256**
+	* 存密码 $\rightarrow$ **Argon2 / BCrypt**
 # 数组
 ## 概念
 一组连续的变量
@@ -2057,7 +1992,7 @@ array (
   4 => 'e',
 )
 */
- 
+
 $arr = [1, 2, 3, 4, 5];
 rsort($arr);
 var_export($arr);
@@ -2074,7 +2009,7 @@ array (
 ### ksort
 按键升序排序
 ```php
-$arr = [5 => 'e', 4 => 'd', 3 => 'c', 2 => 'b', 1 => 'a']; 
+$arr = [5 => 'e', 4 => 'd', 3 => 'c', 2 => 'b', 1 => 'a'];
 ksort($arr); // 数字键值升序排序
 var_export($arr);
 /*
@@ -2087,7 +2022,7 @@ array (
 )
  */
 
-$arr = ['e' => 5, 'd' => 4, 'c' => 3, 'b' => 2, 'a' => 1]; 
+$arr = ['e' => 5, 'd' => 4, 'c' => 3, 'b' => 2, 'a' => 1];
 ksort($arr); // 字母键值升序排序
 var_export($arr);
 /*
@@ -2157,9 +2092,9 @@ PHP 对待对象的方式等同于引用或句柄，即每个变量都持有对�
 将数据和操作数据的方法绑定在一起，隐藏内部实现细节，只暴露必要的接口，提高代码的安全性和可维护性。
 ### 继承
 子类可以继承父类的属性和方法，避免重复编写代码，提高代码复用性和可扩展性。
+<?e?>
 ### 多态
-多态的定义<?:?>同一个行为，对于不同的对象，会产生不同的结果。
-<!--SR:!2026-09-28,95,250-->
+同一个==1;;行为==，对于==1;;不同==的对象，会产生==1;;不同==的结果。
 >站在C++角度，这不是多态，这只是不同类对象的不同表现而已。
 >C++里的多态指运行时对象的具体化，指同一类对象调用相同的方法而返回不同的结果。
 #### C++多态
@@ -2221,10 +2156,10 @@ Drawing a Square (Blue).
 --------------------
 ```
 #### PHP多态
-PHP 由于其弱类型和缺乏像 C++/Java 那样的**对象转型/动态指向**机制，虽然支持方法的重写，但无法实现 C++ 意义上那种通过**基类接口**来调用**运行时动态决定**的派生类方法，因此**不具备 C++ 意义上的运行时多态**。
+PHP 由于其弱类型和缺乏像 C++/Java 那样的**对象转型/动态指向**机制，虽然支持方法的重写，但无法实现 C++ 意义上那种通过**基类接口**来调用**运行时动态决定**的派生类方法，因此**不具备** C++ 意义上的**运行时多态**。
 ##### 接口（Interface）实现多态
 在PHP的例子中，对象都是**确定的**，是不同类的对象。
-下面代码中 `doprint` 函数的参数是一个**接口类型的变量**，符合 **“同一个行为，对于不同的对象，会产生不同的结果”** 这一条件，具有多态性的一般特征。
+下面代码中`doprint`函数的参数是**接口类型的变量**，符合 **同一个行为，对于不同的对象，会产生不同的结果** 这一条件，具有多态性的一般特征。
 因此，**这是多态**。
 ```php
 interface Employee
@@ -2298,8 +2233,10 @@ polymorphic($b); // 输出：code
 多态指同一类对象在运行时的具体化。
 - PHP语言是弱类型的，实现多态更简单、更灵活。
 - 类型转换不是多态。
-- **PHP中**父类和子类看作“继父”和“继子”关系，它们存在继承关系，但不存在血缘关系。因此**子类无法向上转型为父类**，从而**失去多态最典型的特征**。
+- **PHP中**父类和子类看作**继父**和**继子**关系，它们存在继承关系，但不存在血缘关系。因此**子类无法向上转型为父类**，从而**失去多态最典型的特征**。
 - 多态的本质就是if…else，只不过实现的层级不同。
+<!--SR:!2027-05-24,238,250-->
+<?e?>
 ### 抽象
 将具有共性的事物抽象出来，形成类或接口，隐藏具体实现细节，提高代码的可读性和可维护性。
 ## 基本概念
@@ -2355,25 +2292,25 @@ if (is_null($repository)) {
 ## 类常量 [¶](https://www.php.net/manual/zh/language.oop5.constants.php#language.oop5.constants)
 ### 动态调用
 ```php
-class Father  
-{  
-    const STR = 'hello world';  
-  
-    public static function get($className, $str)  
-    {  
-        echo constant($className . '::' . $str), PHP_EOL;  
-    }  
-}  
-  
-$class = new Father();  
-$str = 'STR';  
-  
-// 动态调用常量  
-echo constant($className . '::' . $str), PHP_EOL; // hello world  
-// 动态调用常量, 自 5.3.0 起  
-echo $className::STR, PHP_EOL; // hello world  
-// 动态调用常量, 自 5.3.0 起  
-echo $class::STR, PHP_EOL; // hello world  
+class Father
+{
+    const STR = 'hello world';
+
+    public static function get($className, $str)
+    {
+        echo constant($className . '::' . $str), PHP_EOL;
+    }
+}
+
+$class = new Father();
+$str = 'STR';
+
+// 动态调用常量
+echo constant($className . '::' . $str), PHP_EOL; // hello world
+// 动态调用常量, 自 5.3.0 起
+echo $className::STR, PHP_EOL; // hello world
+// 动态调用常量, 自 5.3.0 起
+echo $class::STR, PHP_EOL; // hello world
 ```
 ## 类的自动加载 [¶](https://www.php.net/manual/zh/language.oop5.autoload.php#language.oop5.autoload)
 在编写面向对象（OOP）程序时，很多开发者为每个类新建一个 PHP 文件。 这会带来一个烦恼：**每个脚本**的开头，都需要包含（**include**）一个长长的列表（每个类都有个文件）。
@@ -2444,7 +2381,7 @@ class AutoLoader
     public static function _instance($config = [])
     {
         if (!self::$_instance) {
-            self::$_instance = new self;        
+            self::$_instance = new self;
         }
         return self::$_instance;
     }
@@ -2505,7 +2442,7 @@ echo "Generated new UUID -> ", $uuid->toString(), "\n";
 ## 对象和引用 [¶](https://www.php.net/manual/zh/language.oop5.references.php#language.oop5.references)
 在 PHP 对象编程经常提到的一个关键点是“默认情况下对象是通过引用传递的”。但其实这不是完全正确的。下面通过一些例子来说明。
 
-PHP 的引用是别名，就是两个不同的变量名字指向相同的内容。在 PHP 中，一个**对象变量**不再保存整个对象的值。**只是保存**一个**标识符**来访问真正的对象内容。 
+PHP 的引用是别名，就是两个不同的变量名字指向相同的内容。在 PHP 中，一个**对象变量**不再保存整个对象的值。**只是保存**一个**标识符**来访问真正的对象内容。
 当对象作为**参数传递**，作为结果**返回**，或者**赋值**给另外一个变量，另外一个变量跟原来的**不是引用**的关系，只是他们都保存着同一个**标识符的拷贝**，这个标识符指向同一个对象的真正内容。
 ### 示例1
 ```php
@@ -2584,25 +2521,25 @@ parent(调用父类定义的字段,方法;与java的super相似)、clone(克隆)
 `public` 是 PHP 中最宽松的访问控制级别。
 - **定义：** 声明为 `public` 的属性和方法可以在**任何地方**被访问。
 - **访问范围：**
-    - 在定义它们的类内部。
-    - 在子类内部。
-    - 在类实例的外部。
+	- 在定义它们的类内部。
+	- 在子类内部。
+	- 在类实例的外部。
 - **用途：** 通常用于定义类的公共接口，即该类提供给外部调用的功能和数据。
 ### protected
 `protected` 提供了中等程度的访问限制。
 - **定义：** 声明为 `protected` 的属性和方法**只能**在定义它们的类以及其**子类**中被访问。
 - **访问范围：**
-    - 在定义它们的类内部。
-    - 在子类内部。
-    - **不能**从类实例的外部访问。
+	- 在定义它们的类内部。
+	- 在子类内部。
+	- **不能**从类实例的外部访问。
 - **用途：** 用于定义仅供类及其派生类使用的内部功能或数据，实现继承体系内部的逻辑。
 ### private
 `private` 是最严格的访问控制级别。
 - **定义：** 声明为 `private` 的属性和方法**只能**在定义它们的**类内部**被访问。
 - **访问范围：**
-    - 仅在定义它们的类内部。
-    - **不能**从子类内部访问。
-    - **不能**从类实例的外部访问。
+	- 仅在定义它们的类内部。
+	- **不能**从子类内部访问。
+	- **不能**从类实例的外部访问。
 - **用途：** 用于定义类的内部实现细节，封装数据和方法，确保它们不会被外部代码或子类意外地修改或依赖。这有助于维护类的内部一致性和独立性。
 ```php
 class A
@@ -2679,7 +2616,7 @@ class BaseClass {
    public function test() {
        echo "BaseClass::test() called\n";
    }
-   
+
    final public function moreTesting() {
        echo "BaseClass::moreTesting() called\n";
    }
@@ -2695,24 +2632,24 @@ class ChildClass extends BaseClass {
 ## 对象继承 [¶](https://www.php.net/manual/zh/language.oop5.inheritance.php#language.oop5.inheritance)
 ### PHP 对象继承精简总结
 1. **定义与目的：**
-    - **继承**让**子类**从**父类**获取属性和方法，实现代码复用、多态性、可扩展性和类层次结构。
+	- **继承**让**子类**从**父类**获取属性和方法，实现代码复用、多态性、可扩展性和类层次结构。
 2. **基本语法：**
-    - 使用 `extends` 关键字：`class ChildClass extends ParentClass {}`。
-    - PHP 不支持多重继承。
+	- 使用 `extends` 关键字：`class ChildClass extends ParentClass {}`。
+	- PHP 不支持多重继承。
 3. **成员继承规则：**
-    - **`public` 和 `protected`** 成员会被子类继承并可直接访问。
-    - **`private`** 成员不被继承（对子类不可见）。
-    - 子类继承时**不能降低**非构造方法的可见性（如 `public` 不能变 `protected`）。**构造方法是个例外**，子类可将父类 `public` 构造方法改为 `protected` 或 `private` 来限制实例化。
+	- **`public` 和 `protected`** 成员会被子类继承并可直接访问。
+	- **`private`** 成员不被继承（对子类不可见）。
+	- 子类继承时**不能降低**非构造方法的可见性（如 `public` 不能变 `protected`）。**构造方法是个例外**，子类可将父类 `public` 构造方法改为 `protected` 或 `private` 来限制实例化。
 4. **方法重写（Override）：**
-    - 子类可定义与父类**同名**方法来改变行为，并可用 `parent::methodName()` 调用父类实现。
+	- 子类可定义与父类**同名**方法来改变行为，并可用 `parent::methodName()` 调用父类实现。
 5. **构造函数继承：**
-    - 子类若无构造函数，则继承父类；若有，通常需显式调用 `parent::__construct()`。
+	- 子类若无构造函数，则继承父类；若有，通常需显式调用 `parent::__construct()`。
 6. **`final` 关键字：**
-    - `final class`：类**不能被继承**。
-    - `final public function`：方法**不能被子类重写**。
+	- `final class`：类**不能被继承**。
+	- `final public function`：方法**不能被子类重写**。
 7. **抽象类与抽象方法：**
-    - **`abstract class`：** 不能直接实例化，作基类使用，可含抽象方法。
-    - **`abstract public function`：** 无具体实现，**非抽象子类**必须实现。
+	- **`abstract class`：** 不能直接实例化，作基类使用，可含抽象方法。
+	- **`abstract public function`：** 无具体实现，**非抽象子类**必须实现。
 8. **接口（Interfaces）：**
 	- 定义了一组必须实现的方法签名，是实现多态的重要方式。
 	- 一个类可以 `implements` 多个接口。
@@ -2734,7 +2671,7 @@ PHP 有抽象类、抽象方法和抽象属性。定义为抽象的类无法实�
 定义为抽象的属性可以声明 `get` 或 `set` 行为的要求，并且可以为一个（但不是全部）操作提供实现。
 ### abstract
 ## 对象接口 [¶](https://www.php.net/manual/zh/language.oop5.interfaces.php#language.oop5.interfaces)
-使用接口（interface），可以**指定**某个类**必须实现**哪些**方法**和**属性**，但不需要定义这些方法或属性的具体内容。 
+使用接口（interface），可以**指定**某个类**必须实现**哪些**方法**和**属性**，但不需要定义这些方法或属性的具体内容。
 由于接口（interface）和类（class）、trait 共享了命名空间，所以它们不能重名。
 ### 总结几个概念
 - 接口作为一种规范和契约存在。作为规范，接口应该保证可用性；作为契约，接口应该保证可控性。
@@ -2799,7 +2736,6 @@ interface C extends A, B
 {
     public static function getThree();
 }
-
 
 class D implements C
 {
@@ -3275,22 +3211,22 @@ PHP所提供的重载（overloading）是指动态地创建类属性和方法。
 > **注意**:
 > PHP中的重载**与其它绝大多数面向对象语言不同**。传统的重载是用于提供**多个同名**的类方法，但各方法的参数**类型**和**个数**不同。
 1. **传统重载**（如Java/C++）：
-    - 同一个类中定义多个**同名方法**，通过**参数类型**或**参数个数**的不同区分。
-    - 编译时确定调用哪个方法（静态绑定）。
+	- 同一个类中定义多个**同名方法**，通过**参数类型**或**参数个数**的不同区分。
+	- 编译时确定调用哪个方法（静态绑定）。
 2. **PHP的重载**：
-    - 通过**魔术方法**（如 `__get`、`__set`、`__call`）动态处理**未定义或不可见的属性/方法**。
-    - 运行时通过魔术方法动态响应属性访问、赋值或方法调用，而非预定义的固定方法。
-    - 不支持传统方法重载（**无法直接定义多个同名方法**），需通过魔术方法模拟。
+	- 通过**魔术方法**（如 `__get`、`__set`、`__call`）动态处理**未定义或不可见的属性/方法**。
+	- 运行时通过魔术方法动态响应属性访问、赋值或方法调用，而非预定义的固定方法。
+	- 不支持传统方法重载（**无法直接定义多个同名方法**），需通过魔术方法模拟。
 3. **核心区别**：
-    - PHP的“重载”本质是**动态属性/方法管理**，而非传统意义的多态方法覆盖。
-    - 传统重载依赖**参数差异**，PHP重载依赖**魔术方法**对未定义成员的拦截。
+	- PHP的“重载”本质是**动态属性/方法管理**，而非传统意义的多态方法覆盖。
+	- 传统重载依赖**参数差异**，PHP重载依赖**魔术方法**对未定义成员的拦截。
 ## 协变与逆变 [¶](https://www.php.net/manual/zh/language.oop5.variance.php#language.oop5.variance)
 1. **协变 (Covariance)**:
-    - 指的是**子类方法**的返回类型可以比父类方法声明的返回类型**更具体**（即子类型）。
-    - 简单来说，如果父类承诺返回一个“交通工具”，那么子类可以更具体地承诺返回一辆“汽车”（汽车是交通工具的一种）。
+	- 指的是**子类方法**的返回类型可以比父类方法声明的返回类型**更具体**（即子类型）。
+	- 简单来说，如果父类承诺返回一个“交通工具”，那么子类可以更具体地承诺返回一辆“汽车”（汽车是交通工具的一种）。
 2. **逆变 (Contravariance)**:
-    - 指的是**子类方法**接受的参数类型可以比父类方法声明的参数类型**更宽泛**（即父类型）。
-    - 简单来说，如果父类要求输入一辆“汽车”，那么子类可以更宽泛地要求输入一个“交通工具”（因为汽车始终是交通工具的一种）。
+	- 指的是**子类方法**接受的参数类型可以比父类方法声明的参数类型**更宽泛**（即父类型）。
+	- 简单来说，如果父类要求输入一辆“汽车”，那么子类可以更宽泛地要求输入一个“交通工具”（因为汽车始终是交通工具的一种）。
 ## 范围解析操作符 `::` [¶](https://www.php.net/manual/zh/language.oop5.paamayim-nekudotayim.php#language.oop5.paamayim-nekudotayim)
 范围解析运算符（也称作 Paamayim Nekudotayim）或更简单地说是双冒号，是一种允许访问类或其中一个父类的常量、static 属性或 static 方法的标记。
 ```php
@@ -3459,11 +3395,11 @@ Son::getStatic(); // Son
 2. 调静态方法不能用$this
 3. 调普通方法/变量, (PHP8以下:类内部可调用，类外部会提示错误，但不影响运行)
 - **对象属性：**
-    - 每个对象实例都有自己的对象属性。
-    - 更改一个对象的对象属性不会影响其他对象的属性。
+	- 每个对象实例都有自己的对象属性。
+	- 更改一个对象的对象属性不会影响其他对象的属性。
 - **静态属性：**
-    - 静态属性属于类，而不是类的实例。
-    - 所有类实例共享同一个静态属性。
+	- 静态属性属于类，而不是类的实例。
+	- 所有类实例共享同一个静态属性。
 ```php
 Class Person
 {
@@ -3659,7 +3595,7 @@ class Index
         $this->staticFunc(); // error, 静态方法内不能出现$this
         self::staticFunc(); // self::
         Index::staticFunc(); // Index::
-        
+
         // 静态方法内
         $this->generalFunc(); // error, 不能出现$this
         self::generalFunc(); // error, 不能静态调用普通方法
@@ -4057,6 +3993,7 @@ Point Object
 | **内部状态** | 每次调用都返回**全新的** `Model` 实例             | `TestRepository` 实例被克隆，但其内部的 `Model` 实例被**共享** (浅克隆)     |
 | **用途**   | **工厂/原型模式**：创建新的、独立的模型数据对象            | **浅拷贝**：复制容器对象，但共享内部数据对象                                 |
 | **操作机制** | **复制内容的主动机制**：开发者**手动**克隆内部对象。        | **复制容器的默认机制**：PHP引擎**自动**浅拷贝外部对象。                        |
+
 **说明：**
 - **`return clone $this->model;`** 是一种**主动**且**局限于内部**的操作，它明确要求复制 `$model` 属性所引用的对象，因此结果是**深拷贝**。
 - **`$cloneTestRepository = clone $testRepository;`** 是 PHP 语言层面**默认**的克隆操作，其本质是**浅拷贝**，因此 `$testRepository` 实例的**容器**被复制了，但内部的对象引用（如 `$model`）是**共享**的。
@@ -4191,11 +4128,11 @@ echo $obj2->object2::$instances, PHP_EOL; // 3
 ```
 ##### 关键概念回顾
 * **对象克隆 (`clone`)：**
-    - `clone` 关键字创建对象的新副本。
-    - 如果类定义了 `__clone()` 方法，则在克隆过程中会调用该方法。
+	- `clone` 关键字创建对象的新副本。
+	- 如果类定义了 `__clone()` 方法，则在克隆过程中会调用该方法。
 * **对象属性：**
-    - 每个对象实例都有自己的对象属性。
-    - 更改一个对象的对象属性不会影响其他对象的属性。
+	- 每个对象实例都有自己的对象属性。
+	- 更改一个对象的对象属性不会影响其他对象的属性。
 * **静态属性：**
 	- 静态属性属于类，而不是类的实例。
 	- 所有类实例共享同一个静态属性。
@@ -4408,31 +4345,31 @@ class Shoe
 }
 
 $student = new Student();
-// 序列化对象「O:7:"Student" 指针」  
-echo serialize($student), PHP_EOL; // O:7:"Student":2:{s:4:"name";s:3:"Sam";s:6:"gender";s:6:"female";}  
+// 序列化对象「O:7:"Student" 指针」
+echo serialize($student), PHP_EOL; // O:7:"Student":2:{s:4:"name";s:3:"Sam";s:6:"gender";s:6:"female";}
 
-// 嵌套对象 Shoe「O:4:"Shoe" 指针」  
+// 嵌套对象 Shoe「O:4:"Shoe" 指针」
 $student->shoe = new Shoe();
-echo serialize($student), PHP_EOL; // O:7:"Student":3:{s:4:"name";s:3:"Sam";s:6:"gender";s:6:"female";s:4:"shoe";O:4:"Shoe":1:{s:4:"name";s:4:"nike";}}  
+echo serialize($student), PHP_EOL; // O:7:"Student":3:{s:4:"name";s:3:"Sam";s:6:"gender";s:6:"female";s:4:"shoe";O:4:"Shoe":1:{s:4:"name";s:4:"nike";}}
 
-// 序列化数组  
+// 序列化数组
 $student_arr = ['name' => 'Tom', 'gender' => 'male'];
 echo serialize($student_arr), PHP_EOL; // a:2:{s:4:"name";s:3:"Tom";s:6:"gender";s:4:"male";}
 ```
 #### 核心区别的理解
 1. **对象指针（类标识符）的包含：**
-    - 当序列化 `Student` 类中包含 `Shoe` 对象时，`Shoe` 的序列化内容开头是 **`O:4:"Shoe":1:`**。
-    - 这里的 **`O:4:"Shoe"`** 正是对象的**类标识符（“指针”）**，表明其类型是 `Shoe` 类。这与您之前提到的 `Student` 对象序列化开头 `O:7:"Student"` 的作用一致。
+	- 当序列化 `Student` 类中包含 `Shoe` 对象时，`Shoe` 的序列化内容开头是 **`O:4:"Shoe":1:`**。
+	- 这里的 **`O:4:"Shoe"`** 正是对象的**类标识符（“指针”）**，表明其类型是 `Shoe` 类。这与您之前提到的 `Student` 对象序列化开头 `O:7:"Student"` 的作用一致。
 2. **递归与完整性：**
-    - 序列化器不是简单地将 `Shoe` 视作一个变量，而是**递归地调用了对象的序列化机制**。
-    - 这确保了在反序列化时，PHP 知道如何**重建**一个 `Shoe` 对象（类型），并正确地将它的属性（`name` 和 `nike`）赋值进去。
+	- 序列化器不是简单地将 `Shoe` 视作一个变量，而是**递归地调用了对象的序列化机制**。
+	- 这确保了在反序列化时，PHP 知道如何**重建**一个 `Shoe` 对象（类型），并正确地将它的属性（`name` 和 `nike`）赋值进去。
 3. **与基本类型的区别：**
-    - 像 `name` 和 `gender` 这样的基本类型属性，其序列化格式是 `s:4:"name";s:3:"Sam";`（类型为 `s`，即 string）。
-    - 而 `Shoe` 属性的内容则以 **`O` (Object)** 开头，**包含了类名和属性的完整信息**。
+	- 像 `name` 和 `gender` 这样的基本类型属性，其序列化格式是 `s:4:"name";s:3:"Sam";`（类型为 `s`，即 string）。
+	- 而 `Shoe` 属性的内容则以 **`O` (Object)** 开头，**包含了类名和属性的完整信息**。
 **总结：** 嵌套对象 `Shoe` 在序列化后的区别在于，它不是被存储为一个简单值，而是被存储为一个**完整的、带有类标识符的嵌套序列化字符串**，确保了反序列化时能够恢复其原始的对象类型和结构。
 ### 字节流、字符流的概念
 - **二进制字节流**：处理**任何类型**的数据。如图片（`.jpg`, `.png`）、音频（`.mp3`）、视频（`.mp4`）、压缩包（`.zip`）、可执行程序（`.exe`）。这些文件如果当成文本来打开，你会看到一堆乱码。
-    
+
 - **字符流**：专门用于处理**文本数据**（如 `.txt`, `.html`, `.csv` 文件）。字符流在字节流的基础上，增加了一个关键步骤：**编码/解码**。它会根据指定的字符集（如UTF-8, GBK）将字符转换成字节（写入时）或将字节转换成字符（读取时）。
 #### 总结与类比
 | 特性         | **字节流 / 二进制字节流**                       | **字符流**                          |
@@ -4655,7 +4592,7 @@ try {
 ```php
 set_exception_handler(function($e){
     echo '统一处理异常';
-}); 
+});
 throw new Exception('一个异常');
 // 统一处理异常
 ```
@@ -4720,180 +4657,52 @@ $resource = fopen('none.txt', 'r+');
 | **触发方式** | 系统自动触发或 `trigger_error` | 必须由 `throw` 手动抛出   |
 | **处理方式** | `set_error_handler` 接管  | `try...catch` 捕获   |
 | **性质**   | 传统的程序运行报告               | 面向对象的错误处理逻辑        |
+
 <?e?>
 # 字符处理与编码
-## 演进
-### 1. ASCII (1963)
-* **逻辑**：7 位编码，127 个字符。
-* **局限**：只能表达==1;;英文==字符，是==1;;所有==现代编码的共同==1;;祖先==。
-### 2. 编码割据时代 (MBCS)
-* **GBK (中国)** / **Shift-JIS (日本)** / **Big5 (繁体)**。
-* **逻辑**：在 ASCII 基础上，利用高位字节扩展，通常用 ==1;;2== 字节表示一个汉字。
-* **代价**：不同国家的文档交换时，因为编码表不一致，必然产生==1;;乱码==。
-### 3. Unicode (万国码)
-* **本质**：它是一张==1;;表==，不是一种压缩算法。它给全球每一个字符（包括 Emoji）定了一个唯一的==1;;编号（码点）==。
-* **实现（UTF）**：
-	* **UTF-8**：==1;;变长==编码。英文字符 ==1;;1== 字节，中文 ==1;;3== 字节。互联网**统治级标准**。
-	* **UTF-16**：定长/变长结合，Java 和 Windows 内存底层常用。
-	* **UTF-32**：完全定长（4 字节），浪费空间，仅在**极少数**内存处理场景使用。
-### 通用性 vs 空间效率
-| **维度**   | **ASCII** | **GBK (国家标准)** | **UTF-8 (互联网标准)** | **UTF-16**      |
-| -------- | --------- | -------------- | ----------------- | --------------- |
-| **涵盖范围** | 基础英文/符号   | 汉字、日韩汉字        | **全球文字、Emoji**    | 全球文字            |
-| **中文占用** | 不支持       | **2 字节** (空间优) | 3 字节 (兼容性优)       | 2 或 4 字节        |
-| **英文占用** | 1 字节      | 2 字节 (冗余)      | **1 字节** (极致)     | 2 字节            |
-| **兼容性**  | 基石        | 兼容 GB2312      | **兼容 ASCII**      | 不兼容 ASCII       |
-| **通用性**  | 极高        | 较低 (跨国易乱码)     | **极高** (国际标准)     | 跨语言交换较少         |
-| **底层特点** | 单字节定长     | 双字节变长          | **多字节变长** (自解释位)  | 定长/变长结合         |
-| **推荐场景** | 基础系统底层    | 老旧/离线纯中文文档     | **Web、App、现代开发**  | 内存处理 (Java/Win) |
-### 字节序（Endianness）的陷阱
-当使用 **UTF-16** 或 **UTF-32** 时，涉及多个字节的先后顺序：
-- **Big-Endian (BE)**：高位在前（大端）。
-- **Little-Endian (LE)**：低位在前（小端）。
-- **BOM (Byte Order Mark)**：文件开头的不可见标记（如 `FE FF`），用于告知程序应按哪种字节序读取。**注意：UTF-8 建议不带 BOM。**
-## 序列化与反序列化链路
-### 链路图
-```mermaid
-graph TD  
-%% 阶段一：序列化 (写入内存)  
-    subgraph 序列化过程  
-        A[汉字: 中] --> B{字符集查找}  
-        B -->|Unicode| C[码点: U+4E2D]  
-        C --> D[原始二进制: 0100 1110 0010 1101]  
-        D --> E{UTF-8 编码协议}  
-        E --> F[填充 3-Byte 模板: 1110xxxx 10xxxxxx 10xxxxxx]  
-        F --> G[二进制字节流: E4 B8 AD]  
-        G --> H[CPU 数据引脚 D0-D7 电平翻转]  
-    end  
-  
-%% 阶段二：物理存储  
-    subgraph 物理存储层  
-        H --> I[内存控制器选通 Row/Col 地址]  
-        I --> J[SRAM 触发器翻转 / DRAM 电容充电]  
-        J --> K[物理状态锁存: 11100100 10111000 10101101]  
-    end  
-  
-%% 阶段三：反序列化 (从内存读取)  
-    subgraph 反序列化过程  
-        K --> L[读取电平信号: E4 B8 AD]  
-        L --> M{识别首字节前缀}  
-        M -->|1110 开头| N[判定为 3 字节字符]  
-        N --> O[提取有效位: 剔除模板头 1110 与 10]  
-        O --> P[拼接位序列: 0100 1110 0010 1101]  
-        P --> Q[还原码点: U+4E2D]  
-        Q --> R{操作系统/字体库索引}  
-        R --> S[渲染引擎输出像素点阵]  
-    end  
-  
-    S --> T[显示屏显示: 中]
-```
-### 硬核细节补充
-#### 1. 汉字 “中” 码点 (Code Point)
-* **十六进制：** `U+4E2D`
-* **十进制：** `20013`
-#### 2. UTF-8 转换二进制详细过程
-UTF-8 是一种变长编码。对于码点在 `U+0800` 到 `U+FFFF` 之间的字符（大多数常用汉字），UTF-8 使用 **3 个字节** 存储。
-##### 第一步：将十六进制码点转为原始二进制
-将 `4E2D` 按位拆解：
-* `4` $\rightarrow$ `0100`
-* `E` $\rightarrow$ `1110`
-* `2` $\rightarrow$ `0010`
-* `D` $\rightarrow$ `1101`
-* **原始二进制序列：** `0100 1110 0010 1101` (共 16 位)
-##### 第二步：应用 UTF-8 三字节模板
-3 字节字符的固定格式（模板）如下，其中 `x` 是待填充位：
-`1110xxxx 10xxxxxx 10xxxxxx`
-##### 第三步：填充比特流
-将 16 位原始二进制按顺序填入模板中的 16 个 `x` 位：
-1. 前 4 位 (`0100`) 填入第一个字节：`1110` **0100**
-2. 中间 6 位 (`111000`) 填入第二个字节：`10` **111000**
-3. 最后 6 位 (`101101`) 填入第三个字节：`10` **101101**
-##### 第四步：计算最终结果
-* **字节 1：** `11100100` $\rightarrow$ **0xE4**
-* **字节 2：** `10111000` $\rightarrow$ **0xB8**
-* **字节 3：** `10101101` $\rightarrow$ **0xAD**
-**最终 UTF-8 编码：** `E4 B8 AD`
-#### 3. 物理存储层
-| 步骤       | 数据状态                            | 物理表现                    |
-| -------- | ------------------------------- | ----------------------- |
-| **字符**   | 中                               | 逻辑概念                    |
-| **码点**   | `U+4E2D`                        | 逻辑地址（索引）                |
-| **编码**   | `E4 B8 AD`                      | 存储在内存中的**数据真值**         |
-| **电信号**  | `11100100`...                   | 数据引脚 D0-D7 的高低电平        |
-| **物理单元** | **SRAM (6T)** / **DRAM (1T1C)** | 晶体管的**锁存状态**或电容的**电荷量** |
-#### 纠错提示
-在你的 TC5517 (SRAM) 实验中，如果你要存储“中”字：
-1. 地址 `n` 存储 `0xE4` (字节 1)
-2. 地址 `n+1` 存储 `0xB8` (字节 2)
-3. 地址 `n+2` 存储 `0xAD` (字节 3)
-**关键点：** 内存芯片本身并不知道它存的是“中”字，它只负责精确地维护这 24 个 Bit 的电平状态。
-**BOM 陷阱「Byte Order Mark」**：在 PHP 读取文件时，如果文件带 BOM (十六进制 `EF BB BF`)，某些函数可能无法识别导致输出异常。
-### 代码演示
+- **通用原理：** 字符、码点、UTF-8 位模式、字节序和 BOM 统一维护在 [[Work/Computer Science/Basics/字符集、Unicode 与 UTF 编码\|字符集、Unicode 与 UTF 编码]]。
+- **字符串模型：** PHP 字符串本质上是字节序列，普通字符串函数通常按字节处理。
+- **字符处理：** 需要按字符查找、截取或计数时，使用 `mbstring` 并明确传入实际编码。
+- **转码边界：** `iconv`、`mb_convert_encoding` 无法无损生成目标编码不支持的字符。
+- **工程约定：** PHP 源码、HTTP 响应和数据库连接通常统一使用 UTF-8。
+- **MySQL 字符集：** 完整 Unicode 支持使用 `utf8mb4`。
+- **BOM 风险：** UTF-8 BOM `EF BB BF` 可能在输出前产生不可见字节，进而影响响应头或文件解析。
+## PHP 字节与字符示例
 ```php
 /**
- * 验证序列化与反序列化
+ * 验证字符、码点和 UTF-8 字节之间的关系
  * "中" -> Unicode: U+4E2D (20013)
  * "中" -> UTF-8 Hex: E4 B8 AD
  */
 $str = "中";
 
-// --- 获取 统一码 码点 ---
-// 方法 A：使用内置函数（PHP 7.2+）
+// 获取 Unicode 码点（PHP 7.2+）。
 $codepointDec = mb_ord($str, 'UTF-8');
 $codepointHex = dechex($codepointDec);
 
 echo "十进制码点: " . $codepointDec . PHP_EOL; // 20013
 echo "十六进制码点: U+" . $codepointHex . PHP_EOL; // U+4e2d
 
-// --- 序列化过程 Serialization ---
+// 查看 PHP 字符串实际保存的 UTF-8 字节。
 $hex = bin2hex($str);
-$dec = hexdec($hex);
-
 echo "十六进制字节流「Hex Stream」: " . $hex . PHP_EOL; // E4B8AD
-echo "十进制表示「Decimal Value」: " . $dec . PHP_EOL; // 14989485
 
-// --- 反序列化过程 Deserialization ---
-// 模拟从硬盘读取二进制并还原
+// 从十六进制字节流还原 PHP 字符串。
 $originalChar = hex2bin($hex);
 echo "还原字符「Original Char」: " . $originalChar . PHP_EOL; // 中
 
-// --- 长度校验 Length Validation ---
+// strlen 按字节计数，mb_strlen 按指定编码中的字符计数。
 echo "字节长度「Byte Length」: " . strlen($str) . PHP_EOL; // 3
 echo "逻辑长度「Logic Length」: " . mb_strlen($str, 'UTF-8') . PHP_EOL; // 1
 ```
 ### 开发规约
-> [!danger] 核心注意事项 (Critical Notes)
-> 1. **数据库存储「Database」**：必须指定 `utf8mb4`。十六进制 `0xF09F9880` (Emoji) 在传统 `utf8` 下会由于超过 3-Byte 导致序列化失败。
-> 2. **HTTP 传输「Transport」**：响应头 `Content-Type: text/html; charset=utf-8` 告知浏览器解码层应使用的“字典”。
-> 3. **截断安全「Truncation」**：在反序列化之前严禁手动按字节截断，否则会破坏 UTF-8 的位模式「Bit Pattern」，产生无效字节。
-> 4. **内存处理层**：现代语言（Python 3, Java, Go）内部通常使用 Unicode 处理字符串。
-> 5. **IDE 源码文件编码**：统一设置为 `UTF-8 without BOM`。
-> 6. **URL 编码 (Percent-encoding)**
-> 	- 浏览器无法直接发送非 ASCII 字符。
-> 	- `中` 被 UTF-8 编码为 `E4 B8 AD`，URL 传输时变为 `%E4%B8%AD`。
-> 7. **转码中的“不可逆”损失**
-> 	- 从 **UTF-8** 转为 **ASCII** 时，无法表示的字符会被替换为 `?`。
-> 	- 一旦信息变成 `?`，原始信息即宣告丢失，不可逆转。
-## 全球化工程：i18n 与 l10n
-### i18n 与 l10n：软件全球化的两翼
-这两个概念是开发者在处理多语言需求时必须区分的。简单来说，**i18n 是“骨架”，l10n 是“血肉”**。
-#### 1. i18n (Internationalization - 国际化)
-* **核心目标**：解耦。
-* **具体做法**：
-	* 将代码中的字符串（如“确定”、“取消”）提取到资源文件中。
-	* 支持动态切换语言包。
-	* 设计能够容纳不同长度文字的 UI 布局（例如德文通常比英文长得多）。
-* **关键点**：i18n 是一次性的设计过程，目的是让软件**具备支持多语言的能力**。
-#### 2. l10n (Localization - 本地化)
-* **核心目标**：适配。
-* **具体做法**：
-	* 翻译文本。
-	* 适配特定地区的习惯：如日期格式（MM/DD/YYYY vs YYYY-MM-DD）、货币单位、度量衡。
-	* 甚至包括特定地区的法律法规适配。
-* **关键点**：l10n 是针对**特定地区**的重复过程。
-### 编码与 i18n 的关系
-字符编码是 i18n 的底层基石。如果一个程序的底层逻辑不支持 UTF-8（Unicode），那么它的 i18n 设计就是不完整的，因为在进行某些语种的 l10n（如阿拉伯语或泰语）时，会出现严重的乱码或显示错误。
-<!--SR:!2026-10-29,149,252-->
+- **数据库：** MySQL 字符集使用 `utf8mb4`，避免 Emoji 等四字节 UTF-8 字符写入失败。
+- **HTTP：** 使用 `Content-Type` 的 `charset` 参数明确响应文本编码。
+- **源码：** 项目统一使用 UTF-8，并避免无必要的 UTF-8 BOM。
+- **截断：** 不使用 `substr` 按任意字节位置截断 UTF-8 文本，应使用 `mb_substr` 等编码感知 API。
+- **URL 编码对象：** 百分号编码作用于字节。
+- **URL 编码示例：** “中”的 UTF-8 字节 `E4 B8 AD` 对应 `%E4%B8%AD`。
+- **转码：** 转向 ASCII 等较小字符集时，无法表示的字符可能被替换或丢弃，原始信息无法恢复。
 <?e?>
 # 内置函数
 ## 常用函数
@@ -5004,7 +4813,7 @@ echo strip_tags("hello <b><i>world</i></b>");// hello world
 ```
 ### str_replace
 字符串替换
-注:由于 str_replace() 的替换时从左到右依次进行的，进行多重替换的时候可能会替换掉之前插入的值
+注:由于 str_replace() 的替换时**从左到右**依次进行的，进行多重替换的时候可能会替换掉之前插入的值
 1. 如果 search 和 replace 为数组，那么 str_replace() 将对 subject 做二者的映射替换。
 2. 如果 replace 的值的个数少于 search 的个数，多余的替换将使用空字符串来进行。
 3. 如果 search 是一个数组而 replace 是一个字符串，那么 search 中每个元素的替换将始终使用这个字符串。该转换不会改变大小写
@@ -5277,7 +5086,7 @@ date('Y-m-d H:i:s', strtotime("Sunday +3 Week +1 Day -1 Second", strtotime('2021
 // 获取当前时间
 $dt = new DateTime('now', new DateTimeZone('Asia/Shanghai'));
 // 格式化输出 (类似 date 函数)
-echo $dt->format('Y-m-d H:i:s'); 
+echo $dt->format('Y-m-d H:i:s');
 ```
 #### 时间加减修改 (极其方便)
 ```php
@@ -5296,7 +5105,7 @@ $nyTime = new DateTime('2026-01-14 12:00:00', new DateTimeZone('America/New_York
 // 切换时区到东京
 $nyTime->setTimezone(new DateTimeZone('Asia/Tokyo'));
 // 此时输出的是东京对应的时间
-echo $nyTime->format('Y-m-d H:i:s'); 
+echo $nyTime->format('Y-m-d H:i:s');
 ```
 #### 时间比较与差值
 ```php
@@ -5353,6 +5162,7 @@ echo $nextMonth->format("Y-m-d H:i:s"), PHP_EOL;
 | **glob://** | `fopen('glob:///tmp/*.log', 'r')` | 匹配多个文件 | ✅ | ❌ | ❌ | 批量读日志 |
 | **zip://**（需扩展） | `fopen('zip:///path/a.zip#file.txt', 'r')` | ZIP 内文件 | ✅ | 部分 | 视情况 | 读 zip 内文件 |
 | **ssh2://**（需扩展） | `fopen('ssh2.shell://user@host/path', 'r')` | SSH 远程文件 | ✅ | ✅ | 视情况 | 远程文件 |
+
 查本机支持的 wrapper：
 ```php
 print_r(stream_get_wrappers());
@@ -5398,6 +5208,7 @@ print_r(stream_get_wrappers());
 | `w+` | `w+b` | **curl sink** → `php://temp` **`w+`** |
 | `a` | `ab` | 少见 |
 | `a+` | `a+b` | 少见 |
+
 `b` 只影响**换行是否转换**，不改变「能不能读写、指针在哪、文件不存在怎么办」。
 ## 文件系统函数
 - [basename](https://www.php.net/manual/zh/function.basename.php) — 返回路径中的文件名部分
@@ -5505,14 +5316,14 @@ echo file_get_contents('index.php'); // 你好世界
 echo file_get_contents('http://www.baidu.com/');
 ```
 ## 目录
-chdir — 改变目录  
-chroot — 改变根目录  
-closedir — 关闭目录句柄  
-dir — 返回一个 Directory 类实例  
-getcwd — 取得当前工作目录  
-opendir — 打开目录句柄  
-readdir — 从目录句柄中读取条目  
-rewinddir — 倒回目录句柄  
+chdir — 改变目录
+chroot — 改变根目录
+closedir — 关闭目录句柄
+dir — 返回一个 Directory 类实例
+getcwd — 取得当前工作目录
+opendir — 打开目录句柄
+readdir — 从目录句柄中读取条目
+rewinddir — 倒回目录句柄
 scandir — 列出指定路径中的文件和目录
 ### 示例
 ```php
@@ -5808,32 +5619,32 @@ return createImage();
 ```
 ## 生成图形验证码「base64」
 ```php
-function buildCaptcha(): array  
-{  
-    $width    = 100;  
-    $height   = 30;  
-    $size     = 4;  
-    $fontSize = 10;  
-    $image    = imagecreatetruecolor($width, $height);  
-    $bgColor  = imagecolorallocate($image, 171, 197, 178);  
-    imagefill($image, 0, 0, $bgColor);  
-    $content = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];  
-    $captcha = "";  
-    for ($i = 0; $i < $size; $i++) {  
-        $lineColor   = imagecolorallocate($image, mt_rand(0, 255), mt_rand(0, 255), mt_rand(0, 255));  
-        $fontcolor   = imagecolorallocate($image, mt_rand(0, 120), mt_rand(0, 120), mt_rand(0, 120));  
-        $fontContent = $content[array_rand($content, 1)];  
-        $captcha     .= $fontContent;  
-        // 干扰线  
-        imageline($image, 0, mt_rand(-15, 15), 60, mt_rand(-15, 15), $lineColor);  
-        imagestring($image, $fontSize, ($i * $width / 4) + mt_rand(5, 10), mt_rand(5, 10), $fontContent, $fontcolor);  
-    }  
-    ob_start();  
-    imagepng($image);  
-    $content = ob_get_clean();  
-    imagedestroy($image);  
-  
-    return [$captcha, 'data:image/png;base64,' . base64_encode($content)];  
+function buildCaptcha(): array
+{
+    $width    = 100;
+    $height   = 30;
+    $size     = 4;
+    $fontSize = 10;
+    $image    = imagecreatetruecolor($width, $height);
+    $bgColor  = imagecolorallocate($image, 171, 197, 178);
+    imagefill($image, 0, 0, $bgColor);
+    $content = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    $captcha = "";
+    for ($i = 0; $i < $size; $i++) {
+        $lineColor   = imagecolorallocate($image, mt_rand(0, 255), mt_rand(0, 255), mt_rand(0, 255));
+        $fontcolor   = imagecolorallocate($image, mt_rand(0, 120), mt_rand(0, 120), mt_rand(0, 120));
+        $fontContent = $content[array_rand($content, 1)];
+        $captcha     .= $fontContent;
+        // 干扰线
+        imageline($image, 0, mt_rand(-15, 15), 60, mt_rand(-15, 15), $lineColor);
+        imagestring($image, $fontSize, ($i * $width / 4) + mt_rand(5, 10), mt_rand(5, 10), $fontContent, $fontcolor);
+    }
+    ob_start();
+    imagepng($image);
+    $content = ob_get_clean();
+    imagedestroy($image);
+
+    return [$captcha, 'data:image/png;base64,' . base64_encode($content)];
 }
 ```
 ## index.html
@@ -5883,8 +5694,8 @@ return check($_POST['code']);
 ### 1. 范式理论的背景与目标
 * **定义：** 数据库范式是为了规范数据库设计，确保设计出高效率、优雅的数据库而逐渐形成的理论，包含五大范式（层次递进）。
 * **历史背景：** 范式理论诞生于 20 世纪 70-80 年代，当时的系统特征是：
-    * **存储器资源极其有限**（磁盘小，存储昂贵）。
-    * **网络不成熟**，主要关注单机计算性能。
+	* **存储器资源极其有限**（磁盘小，存储昂贵）。
+	* **网络不成熟**，主要关注单机计算性能。
 * **范式目标：** 在资源受限的背景下，范式强调**减少依赖**和**降低冗余**，以节省存储空间。
 ### 2. 反范式的原因：背景变化与性能需求
 随着时代发展，系统特征发生巨大变化：硬盘容量极大增加、价格低廉，同时系统面临**高并发、业务逻辑复杂、低延迟**的要求。
@@ -6017,6 +5828,7 @@ PDO::FETCH_OBJ(数组包含对象)
 | `PDO::FETCH_OBJ`   | 按照对象的形式，类似于以前的mysql\_fetch\_object()函数。                              |
 | `PDO::FETCH_BOUND` | 以布尔值的形式返回结果，同时将获取的列值赋给bindParam()方法中指定的变量。                           |
 | `PDO::FETCH_LAZY`  | 以关联数组、数字索引数组和对象3种形式返回结果。                                             |
+
 ```mysql
 CREATE DATABASE `my` DEFAULT CHARACTER SET `utf8mb4` COLLATE `utf8mb4_general_ci`;
 USE `my`;
@@ -6152,7 +5964,7 @@ ini_set('session.save_path', '/tmp/');
 ini_set('session.gc_maxlifetime', 6 * 3600); // 有效时间6个小时
 $time = $_SERVER['REQUEST_TIME'] + 24 * 3600; // 有效时间24个小时
 setcookie('name', 'value', $time, "/"); // 设置cookie
-echo $_COOKIE['session_name']; // value 
+echo $_COOKIE['session_name']; // value
 ```
 ### 设置一个时效性(10秒)的cookie
 ```php

@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/CLI/","title":"CLI","tags":["flashcards"],"noteIcon":"","created":"2026-05-21T11:11:59.000+08:00","updated":"2026-05-21T11:11:59.000+08:00","dg-note-properties":{"title":"CLI","tags":["flashcards"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Script/PHP/Function/CLI/","title":"CLI","tags":["flashcards"],"noteIcon":"","created":"2025-07-18T11:16:41.837+08:00","updated":"2026-11-10T12:15:00.825+08:00","dg-note-properties":{"title":"CLI","tags":["flashcards"],"reference linking":null}}
 ---
 
 # 核心
@@ -33,16 +33,16 @@ Array
 ##### `getopt`
 - [getopt](https://www.php.net/manual/zh/function.getopt.php) — 从命令行参数列表中获取选项
 ```php
-$options = getopt("f:hp:");  
+$options = getopt("a:b:");  
 var_dump($options);
 ```
 执行命令`php example.php -fvalue -h`输出如下
 ```
 array(2) {
-  ["f"]=>
+  ["a"]=>
+  string(3) "key"
+  ["b"]=>
   string(5) "value"
-  ["h"]=>
-  bool(false)
 }
 ```
 ### I/O通道操作
@@ -93,8 +93,9 @@ pcntl_signal(SIGTERM, function($sig) {
 #### 3. 进程管理（需pcntl扩展）
 ```php
 $pid = pcntl_fork();
-if ($pid == -1) die("Fork failed");
-elseif ($pid) { // 父进程
+if ($pid == -1) {
+	die("Fork failed");
+} elseif ($pid) { // 父进程
     pcntl_wait($status); 
 } else { // 子进程
     exec('php worker.php');

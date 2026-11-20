@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-08-17T11:15:29.000+08:00","updated":"2026-09-06T21:17:24.784+08:00","dg-note-properties":{"title":"Go Common Problem","tags":["flashcards"]}}
+{"dg-publish":true,"permalink":"/Work/Script/Go/Go Common Problem/","title":"Go Common Problem","tags":["flashcards"],"noteIcon":"","created":"2026-09-13T11:03:19.000+08:00","updated":"2026-09-13T11:03:19.000+08:00","dg-note-properties":{"title":"Go Common Problem","tags":["flashcards"]}}
 ---
 
 # 为什么 Go 语言要求 Map 键必须可比较？
@@ -142,7 +142,7 @@ if len(b) == cap(b) {
 | 原容量 $\ge$ ==1;;256==：$\text{newcap} =$ ==1;;$\text{oldcap} + \frac{\text{oldcap} + 3 \times 256}{4}$== | **温和增长 (~1.25x)** | 容量越大，越趋向于 1.25 倍，减少大块内存的浪费。        |
 在 Go 1.18 之后，为了让扩容过程更平滑，避开 1024 字节处容量翻倍到 $1.25\times$ 的突然跳变，官方引入了新的阈值（256）和公式。
 ### 内存对齐 (Memory Alignment)
-计算出预期的 `newcap` 后，Go 会根据内存管理块（Size Classes）进行==1;;向上==对齐。
+计算出预期的 `newcap` 后，Go 会根据内存管理块（Size Classes）进行向==1;;上==对齐。
 > **例子**：如果公式计算出需要 850 字节，Go 可能会实际分配 1024 字节，因为内存管理单元是按块分配的。
 ### 代码佐证 (Experimental Proof)
 你可以运行以下代码，观察容量增长的轨迹，验证公式逻辑：
@@ -215,7 +215,7 @@ if cap > doublecap {
 - **预分配 (Pre-allocation)**：如果你预知数据量（比如文件大小），直接 `make([]byte, 0, fileSize)`。这能让你的代码从 $O(N)$ 的多次拷贝优化到 ==1;;零==拷贝。
 - **大内存常驻**：由于切片引用==1;;底层==数组，如果一个==1;;小==切片引用了一个==1;;巨大==的数组，整个数组都不会被 ==1;;GC 回收==。在处理大数据后，建议将有用部分 `copy` 到新切片。
 - **复用切片**：在循环中通过 `s = s[:0]` 重置切片，可以复用已有的底层数组，避免重新触发扩容逻辑。
-<!--SR:!2026-09-13,111,252-->
+<!--SR:!2027-06-20,280,252-->
 <?e?>
 ## 切片视图与 io.Reader 的读取契约
 ```go

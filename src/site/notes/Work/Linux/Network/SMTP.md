@@ -1,13 +1,14 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Linux/Network/SMTP/","title":"SMTP","tags":["flashcards","#network","#smtp"],"noteIcon":"","created":"2025-11-19T16:37:35.316+08:00","updated":"2026-07-18T21:33:26.623+08:00","dg-note-properties":{"title":"SMTP","tags":["flashcards","#network","#smtp"],"reference linking":null}}
+{"dg-publish":true,"permalink":"/Work/Linux/Network/SMTP/","title":"SMTP","tags":["flashcards","#network","#smtp"],"noteIcon":"","created":"2026-07-18T21:33:26.000+08:00","updated":"2026-10-31T18:51:28.548+08:00","dg-note-properties":{"title":"SMTP","tags":["flashcards","#network","#smtp"],"reference linking":null}}
 ---
 
+# SMTP
 SMTP（Simple Mail Transfer Protocol，简单邮件传输协议）是互联网中用于**发送电子邮件**的核心协议。
 ## 1\. SMTP 协议的工作原理
 SMTP 协议的工作模式基于**客户端-服务器**（C/S）模型，它定义了邮件客户端和邮件服务器之间，以及不同邮件服务器之间传输邮件的规则。
 ### 工作流程概述
-1.  **连接建立 (Establishment):** 发件人的邮件客户端（MUA, Mail User Agent）或发送邮件服务器（MTA, Mail Transfer Agent）通过 TCP **25 号端口**（或加密的 465/587 端口）连接到接收方邮件服务器。
-2.  **身份确认 (Identification):** 发送方发送 **`HELO`** 或 **`EHLO`** 命令向服务器表明身份。服务器回复 **`250 OK`** 表示准备就绪。
+1.  **连接建立 (Establishment):** 服务器之间的 SMTP 中继通常使用 TCP **25 号端口**；邮件客户端向邮件提交代理（MSA）提交邮件通常使用 **587 端口 + STARTTLS**，或使用 **465 端口的隐式 TLS**。587 端口本身并非天然加密。
+2.  **身份确认 (Identification):** TCP/TLS 连接建立后，服务器先发送 `220` 问候语。客户端随后发送 **`EHLO`**（旧服务器回退使用 `HELO`），ESMTP 服务器通过一行或多行 `250` 响应返回支持的能力。
 3.  **邮件事务 (Mail Transaction):**
       * **发送方：** 使用 **`MAIL FROM:`** 命令指明发送者邮箱地址。
       * **接收方：** 使用 **`RCPT TO:`** 命令指明接收者邮箱地址。该命令可以重复多次（支持多个收件人）。
@@ -19,36 +20,30 @@ SMTP 协议的工作模式基于**客户端-服务器**（C/S）模型，它定�
       * 发送方发送 **`QUIT`** 命令。
       * 服务器回复 `221 Goodbye` 并关闭连接。
 ### 关键特点
-  * **端口：** 默认使用 **TCP 端口 25**。
+  * **端口：** SMTP 中继使用 **TCP 端口 25**；客户端邮件提交通常使用 **587（STARTTLS）** 或 **465（隐式 TLS）**。
   * **交互：** 采用**问答式交互**，客户端（发送方）发出命令，服务器（接收方）返回数字状态码和文本信息。
-  * **非持久：** 传统的 SMTP 连接在完成一次邮件发送后即关闭。
-  * **不负责接收：** SMTP 仅负责**发送和转发**邮件。接收邮件通常由 POP3 或 IMAP 协议处理。
+  * **状态码首位：** `2xx` 表示成功完成，`3xx` 表示还需继续输入，`4xx` 表示临时失败、可以稍后重试，`5xx` 表示永久失败、不应原样重试。
+  * **可复用连接：** 一个 SMTP 连接可以承载多个邮件事务；一封邮件被接受后，客户端可以开始下一事务，也可以发送 `QUIT` 结束会话。
+  * **传输与访问分离：** SMTP 负责提交、中继和投递邮件；POP3 或 IMAP 用于用户在投递完成后访问和管理邮箱中的邮件。
 ## 2\. SMTP 协议工作流程 Mermaid 图示
-
 ```mermaid
 sequenceDiagram
     participant Client as 发件方 (MUA/MTA)
     participant Server as 接收方 (MTA)
-
-    Client->>Server: TCP连接 (端口 25/587)
+    Client->>Server: TCP连接 (25 中继 / 587 提交)
     Server-->>Client: 220 服务就绪
-    
     Client->>Server: EHLO client.example.com
     Server-->>Client: 250 OK
-    
+    Note over Client,Server: 587 提交应在此执行 STARTTLS，握手后再次 EHLO
     Client->>Server: MAIL FROM:<sender@example.com>
     Server-->>Client: 250 OK
-    
     Client->>Server: RCPT TO:<recipient@example.net>
     Server-->>Client: 250 OK
-    
     Client->>Server: DATA
     Server-->>Client: 354 开始输入数据, 以<CRLF>.<CRLF>结束
-    
     Client->>Server: [邮件头和邮件体内容]
     Client->>Server: .
     Server-->>Client: 250 邮件已接受/进入队列
-    
     Client->>Server: QUIT
     Server-->>Client: 221 再见
     Server->>Client: 关闭TCP连接
@@ -59,17 +54,19 @@ sequenceDiagram
 | **连接与身份** | **HELO**       | SMTP     | 建立连接后       | 标识发送方主机名（传统）。                  |
 |           | **EHLO**       | ESMTP    | 建立连接后       | 标识发送方，请求并启用扩展功能（推荐）。           |
 |           | **AUTH**       | ESMTP    | EHLO 成功后    | 客户端提供用户名和密码进行身份验证。             |
-|           | **STARTTLS**   | ESMTP    | EHLO 成功后    | 将当前连接升级为加密的安全连接 (TLS)。         |
+|           | **STARTTLS**   | ESMTP    | EHLO 成功后    | 将当前连接升级为 TLS；握手成功后须再次发送 EHLO。   |
 | **邮件事务**  | **MAIL FROM:** | SMTP     | 身份确认后       | 指定邮件的**发件人地址**。                |
 |           | **RCPT TO:**   | SMTP     | MAIL FROM 后 | 指定邮件的**收件人地址**（可重复）。           |
 |           | **DATA**       | SMTP     | RCPT TO 后   | 通知服务器开始发送邮件内容（邮件头和邮件体）。        |
 | **事务控制**  | **RSET**       | SMTP     | 任何时候        | 重置当前事务状态，准备开始新的邮件发送。           |
 |           | **NOOP**       | SMTP     | 任何时候        | 无操作，用于保持连接或测试服务器响应。            |
 |           | **QUIT**       | SMTP     | 任何时候        | 请求服务器关闭 TCP 连接。                |
+| **扩展参数**  | **SIZE**       | ESMTP    | EHLO/MAIL   | EHLO 能力关键字；客户端可在 `MAIL FROM` 中发送 `SIZE=<字节数>`。 |
 | **辅助与查询** | **VRFY**       | SMTP     | 身份确认后       | 验证邮箱地址是否存在（现较少用）。              |
 |           | **EXPN**       | SMTP     | 身份确认后       | 请求展开邮件列表（现较少用）。                |
 |           | **HELP**       | SMTP     | 任何时候        | 请求服务器提供命令帮助信息。                 |
-|           | **SIZE**       | ESMTP    | MAIL FROM 中 | 声明邮件总字节数（在 `MAIL FROM` 命令参数中）。 |
+
+> **行长记忆：512/1000。** 基本 SMTP 的命令行和每条响应行最多为 `512` 字节，`DATA` 中的文本行最多为 `1000` 字节；两者都包含结尾的 `CRLF`，文本行上限不计算透明传输时额外复制的前导句点。SMTP 扩展可能提高限制。
 ## 4\. PHP Socket 发送邮件示例
 以下示例使用 PHP 的 `fsockopen` 函数（Socket 接口）手动发送一个简单的纯文本邮件。
 **请注意：** 实际生产环境应使用 PHPMailer 或 Symfony Mailer 等成熟的库，因为手动编写代码复杂且容易出错。
@@ -77,16 +74,19 @@ sequenceDiagram
 // ----------------------------------------------------
 // 配置信息 (请替换为您的实际邮箱、授权码和服务器信息)
 // ----------------------------------------------------
-$server          = 'ssl://smtp.qq.com';      // 您的 SMTP 服务器地址
-$port            = 465;                      // 推荐使用 587 或 465 端口
-$username        = '1014129578@qq.com';      // 邮箱账号
-$password        = 'kkgbbmzflkprbcbj';       // 注意：这里应使用授权码，而非登录密码
+$server          = 'ssl://smtp.example.com'; // 465 端口使用隐式 TLS
+$port            = 465;
+$username        = getenv('SMTP_USERNAME');
+$password        = getenv('SMTP_PASSWORD');  // 使用授权码，并通过环境变量注入
 $sender_email    = $username;
-$recipient_email = '1054487195@qq.com';
+$recipient_email = getenv('SMTP_RECIPIENT');
 $subject         = 'Test Subject via PHP Socket (with AUTH)';
 $message_body    = "This email was sent using a raw PHP socket connection with AUTH LOGIN.\r\nIt works!";
+if (!$username || !$password || !$recipient_email) {
+    die("Missing SMTP_USERNAME, SMTP_PASSWORD, or SMTP_RECIPIENT.\n");
+}
 // ----------------------------------------------------
-// 1. 构建邮件内容 (RFC 2822 格式)
+// 1. 构建邮件内容 (RFC 5322 格式)
 // ----------------------------------------------------
 $email_content = "To: <{$recipient_email}>\r\n";
 $email_content .= "From: <{$sender_email}>\r\n";
@@ -97,11 +97,10 @@ $email_content .= $message_body;
 // ----------------------------------------------------
 // 辅助函数 (保持不变)
 // ----------------------------------------------------
-function sendCommand($fp, $command)
+function sendCommand($fp, $command, $sensitive = false)
 {
-    // SMTP 交互函数... (略，保持原有逻辑)
     fwrite($fp, $command . "\r\n");
-    echo "C: " . trim($command) . "\n";
+    echo "C: " . ($sensitive ? '[REDACTED]' : trim($command)) . "\n";
     $response = '';
     while (!feof($fp)) {
         $line     = fgets($fp, 512);
@@ -135,10 +134,10 @@ sendCommand($fp, "EHLO localhost");
 $response = sendCommand($fp, "AUTH LOGIN");
 // 服务器应回复 334 VXNlcm5hbWU6 (要求输入用户名)
 // 2. 发送 Base64 编码的用户名
-$response = sendCommand($fp, base64_encode($username));
+$response = sendCommand($fp, base64_encode($username), true);
 // 服务器应回复 334 UGFzc3dvcmQ6 (要求输入密码)
 // 3. 发送 Base64 编码的密码/授权码
-$response = sendCommand($fp, base64_encode($password));
+$response = sendCommand($fp, base64_encode($password), true);
 // 服务器应回复 235 Authentication successful
 // 检查认证是否成功 (简单检查，生产环境需更严谨)
 if (strpos($response, '235') === false) {
@@ -154,7 +153,8 @@ sendCommand($fp, "MAIL FROM:<{$sender_email}>");
 sendCommand($fp, "RCPT TO:<{$recipient_email}>");
 // DATA 命令，准备发送内容
 sendCommand($fp, "DATA");
-// 发送邮件内容和结束符
+// 发送邮件内容和结束符；对行首句点执行 dot-stuffing，避免提前终止 DATA
+$email_content = preg_replace('/(^|\r\n)\./', '$1..', $email_content);
 fwrite($fp, $email_content . "\r\n.\r\n");
 echo "C: [Mail Content + .]\n";
 fgets($fp, 512); // 读取 250 OK 响应

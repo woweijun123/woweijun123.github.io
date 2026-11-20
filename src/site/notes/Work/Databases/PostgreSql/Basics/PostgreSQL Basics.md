@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Databases/PostgreSql/Basics/PostgreSQL Basics/","title":"PostgreSQL Basics","tags":["PostgreSQL","MySQL","flashcards"],"noteIcon":"","created":"2026-06-17T14:39:31.000+08:00","updated":"2026-06-17T14:39:31.000+08:00","dg-note-properties":{"title":"PostgreSQL Basics","tags":["PostgreSQL","MySQL","flashcards"],"reference linking":["[[Work/Databases/MySql/Basics/Mysql Basics]]"]}}
+{"dg-publish":true,"permalink":"/Work/Databases/PostgreSql/Basics/PostgreSQL Basics/","title":"PostgreSQL Basics","tags":["PostgreSQL","MySQL","flashcards"],"noteIcon":"","created":"2026-06-17T14:30:06.017+08:00","updated":"2026-07-01T11:38:10.580+08:00","dg-note-properties":{"title":"PostgreSQL Basics","tags":["PostgreSQL","MySQL","flashcards"],"reference linking":["[[Work/Databases/MySql/Basics/Mysql Basics]]"]}}
 ---
 
 # 概念

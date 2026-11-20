@@ -1,43 +1,43 @@
 ---
-{"dg-publish":true,"permalink":"/Work/Linux/Network/Rpc「Grpc 原理」/","title":"Grpc 原理","tags":["flashcards","#network","#rpc"],"noteIcon":"","created":"2025-04-07T21:18:31.884+08:00","updated":"2026-07-18T21:33:00.384+08:00","dg-note-properties":{"title":"Grpc 原理","tags":["flashcards","#network","#rpc"],"reference linking":"[tech| 再探 grpc - 简书](https://www.jianshu.com/p/f3221df39e6f)"}}
+{"dg-publish":true,"permalink":"/Work/Linux/Network/Rpc「Grpc 原理」/","title":"Rpc「Grpc 原理」","tags":["flashcards","#network","#rpc"],"noteIcon":"","created":"2026-07-18T21:33:00.000+08:00","updated":"2026-10-31T18:54:37.063+08:00","dg-note-properties":{"title":"Rpc「Grpc 原理」","tags":["flashcards","#network","#rpc"],"reference linking":"[tech| 再探 grpc - 简书](https://www.jianshu.com/p/f3221df39e6f)"}}
 ---
 
 # tech| 再探 grpc
 折腾 grpc 过几次, 都没有大规模的用起来, 熟悉程度多停留在官网的 helloworld 上, 对原理的理解不够深入, 所以经常会卡住.
->  [grpc| python 实战 grpc](https://www.jianshu.com/p/43fdfeb105ff) 
+>  [grpc| python 实战 grpc](https://www.jianshu.com/p/43fdfeb105ff)
 
 这里有介绍过我  **卡住**  的点, 按照官网的 quick start 文档:
 - 使用 php: 配置 PHP 的环境麻烦, 尤其  `grpc/grpc`  代码库编译出  `grpc_php_plugin`  这一步
 - 使用 go: 安装 golang 包, 经常  **撞墙** (go get 失败)
 - 最后  **偷懒**  使用 python 跑了一遍, 最大的收获是 grpc 除了  **单向请求** , 还有  **双向通信** (stream, 流式通信), 把环境的问题绕过去后跑通了 demo
+- **gRPC 的 4 种方法形态：** 一元、服务端流、客户端流、双向流；可记作“请求是否 `stream` × 响应是否 `stream`”的 `2 × 2`。这里的流是单次 RPC 内的有序消息序列，不等同于 TCP 字节流。
 > 来自 PHPer 的灵魂叩问: 要么搞定环境, 要么用不了 grpc ?
 
 就是陷入到这个问题里去了, 一直绕不出来. 但是理解了 grpc 基本原理, 换个思路, 就会发现非常的简单.
 ## 官方文档的解读
-> grpc - quickstart - php:  [https://grpc.io/docs/quickstart/php/](https://links.jianshu.com/go?to=https%3A%2F%2Fgrpc.io%2Fdocs%2Fquickstart%2Fphp%2F) 
+> grpc - quickstart - php:  [https://grpc.io/docs/quickstart/php/](https://links.jianshu.com/go?to=https%3A%2F%2Fgrpc.io%2Fdocs%2Fquickstart%2Fphp%2F)
 
 官方 php quickstart 介绍的步骤:
 - grpc 环境
 	- ext-grpc
-	-  `github.com/grpc/grpc`  源码库中编译出  `grpc_php_plugin` , 此扩展用来配合 protoc, 来自动生成代码
-
+	- `github.com/grpc/grpc` 源码库中编译出 `grpc_php_plugin`。它是配合 `protoc` 生成 gRPC PHP 代码的编译器插件，不是 PHP 扩展；运行时扩展是 `ext-grpc`。
 - protobuf 环境
-	- proto 文件, 基于 IDL 文件定义服务, 目前使用 proto3 语法(语法很简单, 一刻钟内就可以看完)
-	- protoc, protobuf compile, proto 文件编译器, 可以理解 proto 文件基于不同开发语言进行  **翻译** 
+	- proto 文件：使用 IDL 定义消息与服务。现有项目可使用 proto2/proto3，新项目也可使用 Protobuf Editions；gRPC 默认使用 Protobuf，但并非概念上只能使用 proto3。
+	- protoc, protobuf compile, proto 文件编译器, 可以理解 proto 文件基于不同开发语言进行  **翻译**
 	- protobuf runtime, protobuf 格式的运行时支持, protobuf 序列化后的信息, 需要 protobuf runtime
 
 有 2 点容易让人产生误读的地方:
 - 顺序: 先理解了 protobuf 环境, 进一步再来构建 grpc
-- 官网自动生成的代码, 只是能跑通 grpc 服务调用. 但现实是,  **rpc 服务, 需要一整套的服务框架进行支持, 比如说: 微服务** 
+- 官网自动生成的代码, 只是能跑通 grpc 服务调用. 但现实是,  **rpc 服务, 需要一整套的服务框架进行支持, 比如说: 微服务**
 ## 理解 grpc
 从几个基础的点, 一点一点来看 grpc.
 - protobuf: 序列化, 编码的基础知识
-- rpc, tcp 基础上的通信: tcp 通信为什么需要协议, 协议设计简单
+- RPC 与传输：RPC 是调用模型，具体框架可使用原始 TCP、HTTP/2、QUIC 或其他 IPC/传输机制；使用 TCP 时需处理字节流上的消息分帧
 - grpc 的通信协议细节
 ### protobuf
 protobuf 环境:
-- proto 文件, 基于 IDL 文件定义服务, 目前使用 proto3 语法(语法很简单, 一刻钟内就可以看完)
-- protoc, protobuf compile, proto 文件编译器, 可以理解 proto 文件基于不同开发语言进行  **翻译** 
+	- proto 文件：使用 IDL 定义消息与服务，可采用 proto2、proto3 或受工具链支持的 Editions 语法
+- protoc, protobuf compile, proto 文件编译器, 可以理解 proto 文件基于不同开发语言进行  **翻译**
 - protobuf runtime, protobuf 格式的运行时支持, protobuf 序列化后的信息, 需要 protobuf runtime
 
 通过时序来理解:
@@ -150,8 +150,6 @@ class HelloRequest extends \Google\Protobuf\Internal\Message
     }
 
 }
-
-
 ```
 `HelloResponse.php`
 ```php
@@ -213,10 +211,8 @@ class HelloResponse extends \Google\Protobuf\Internal\Message
     }
 
 }
-
-
 ```
-### rpc, tcp 基础上的通信
+### RPC 与 TCP 字节流通信
 tcp/ip 4 层网络通信:
 - 物理层/数据链路层: 网线/路由器/交换机/网卡  -> mac地址
 - ip 层: ip 地址, 4 种网络地址类型
@@ -225,7 +221,7 @@ tcp/ip 4 层网络通信:
 
 为什么需要协议: tcp 是流式(stream)传输数据的, 需要协议来确定数据边界
 简单协议设计: EOF结束符 / 固定包头
-> swoole wiki - 网络通信协议设计:  [https://wiki.swoole.com/wiki/page/484.html](https://links.jianshu.com/go?to=https%3A%2F%2Fwiki.swoole.com%2Fwiki%2Fpage%2F484.html) 
+> swoole wiki - 网络通信协议设计:  [https://wiki.swoole.com/wiki/page/484.html](https://links.jianshu.com/go?to=https%3A%2F%2Fwiki.swoole.com%2Fwiki%2Fpage%2F484.html)
 
 有了 swoole, tcp 通信, 编程十分简单:
 - server.php: tcp 协程 server
@@ -280,8 +276,8 @@ echo $c->recv();
 $c->close();
 
 ```
-### grpc = http2 + protobuf
-grpc 基于 http2 协议进行通信, 理解上面的基础知识, 再来看 grpc 使用的 http2 协议通信细节, 完全可以简单实现:
+### gRPC、HTTP/2 与 Protobuf
+标准 gRPC 通常将 RPC 映射到 HTTP/2，并默认使用 Protobuf 作为 IDL 与消息编码，但不能简化为“HTTP/2 + Protobuf”。gRPC 还定义了请求路径、必需请求头、元数据、截止时间、每条消息的 5 字节包络、压缩、Trailer 状态码、取消和流式调用语义。下面示例只演示**单个未压缩一元调用**的核心结构，不是完整 gRPC 实现：
 ```php
 <?php
 
@@ -298,11 +294,11 @@ $http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Respo
 
     if ($path == '/grpc.HelloService/SayHello') {
         // decode, 获取 rpc 中的请求
-        $request_message = \Grpc\Parser::deserializeMessage([HelloRequest::class, null], $request->rawContent());
+        $request_message = \Grpc\Parser::deserializeMessage([\Grpc\HelloRequest::class, null], $request->rawContent());
 
         // encode, 返回 rpc 中的应答
-        $response_message = new HelloReply();
-        $response_message->setMessage('Hello ' . $request_message->getName());
+        $response_message = new \Grpc\HelloResponse();
+        $response_message->setReply('Hello ' . $request_message->getGreeting());
         $response->header('content-type', 'application/grpc');
         $response->header('trailer', 'grpc-status, grpc-message');
         $trailer = [
@@ -318,13 +314,12 @@ $http->on('request', function (\Swoole\Http\Request $request, \Swoole\Http\Respo
 ```
 这里包括四部分:
 -  `\Swoole\Http\Server` : 使用 swoole 实现的 http2 server
-- .proto 文件中定义的 grpc 服务名:  `request_uri 和 proto 文件中 rpc 对应关系: /{package}.{service}/{rpc}` 
--  `\Grpc\Parser` : grpc 信息的解析类, 根据 grpc 使用的 http2 协议细节封装一个类就  **搞定了** 
-- HelloRequest / HelloReply: .ptoto 文件 + protoc 自动生成的 protobuf 自动解析文件
+- .proto 文件中定义的 grpc 服务名:  `request_uri 和 proto 文件中 rpc 对应关系: /{package}.{service}/{rpc}`
+- `\Grpc\Parser`：演示 gRPC 消息包络与 Protobuf 编解码；完整实现还要处理压缩、多消息流、截止时间、取消、元数据和协议错误
+- HelloRequest / HelloResponse：`.proto` 文件经 `protoc` 生成的 Protobuf 消息类
 
 server 的示例代码有了, client 也可以使用 swoole http2 协程 client 相应封装了
 -  `\Grpc\Parser`  示例代码:
-
 ```php
 <?php
 
@@ -337,12 +332,27 @@ class Parser
 
     public static function pack(string $data): string
     {
-        return $data = pack('CN', 0, strlen($data)) . $data;
+        // 1 字节压缩标志 + 4 字节大端消息长度 + 消息体。
+        return pack('CN', 0, strlen($data)) . $data;
     }
 
     public static function unpack(string $data): string
     {
-        return $data = substr($data, 5);
+        if (strlen($data) < 5) {
+            throw new \UnexpectedValueException('Truncated gRPC message envelope');
+        }
+
+        $header = unpack('Ccompressed/Nlength', substr($data, 0, 5));
+        if ($header['compressed'] !== 0) {
+            throw new \UnexpectedValueException('Compressed gRPC messages are not supported by this example');
+        }
+
+        $message = substr($data, 5);
+        if (strlen($message) !== $header['length']) {
+            throw new \UnexpectedValueException('Invalid gRPC message length');
+        }
+
+        return $message;
     }
 
     public static function serializeMessage($data)
@@ -380,20 +390,24 @@ class Parser
         return call_user_func($deserialize, $value);
     }
 
-    public static function parseToResultArray($response, $deserialize): array
+    public static function parseToResultArray($response, $deserialize, array $finalMetadata): array
     {
         if (!$response) {
             return ['No response', GRPC_ERROR_NO_RESPONSE, $response];
         } else if ($response->statusCode !== 200) {
             return ['Http status Error', $response->errCode ?: $response->statusCode, $response];
         } else {
-            $grpc_status = (int)($response->headers['grpc-status'] ?? 0);
+            // 调用方须归一化尾部元数据；Trailers-Only 响应则从首个 header block 取最终元数据。
+            if (!array_key_exists('grpc-status', $finalMetadata)) {
+                return ['Missing grpc-status final metadata', GRPC_ERROR_NO_RESPONSE, $response];
+            }
+            $grpc_status = (int)$finalMetadata['grpc-status'];
             if ($grpc_status !== 0) {
-                return [$response->headers['grpc-message'] ?? 'Unknown error', $grpc_status, $response];
+                return [$finalMetadata['grpc-message'] ?? 'Unknown error', $grpc_status, $response];
             }
             $data = $response->data;
             $reply = self::deserializeMessage($deserialize, $data);
-            $status = (int)($response->headers['grpc-status'] ?? 0 ?: 0);
+            $status = $grpc_status;
             return [$reply, $status, $response];
         }
     }
@@ -403,17 +417,18 @@ class Parser
 到这里, 基本上 grpc 的简单原理, 都在上面写的例子中展示出来了, 能将自己以前积累的知识融会贯通起来, 喜悦之情喷涌而出!
 ### 值得一提的点
 一开始卡住就是抛开原理跑 demo, 不断在折腾环境, 折腾代码自动生成, 跑官网 demo 上越走越远. 之前遇到的一个例子再提一下, 希望能有所启发.
-> alipay ILLEGAL_SIGN 错误解决:  [https://www.jianshu.com/p/28585a6454b2](https://www.jianshu.com/p/28585a6454b2) 
+> alipay ILLEGAL_SIGN 错误解决:  [https://www.jianshu.com/p/28585a6454b2](https://www.jianshu.com/p/28585a6454b2)
 
-整个调用链路非常长, debug 问题的时候前前后后 trace 了很久, 尽其所能的做了各种尝试, 但是回归到本质:  **http 协议** 
-所以，翻开了 [《http 权威指南》](https://links.jianshu.com/go?to=https%3A%2F%2Fbook.douban.com%2Fsubject%2F10746113%2F) ，仔细查阅之后，你就会发现，在 http协议里面，只有 2 个地方会影响到 charset：
-- 客户端： `accept-charset='utf-8'` 
-- 服务端： `content-type: text/plain;charset:utf-8` 
+整个调用链路非常长, debug 问题的时候前前后后 trace 了很久, 尽其所能的做了各种尝试, 但是回归到本质:  **http 协议**
+所以，翻开了 [《http 权威指南》](https://links.jianshu.com/go?to=https%3A%2F%2Fbook.douban.com%2Fsubject%2F10746113%2F) 后，还要区分“客户端可接受的字符集”和“当前表示实际使用的字符集”：
+- `Accept-Charset` 表示客户端偏好的响应字符集，但现代客户端很少发送，且它不能指定请求体编码。
+- `Content-Type: text/plain; charset=utf-8` 中的 `charset` 描述该消息体的字符编码；请求和响应都可各自携带 `Content-Type`。
+- 字符编码还受具体媒体类型规范影响。例如 JSON 在开放系统交换中通常使用 UTF-8，不能把所有乱码问题归结为两个 HTTP 头。
 ### 补充 && 更多
--  [`swoole/grpc`](https://links.jianshu.com/go?to=https%3A%2F%2Fgithub.com%2Fswoole%2Fgrpc): 可以参考的项目, 推荐只看  `swoole/grpc/examples/grpc/greeter_server.php`  和  `swoole/grpc/examples/grpc/greeter_client.php` 
-- 关于 protobuf 的实践, 我之前的 blog:  [服务器开发系列 1](https://www.jianshu.com/p/1633fa196c43) 
-- nginx 对 grpc 的支持:  [https://www.nginx.com/blog/nginx-1-13-10-grpc/](https://links.jianshu.com/go?to=https%3A%2F%2Fwww.nginx.com%2Fblog%2Fnginx-1-13-10-grpc%2F) 
-- 极客时间 - 深入浅出 grpc:  [https://time.geekbang.org/column/intro/75](https://links.jianshu.com/go?to=https%3A%2F%2Ftime.geekbang.org%2Fcolumn%2Fintro%2F75) 
+-  [`swoole/grpc`](https://links.jianshu.com/go?to=https%3A%2F%2Fgithub.com%2Fswoole%2Fgrpc): 可以参考的项目, 推荐只看  `swoole/grpc/examples/grpc/greeter_server.php`  和  `swoole/grpc/examples/grpc/greeter_client.php`
+- 关于 protobuf 的实践, 我之前的 blog:  [服务器开发系列 1](https://www.jianshu.com/p/1633fa196c43)
+- nginx 对 grpc 的支持:  [https://www.nginx.com/blog/nginx-1-13-10-grpc/](https://links.jianshu.com/go?to=https%3A%2F%2Fwww.nginx.com%2Fblog%2Fnginx-1-13-10-grpc%2F)
+- 极客时间 - 深入浅出 grpc:  [https://time.geekbang.org/column/intro/75](https://links.jianshu.com/go?to=https%3A%2F%2Ftime.geekbang.org%2Fcolumn%2Fintro%2F75)
 
 更多:
 - grpc 序列化机制(protobuf)  && grpc 安全性设计
